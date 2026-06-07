@@ -38,8 +38,9 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-h
 .logo-text strong{display:block;font-size:17px;font-weight:700;color:var(--silver2);letter-spacing:0.5px;}
 .logo-text span{font-size:9px;letter-spacing:5px;color:var(--silver3);}
 .nav-links{display:flex;gap:4px;}
-.nav-link{background:none;border:none;color:var(--text2);padding:8px 14px;border-radius:7px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:13px;font-weight:600;transition:.2s;text-decoration:none;display:inline-block;}
-.nav-link:hover,.nav-link.active{background:var(--bg3);color:var(--silver2);}
+.nav-link{background:none;border:1px solid transparent;color:var(--text2);padding:7px 16px;border-radius:20px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:13px;font-weight:600;transition:.2s;text-decoration:none;display:inline-flex;align-items:center;gap:5px;}
+.nav-link:hover{color:var(--silver2);background:rgba(255,255,255,.06);border-color:var(--border3);}
+.nav-link.active{color:var(--silver2);background:rgba(255,255,255,.08);border-color:rgba(200,200,200,.2);}.nav-link:hover,.nav-link.active{background:var(--bg3);color:var(--silver2);}
 .topbar-right{display:flex;align-items:center;gap:8px;}
 .icon-btn{background:var(--bg3);border:1px solid var(--border2);color:var(--silver);width:36px;height:36px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:.2s;position:relative;}
 .icon-btn:hover{border-color:var(--silver3);color:var(--silver2);}
@@ -490,6 +491,28 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
   .sb-item{padding:8px 12px;font-size:12px;}
   .admin-layout{flex-direction:column;}
   .form-grid{grid-template-columns:1fr;}
+
+  /* Ads slider mobile fix */
+  .ads-section{margin:0 0.8rem 2rem;border-radius:12px;}
+  .ads-slider{height:auto;min-height:200px;}
+  .ad-slide{flex-direction:column;align-items:flex-start;padding:1.2rem 1.4rem;gap:1rem;position:relative;height:auto;}
+  .ad-slide.active{position:relative;}
+  .ad-slide:not(.active){position:absolute;inset:0;height:100%;}
+  .ad-content{max-width:100%;width:100%;}
+  .ad-visual{width:100%;justify-content:flex-start;margin-top:4px;}
+  .ad-title{font-size:1.3rem !important;}
+  .ad-highlight{font-size:1.6rem !important;}
+  .ad-desc{font-size:12px !important;}
+  .ad-slide .s1,.ad-slide .s2,.ad-slide .s3{opacity:.3;}
+
+  /* Promo banner mobile */
+  .promo{flex-direction:column;gap:10px;text-align:center;padding:1.2rem;}
+  .promo-code{font-size:18px;}
+
+  /* Hero mobile */
+  .hero{padding:3rem 1.2rem 2rem;min-height:auto;}
+  .hero-btns{flex-direction:column;gap:8px;align-items:stretch;}
+  .hero-btns button{width:100%;justify-content:center;}
 }
 </style>
 <!-- Firebase SDK with multiple CDN fallbacks -->
@@ -543,11 +566,26 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
     </div>
   </button>
   <div class="nav-links">
-    <button class="nav-link active" id="nl-home" onclick="showPage('home')">الرئيسية</button>
-    <button class="nav-link" id="nl-shop" onclick="showPage('shop')">المتجر</button>
-    <button class="nav-link" id="nl-about" onclick="showPage('about')">من نحن</button>
-    <button class="nav-link" id="nl-contact" onclick="showPage('contact')">تواصل معنا</button>
-    <button class="nav-link" onclick="openTrackSearch()">📦 تتبع طلبي</button>
+    <button class="nav-link active" id="nl-home" onclick="showPage('home')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      الرئيسية
+    </button>
+    <button class="nav-link" id="nl-shop" onclick="showPage('shop')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      المتجر
+    </button>
+    <button class="nav-link" id="nl-about" onclick="showPage('about')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      من نحن
+    </button>
+    <button class="nav-link" id="nl-contact" onclick="showPage('contact')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
+      تواصل معنا
+    </button>
+    <button class="nav-link" onclick="openTrackSearch()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      تتبع طلبي
+    </button>
   </div>
   <div class="topbar-right">
     <!-- Admin Notification Bell (hidden for visitors) -->
@@ -1015,7 +1053,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
 <!-- ================================================ HOME PAGE ================================================ -->
 <div class="page active" id="page-home">
   <div class="hero">
-    <div class="hero-badge"><span class="hero-badge-dot"></span> متجر البرمجيات رقم 1</div>
+    <div class="hero-badge"><span class="hero-badge-dot"></span> <span id="hero-badge-text">متجر البرمجيات رقم 1</span></div>
     <h1>حلول برمجية <em>احترافية</em><br>لكل مشروعك</h1>
     <p class="hero-sub">اكتشف مئات الكودات والسكريبتات والتطبيقات الجاهزة — جودة عالية، تسليم فوري، دعم مستمر</p>
 
@@ -1038,9 +1076,9 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
   </div>
 
   <div class="stats-bar">
-    <div class="stat-item"><div class="stat-num" id="s-prods">150+</div><div class="stat-label">منتج متاح</div></div>
-    <div class="stat-item"><div class="stat-num">1,800+</div><div class="stat-label">عميل راضٍ</div></div>
-    <div class="stat-item"><div class="stat-num">4.9 ⭐</div><div class="stat-label">متوسط التقييم</div></div>
+    <div class="stat-item"><div class="stat-num" id="s-prods">0</div><div class="stat-label">منتج متاح</div></div>
+    <div class="stat-item"><div class="stat-num" id="s-visitors">0</div><div class="stat-label">زيارة للموقع</div></div>
+    <div class="stat-item"><div class="stat-num" id="s-rating">—</div><div class="stat-label">متوسط التقييم</div></div>
     <div class="stat-item"><div class="stat-num">24/7</div><div class="stat-label">دعم فني</div></div>
   </div>
 
@@ -1160,14 +1198,40 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
     </div>
   </div>
 
-  <!-- PROMO -->
-  <div class="promo">
-    <div class="promo-text">
-      <h3>🔥 عرض محدود — خصم 30%</h3>
-      <p>على جميع القوالب والإضافات — ينتهي العرض قريبًا</p>
+  <!-- PROMO BANNER -->
+  <div id="promo-banner" style="display:none;margin:0 2rem 2rem;border-radius:14px;overflow:hidden;background:linear-gradient(135deg,#111 0%,#1a1030 50%,#0a0a20 100%);border:1px solid rgba(120,100,255,.25);padding:0;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:1.4rem 2rem;gap:1.5rem;flex-wrap:wrap;position:relative;overflow:hidden;">
+      <!-- glow -->
+      <div style="position:absolute;left:-40px;top:-40px;width:180px;height:180px;background:radial-gradient(circle,rgba(120,80,255,.15),transparent 70%);pointer-events:none;"></div>
+
+      <!-- text -->
+      <div style="position:relative;z-index:1;flex:1;min-width:200px;">
+        <div style="font-size:11px;font-weight:700;color:rgba(180,160,255,.7);letter-spacing:2px;margin-bottom:6px;text-transform:uppercase;">عرض حصري</div>
+        <h3 id="promo-title" style="font-size:1.3rem;font-weight:900;color:var(--silver2);margin-bottom:6px;line-height:1.3;">🔥 عرض محدود — خصم 30%</h3>
+        <p id="promo-desc" style="font-size:13px;color:var(--text2);line-height:1.6;">على جميع القوالب والإضافات — ينتهي العرض قريبًا</p>
+      </div>
+
+      <!-- code box -->
+      <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:8px;flex-shrink:0;">
+        <div style="font-size:11px;color:var(--text3);">كود الخصم</div>
+        <div onclick="copyPromo()" id="promo-code-display" title="اضغط للنسخ" style="
+          background:rgba(255,255,255,.06);border:1px dashed rgba(180,160,255,.4);
+          border-radius:10px;padding:10px 22px;cursor:pointer;
+          font-size:20px;font-weight:900;color:#c8b8ff;letter-spacing:3px;
+          font-family:monospace;transition:.2s;text-align:center;min-width:120px;
+          display:flex;align-items:center;gap:8px;
+          " onmouseover="this.style.background='rgba(255,255,255,.1)';this.style.borderColor='rgba(200,180,255,.6)'" onmouseout="this.style.background='rgba(255,255,255,.06)';this.style.borderColor='rgba(180,160,255,.4)'">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(180,160,255,.7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          CORE30
+        </div>
+        <div style="font-size:10px;color:var(--text3);">اضغط للنسخ</div>
+      </div>
+
+      <!-- button -->
+      <div style="position:relative;z-index:1;flex-shrink:0;">
+        <button id="promo-btn" onclick="showPage('shop')" class="btn-silver" style="white-space:nowrap;">احصل على الخصم ←</button>
+      </div>
     </div>
-    <div onclick="copyPromo()" class="promo-code" title="اضغط للنسخ">CORE30</div>
-    <button class="btn-silver" onclick="showPage('shop')">احصل على الخصم</button>
   </div>
 
   <!-- CATEGORIES -->
@@ -1217,47 +1281,43 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
 
   <!-- PAYMENT METHODS BANNER -->
   <div style="background:var(--bg2);border-bottom:1px solid var(--border2);padding:12px 2rem;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;direction:ltr;">
-    <span style="font-size:11px;color:var(--text3);margin-left:6px;font-family:'Cairo',sans-serif;direction:rtl;">:طرق الدفع المقبولة</span>
+    <span style="font-size:11px;color:var(--text3);margin-left:10px;font-family:'Cairo',sans-serif;direction:rtl;">:طرق الدفع المقبولة</span>
 
     <!-- Visa -->
-    <div style="background:#1a1f71;border-radius:7px;padding:6px 14px;height:36px;display:flex;align-items:center;justify-content:center;">
-      <svg width="50" height="16" viewBox="0 0 50 16">
-        <text x="0" y="13" font-size="15" font-weight="900" fill="white" font-family="Arial,sans-serif" letter-spacing="1">VISA</text>
+    <div style="background:#1a1f71;border-radius:7px;padding:6px 16px;height:36px;display:flex;align-items:center;justify-content:center;">
+      <svg width="52" height="17" viewBox="0 0 52 17">
+        <text x="0" y="14" font-size="16" font-weight="900" fill="white" font-family="Arial,sans-serif" letter-spacing="2">VISA</text>
       </svg>
-    </div>
-
-    <!-- Mastercard -->
-    <div style="background:#1a1a1a;border-radius:7px;padding:6px 12px;height:36px;display:flex;align-items:center;justify-content:center;gap:6px;">
-      <div style="position:relative;width:36px;height:22px;flex-shrink:0;">
-        <div style="position:absolute;left:0;top:0;width:22px;height:22px;border-radius:50%;background:#eb001b;"></div>
-        <div style="position:absolute;right:0;top:0;width:22px;height:22px;border-radius:50%;background:#f79e1b;opacity:.9;"></div>
-      </div>
-      <span style="font-size:10px;font-weight:700;color:#fff;font-family:Arial;">Mastercard</span>
     </div>
 
     <!-- PayPal -->
-    <div style="background:#009cde;border-radius:7px;padding:6px 14px;height:36px;display:flex;align-items:center;gap:5px;">
-      <svg width="16" height="20" viewBox="0 0 16 20" fill="none">
-        <path d="M13.5 2C12.3 .7 10.4 0 8 0H2.5C1.7 0 1 .6 .9 1.4L0 15c0 .5.3.9.8.9H4l1-5.8v.3c.1-.8.8-1.4 1.6-1.4h3.3c6.5 0 11.6-2.6 13.1-10.2.1-.2.1-.4.1-.6C22 .7 18.5 0 13.5 2z" fill="white" opacity=".9"/>
+    <div style="background:#003087;border-radius:7px;padding:6px 14px;height:36px;display:flex;align-items:center;gap:5px;">
+      <svg width="18" height="20" viewBox="0 0 24 24" fill="none">
+        <path d="M7.076 21.337H4.272a.641.641 0 01-.633-.74L5.498.911A.791.791 0 016.268.25h6.396c2.652 0 4.477.597 5.427 1.776.938 1.157.938 2.79.384 4.806-.574 2.102-1.606 3.735-3.068 4.853-1.302.993-2.96 1.497-4.926 1.497H8.547a.641.641 0 00-.634.548l-.837 7.607z" fill="#009cde"/>
+        <path d="M19.958 7.453c-.57 3.738-3.426 6.185-8.1 6.185H9.693a.641.641 0 00-.633.548l-1.22 7.743a.449.449 0 00.444.52h3.119a.641.641 0 00.633-.548l.506-3.207a.791.791 0 01.77-.64h1.476c3.88 0 6.568-2.088 7.37-5.85.317-1.494.162-2.75-.2-3.751z" fill="#012169"/>
       </svg>
-      <span style="font-size:13px;font-weight:900;color:#fff;font-family:Arial;letter-spacing:-.5px;">Pay<span style="color:#003087;">Pal</span></span>
+      <span style="font-size:13px;font-weight:900;color:#fff;font-family:Arial;letter-spacing:-.3px;">Pay<span style="color:#009cde;">Pal</span></span>
     </div>
 
     <!-- Apple Pay -->
-    <div style="background:#000;border-radius:7px;padding:6px 14px;height:36px;display:flex;align-items:center;gap:5px;">
+    <div style="background:#000;border-radius:7px;padding:6px 14px;height:36px;display:flex;align-items:center;gap:6px;">
       <svg width="16" height="19" viewBox="0 0 24 24" fill="white">
         <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.7 9.05 7.4c1.37.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.39-1.32 2.76-2.53 3.99zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
       </svg>
-      <span style="font-size:12px;font-weight:700;color:#fff;font-family:Arial;">Apple Pay</span>
+      <span style="font-size:12px;font-weight:700;color:#fff;font-family:Arial;letter-spacing:.3px;">Apple Pay</span>
     </div>
 
-    <!-- Google Pay -->
-    <div style="background:#fff;border-radius:7px;padding:6px 14px;height:36px;display:flex;align-items:center;">
-      <svg width="52" height="20" viewBox="0 0 52 20">
-        <text x="0" y="15" font-size="13" font-family="Arial,sans-serif" font-weight="700">
-          <tspan fill="#4285f4">G</tspan><tspan fill="#ea4335">o</tspan><tspan fill="#fbbc05">o</tspan><tspan fill="#4285f4">g</tspan><tspan fill="#34a853">l</tspan><tspan fill="#ea4335">e</tspan><tspan fill="#555" font-weight="500"> Pay</tspan>
-        </text>
+    <!-- Dukan Tab (دكان تب) -->
+    <div style="background:linear-gradient(135deg,#1b4f8a,#2563ae);border-radius:7px;padding:6px 14px;height:36px;display:flex;align-items:center;gap:7px;">
+      <!-- Custom D icon for Dukan Tab -->
+      <svg width="20" height="20" viewBox="0 0 40 40" fill="none">
+        <rect width="40" height="40" rx="8" fill="white" opacity=".15"/>
+        <text x="6" y="28" font-size="22" font-weight="900" fill="white" font-family="Arial,sans-serif">D</text>
       </svg>
+      <div style="display:flex;flex-direction:column;line-height:1.2;">
+        <span style="font-size:11px;font-weight:900;color:#fff;font-family:'Cairo',sans-serif;letter-spacing:.5px;">دُكان</span>
+        <span style="font-size:9px;font-weight:600;color:rgba(255,255,255,.7);font-family:'Cairo',sans-serif;letter-spacing:1px;">تاب</span>
+      </div>
     </div>
   </div>
 
@@ -1309,7 +1369,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
       <span class="footer-copy">© 2025 Core Code Store — جميع الحقوق محفوظة</span>
       <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
         <button onclick="document.getElementById('rating-modal').classList.add('open')" style="background:none;border:1px solid var(--border2);color:var(--text3);padding:5px 14px;border-radius:6px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:12px;transition:.2s;" onmouseover="this.style.color='var(--silver2)';this.style.borderColor='var(--silver4)'" onmouseout="this.style.color='var(--text3)';this.style.borderColor='var(--border2)'">⭐ قيّم الموقع</button>
-        <span class="footer-copy">💳 Visa • Mastercard • PayPal • Apple Pay • Google Pay</span>
+        <span class="footer-copy">💳 Visa • PayPal • Apple Pay • Dukan Tab</span>
       </div>
     </div>
   </footer>
@@ -1382,14 +1442,19 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
     <div class="team-grid" id="team-grid-display"></div>
 
     <!-- Join Team Banner -->
-    <div style="margin-top:2rem;background:linear-gradient(135deg,#0f1a0f,#1a2a1a);border:1px solid rgba(60,160,80,.2);border-radius:14px;padding:2rem;text-align:center;position:relative;overflow:hidden;">
-      <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(60,160,80,.05),transparent);pointer-events:none;"></div>
-      <div style="font-size:36px;margin-bottom:10px;">🚀</div>
-      <h3 style="font-size:18px;font-weight:700;color:var(--silver2);margin-bottom:6px;">انضم إلى فريقنا</h3>
-      <p style="font-size:13px;color:var(--text2);margin-bottom:1.4rem;line-height:1.8;max-width:440px;margin-left:auto;margin-right:auto;">هل أنت مطور موهوب؟ مصمم مبدع؟ نحن نبحث عن أفضل الكفاءات للانضمام إلى فريقنا المتنامي</p>
-      <button onclick="openJobModal()" class="btn-silver" style="font-size:15px;padding:12px 32px;">
-        📝 تقدّم للانضمام الآن ←
-      </button>
+    <div id="join-banner" style="margin-top:2rem;border-radius:14px;overflow:hidden;position:relative;">
+      <!-- background image layer -->
+      <div id="join-banner-bg" style="position:absolute;inset:0;background:linear-gradient(135deg,#0f1a0f,#1a2a1a);border:1px solid rgba(60,160,80,.2);border-radius:14px;"></div>
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(60,160,80,.05),transparent);pointer-events:none;border-radius:14px;"></div>
+      <!-- content -->
+      <div style="position:relative;z-index:1;padding:2rem;text-align:center;">
+        <div id="join-banner-icon" style="font-size:36px;margin-bottom:10px;">🚀</div>
+        <h3 id="join-banner-title" style="font-size:18px;font-weight:700;color:var(--silver2);margin-bottom:6px;">انضم إلى فريقنا</h3>
+        <p id="join-banner-desc" style="font-size:13px;color:var(--text2);margin-bottom:1.4rem;line-height:1.8;max-width:440px;margin-left:auto;margin-right:auto;">هل أنت مطور موهوب؟ مصمم مبدع؟ نحن نبحث عن أفضل الكفاءات للانضمام إلى فريقنا المتنامي</p>
+        <button id="join-banner-btn" onclick="openJobModal()" class="btn-silver" style="font-size:15px;padding:12px 32px;">
+          📝 تقدّم للانضمام الآن ←
+        </button>
+      </div>
     </div>
   </div>
 
@@ -1415,15 +1480,56 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
       <p style="font-size:14px;color:var(--text2);margin-top:8px;">نحن هنا للمساعدة — أرسل لنا رسالتك وسنرد خلال ساعات</p>
     </div>
     <div class="contact-grid" style="margin-bottom:2rem;" id="contact-cards-display"></div>
-    <div class="form-card" style="max-width:100%;">
-      <div class="form-card-title">📩 أرسل رسالة</div>
-      <div class="form-grid" style="margin-bottom:14px;">
-        <div class="form-group"><label class="form-label">الاسم الكامل</label><input type="text" class="form-input" placeholder="اسمك الكامل"></div>
-        <div class="form-group"><label class="form-label">البريد الإلكتروني</label><input type="email" class="form-input" placeholder="بريدك الإلكتروني"></div>
+
+    <!-- Contact Messages Log (shown after send) -->
+    <div id="contact-success-box" style="display:none;background:rgba(40,120,60,.12);border:1px solid rgba(60,160,80,.3);border-radius:12px;padding:20px 24px;margin-bottom:1.5rem;text-align:center;">
+      <div style="font-size:36px;margin-bottom:10px;">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#4caf7d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
       </div>
-      <div class="form-group" style="margin-bottom:14px;"><label class="form-label">الموضوع</label><input type="text" class="form-input" placeholder="موضوع رسالتك"></div>
-      <div class="form-group" style="margin-bottom:14px;"><label class="form-label">الرسالة</label><textarea class="form-textarea" placeholder="اكتب رسالتك هنا..."></textarea></div>
-      <button class="btn-silver" onclick="sendContact()">إرسال الرسالة ←</button>
+      <div style="font-size:16px;font-weight:700;color:#6dbf8d;margin-bottom:6px;">تم إرسال رسالتك بنجاح!</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.7;" id="contact-auto-reply"></div>
+      <button class="btn-outline" style="margin-top:14px;font-size:12px;" onclick="resetContactForm()">← إرسال رسالة أخرى</button>
+    </div>
+
+    <div class="form-card" style="max-width:100%;" id="contact-form-box">
+      <div class="form-card-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:6px;vertical-align:middle;"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
+        أرسل رسالة
+      </div>
+      <div class="form-grid" style="margin-bottom:14px;">
+        <div class="form-group">
+          <label class="form-label">الاسم الكامل *</label>
+          <input type="text" class="form-input" id="ct-sender-name" placeholder="اسمك الكامل">
+        </div>
+        <div class="form-group">
+          <label class="form-label">البريد الإلكتروني</label>
+          <input type="email" class="form-input" id="ct-sender-email" placeholder="بريدك الإلكتروني" dir="ltr">
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:14px;">
+        <label class="form-label">رقم الواتساب (اختياري)</label>
+        <input type="text" class="form-input" id="ct-sender-phone" placeholder="+970 59 000 0000" dir="ltr">
+      </div>
+      <div class="form-group" style="margin-bottom:14px;">
+        <label class="form-label">الموضوع *</label>
+        <select class="form-input" id="ct-sender-subject">
+          <option value="">— اختر الموضوع —</option>
+          <option>استفسار عن منتج</option>
+          <option>طلب مشروع مخصص</option>
+          <option>دعم فني</option>
+          <option>شكوى أو مقترح</option>
+          <option>شراكة أو تعاون</option>
+          <option>أخرى</option>
+        </select>
+      </div>
+      <div class="form-group" style="margin-bottom:14px;">
+        <label class="form-label">الرسالة *</label>
+        <textarea class="form-textarea" id="ct-sender-msg" placeholder="اكتب رسالتك هنا..." style="min-height:120px;"></textarea>
+      </div>
+      <button class="btn-silver" style="width:100%;justify-content:center;font-size:15px;padding:13px;" onclick="sendContactMsg()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:6px;vertical-align:middle;"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
+        إرسال الرسالة ←
+      </button>
     </div>
   </div>
   <footer style="background:var(--bg2);border-top:1px solid var(--border2);padding:1.5rem 2rem;text-align:center;">
@@ -1443,7 +1549,11 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
           <polygon points="36,32 36,68 64,50" fill="#c8c8c8"/>
         </svg>
         <div class="login-title">لوحة التحكم</div>
-        <div class="login-sub">CORE CODE STORE — ADMIN</div>
+        <div class="login-sub" style="letter-spacing:3px;display:flex;align-items:center;justify-content:center;gap:8px;">
+          <span style="width:20px;height:1px;background:var(--border3);display:inline-block;"></span>
+          لوحة تحكم الشركة
+          <span style="width:20px;height:1px;background:var(--border3);display:inline-block;"></span>
+        </div>
       </div>
       <div class="form-group" style="margin-bottom:14px;"><label class="form-label">اسم المستخدم</label><input type="text" class="form-input" id="l-user" placeholder="اسم المستخدم" autocomplete="username"></div>
       <div class="form-group" style="margin-bottom:14px;"><label class="form-label">كلمة المرور</label><input type="password" class="form-input" id="l-pass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
@@ -1471,6 +1581,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
       <div class="sb-item" onclick="showAdmin('ads',this)"><span>🎬</span> إدارة الإعلانات</div>
       <div class="sb-group">الإعدادات</div>
       <div class="sb-item" onclick="showAdmin('coupons',this)"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/></svg></span> كوبونات الخصم</div>
+      <div class="sb-item" onclick="showAdmin('contactmsgs',this)"><span>📩</span> رسائل التواصل <span id="ct-msgs-badge" style="display:none;background:#5566ee;color:#fff;border-radius:50%;width:16px;height:16px;font-size:9px;display:none;align-items:center;justify-content:center;margin-right:4px;">0</span></div>
       <div class="sb-item" onclick="showAdmin('contact',this)"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></span> معلومات التواصل</div>
       <div class="sb-item" onclick="showAdmin('features',this)"><span class="ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="#f5c518" stroke="#f5c518" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></span> مميزات الموقع</div>
       <div class="sb-item" onclick="showAdmin('reviews',this)"><span class="ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="#f5c518" stroke="#f5c518" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></span> التقييمات</div>
@@ -1646,14 +1757,23 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
               <input type="text" class="form-input" id="cat-name" placeholder="مثال: مواقع إلكترونية">
             </div>
             <div class="form-group">
-              <label class="form-label">الأيقونة (emoji) *</label>
+              <label class="form-label">الأيقونة (emoji) — أو ارفع صورة أدناه</label>
               <input type="text" class="form-input" id="cat-icon" placeholder="🌐" maxlength="4">
             </div>
           </div>
           <div class="form-group" style="margin-bottom:14px;">
             <label class="form-label">المعرف (id) — حروف إنجليزية بدون مسافة</label>
             <input type="text" class="form-input" id="cat-id-field" placeholder="مثال: websites" dir="ltr">
-            <div style="font-size:11px;color:var(--text3);margin-top:3px;">يُستخدم داخلياً — لا يظهر للزبائن</div>
+            <div style="font-size:11px;color:var(--text3);margin-top:3px;">يمكنك تعديله في أي وقت — يُستخدم للربط الداخلي</div>
+          </div>
+          <!-- Image upload -->
+          <div class="form-group" style="margin-bottom:14px;">
+            <label class="form-label">صورة التصنيف (اختياري — تُعرض بدل الأيقونة)</label>
+            <input type="file" class="form-input" id="cat-img-file" accept="image/*" style="cursor:pointer;margin-bottom:8px;" onchange="previewCatImg(this)">
+            <div id="cat-img-preview-wrap" style="display:none;align-items:center;gap:10px;">
+              <img id="cat-img-preview" style="width:56px;height:56px;object-fit:cover;border-radius:10px;border:1px solid var(--border3);">
+              <button type="button" onclick="clearCatImg()" style="background:none;border:1px solid rgba(200,60,60,.3);color:var(--red);padding:4px 10px;border-radius:6px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:11px;">✕ إزالة</button>
+            </div>
           </div>
           <div class="form-actions">
             <button class="btn-silver" id="cat-save-btn" onclick="saveCat()">حفظ التصنيف ←</button>
@@ -1664,7 +1784,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
         <div class="tbl-box">
           <div class="tbl-head"><span class="tbl-head-title">التصنيفات (<span id="cats-count">0</span>)</span></div>
           <table class="a-table">
-            <thead><tr><th>الأيقونة</th><th>الاسم</th><th>المعرف</th><th>المنتجات</th><th>إجراءات</th></tr></thead>
+            <thead><tr><th>الصورة</th><th>الاسم</th><th>المعرف</th><th>المنتجات</th><th>إجراءات</th></tr></thead>
             <tbody id="cats-body"></tbody>
           </table>
         </div>
@@ -1836,6 +1956,24 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
       </div>
 
       <!-- CONTACT MANAGEMENT -->
+      <!-- CONTACT MESSAGES -->
+      <div class="admin-pg" id="apg-contactmsgs">
+        <div class="admin-pg-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:8px;vertical-align:middle;"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
+          رسائل التواصل
+        </div>
+        <div class="tbl-box">
+          <div class="tbl-head">
+            <span class="tbl-head-title">الرسائل الواردة (<span id="ct-msgs-count">0</span>)</span>
+          </div>
+          <table class="a-table">
+            <thead><tr><th>المُرسِل</th><th>الموضوع</th><th>الرسالة</th><th>التاريخ</th><th>الحالة</th><th>إجراءات</th></tr></thead>
+            <tbody id="ct-msgs-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- CONTACT INFO -->
       <div class="admin-pg" id="apg-contact">
         <div class="admin-pg-title"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:8px;vertical-align:middle;"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg> معلومات التواصل</div>
 
@@ -2198,6 +2336,12 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
         <!-- STORE INFO -->
         <div class="form-card" style="max-width:100%;">
           <div class="form-card-title">معلومات المتجر</div>
+          <!-- Hero Badge - first field -->
+          <div class="form-group" style="margin-bottom:14px;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:12px;">
+            <label class="form-label" style="color:var(--silver2);">🟢 نص المربع الصغير في الصفحة الرئيسية</label>
+            <input type="text" class="form-input" id="set-hero-badge" placeholder="متجر البرمجيات رقم 1" style="margin-top:6px;">
+            <div style="font-size:11px;color:var(--text3);margin-top:4px;">المربع الذي يظهر فوق العنوان الرئيسي مع النقطة الخضراء</div>
+          </div>
           <div class="form-grid" style="margin-bottom:14px;">
             <div class="form-group"><label class="form-label">البريد الإلكتروني</label><input type="email" class="form-input" id="set-email" placeholder="admin@example.com"></div>
             <div class="form-group"><label class="form-label">رقم التواصل</label><input type="text" class="form-input" id="set-phone" value="+970 59 000 0000"></div>
@@ -2217,6 +2361,71 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
             </select>
           </div>
           <div class="form-actions"><button class="btn-silver" onclick="saveStoreInfo()">حفظ المعلومات</button></div>
+        </div>
+
+        <!-- PROMO BANNER -->
+        <div class="form-card" style="max-width:100%;margin-bottom:1.5rem;">
+          <div class="form-card-title">🔥 مربع العرض المحدود</div>
+          <div class="form-group" style="margin-bottom:12px;display:flex;align-items:center;gap:10px;">
+            <label style="font-size:13px;color:var(--text2);font-weight:600;">إظهار المربع</label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+              <input type="checkbox" id="promo-active" onchange="savePromoSettings()" style="width:16px;height:16px;accent-color:var(--silver3);">
+              <span style="font-size:12px;color:var(--text3);">تفعيل العرض على الصفحة الرئيسية</span>
+            </label>
+          </div>
+          <div class="form-grid" style="margin-bottom:12px;">
+            <div class="form-group">
+              <label class="form-label">عنوان العرض</label>
+              <input type="text" class="form-input" id="set-promo-title" placeholder="🔥 عرض محدود — خصم 30%">
+            </div>
+            <div class="form-group">
+              <label class="form-label">كود الخصم</label>
+              <input type="text" class="form-input" id="set-promo-code" placeholder="CORE30" dir="ltr" style="text-transform:uppercase;letter-spacing:2px;">
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:12px;">
+            <label class="form-label">وصف العرض</label>
+            <input type="text" class="form-input" id="set-promo-desc" placeholder="على جميع القوالب والإضافات — ينتهي العرض قريبًا">
+          </div>
+          <div class="form-group" style="margin-bottom:14px;">
+            <label class="form-label">نص الزر</label>
+            <input type="text" class="form-input" id="set-promo-btn" placeholder="احصل على الخصم">
+          </div>
+          <div class="form-actions">
+            <button class="btn-silver" onclick="savePromoSettings()">حفظ وتحديث العرض ←</button>
+          </div>
+        </div>
+
+        <!-- JOIN TEAM BANNER -->
+        <div class="form-card" style="max-width:100%;margin-bottom:1.5rem;">
+          <div class="form-card-title">🚀 مربع "انضم إلى فريقنا"</div>
+          <div class="form-group" style="margin-bottom:12px;">
+            <label class="form-label">الأيقونة (emoji)</label>
+            <input type="text" class="form-input" id="set-join-icon" placeholder="🚀" maxlength="4">
+          </div>
+          <div class="form-group" style="margin-bottom:12px;">
+            <label class="form-label">العنوان</label>
+            <input type="text" class="form-input" id="set-join-title" placeholder="انضم إلى فريقنا">
+          </div>
+          <div class="form-group" style="margin-bottom:12px;">
+            <label class="form-label">الوصف</label>
+            <textarea class="form-textarea" id="set-join-desc" placeholder="هل أنت مطور موهوب؟..." style="min-height:70px;"></textarea>
+          </div>
+          <div class="form-group" style="margin-bottom:12px;">
+            <label class="form-label">نص الزر</label>
+            <input type="text" class="form-input" id="set-join-btn" placeholder="📝 تقدّم للانضمام الآن ←">
+          </div>
+          <div class="form-group" style="margin-bottom:14px;">
+            <label class="form-label">صورة خلفية المربع (اختياري)</label>
+            <input type="file" class="form-input" id="set-join-img" accept="image/*" style="cursor:pointer;margin-bottom:8px;" onchange="previewJoinImg(this)">
+            <div id="set-join-img-preview" style="display:none;gap:10px;align-items:center;">
+              <img id="set-join-img-thumb" style="width:100%;height:100px;object-fit:cover;border-radius:8px;border:1px solid var(--border3);">
+              <button type="button" onclick="clearJoinImg()" style="background:none;border:1px solid rgba(200,60,60,.3);color:var(--red);padding:4px 10px;border-radius:6px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:11px;margin-top:6px;">✕ إزالة</button>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn-silver" onclick="saveJoinBanner()">حفظ وتحديث ←</button>
+          </div>
         </div>
 
         <!-- BACKUP & RESTORE -->
@@ -2426,12 +2635,16 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
       <div class="form-grid" style="margin-bottom:14px;">
         <div class="form-group">
           <label class="form-label">لون الخلفية الرئيسي</label>
-          <input type="color" class="form-input" id="ad-f-color1" value="#111122" style="height:42px;cursor:pointer;">
+          <input type="color" class="form-input" id="ad-f-color1" value="#111122" style="height:42px;cursor:pointer;" oninput="previewAdColors()">
         </div>
         <div class="form-group">
           <label class="form-label">لون الخلفية الثانوي</label>
-          <input type="color" class="form-input" id="ad-f-color2" value="#1a1a2e" style="height:42px;cursor:pointer;">
+          <input type="color" class="form-input" id="ad-f-color2" value="#1a1a2e" style="height:42px;cursor:pointer;" oninput="previewAdColors()">
         </div>
+      </div>
+      <!-- Live color preview -->
+      <div id="ad-color-preview" style="height:50px;border-radius:8px;margin-bottom:14px;transition:.3s;border:1px solid var(--border3);background:linear-gradient(135deg,#111122,#1a1a2e);display:flex;align-items:center;justify-content:center;">
+        <span style="font-size:11px;color:rgba(255,255,255,.5);">معاينة الألوان</span>
       </div>
       <div class="form-group" style="margin-bottom:14px;">
         <label class="form-label">رفع صورة للخلفية (اختياري)</label>
@@ -2634,6 +2847,7 @@ let adImageBase64 = '';
 
 // ====== NAVIGATION ======
 function showPage(p) {
+  sessionStorage.setItem('ccs_last_page', p);
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
   document.getElementById('page-'+p).classList.add('active');
   document.querySelectorAll('.nav-link').forEach(x=>x.classList.remove('active'));
@@ -2819,6 +3033,24 @@ let cats = [
   {id:'apis',    name:'APIs',            icon:'🔗'},
 ];
 
+// ---- Category image ----
+let catImgBase64 = '';
+function previewCatImg(input) {
+  const file = input.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    catImgBase64 = e.target.result;
+    const img = document.getElementById('cat-img-preview'); if(img) img.src = catImgBase64;
+    const wrap = document.getElementById('cat-img-preview-wrap'); if(wrap) wrap.style.display='flex';
+  };
+  reader.readAsDataURL(file);
+}
+function clearCatImg() {
+  catImgBase64 = '';
+  const f=document.getElementById('cat-img-file'); if(f) f.value='';
+  const w=document.getElementById('cat-img-preview-wrap'); if(w) w.style.display='none';
+}
+
 function renderCatsAdmin() {
   const el = document.getElementById('cats-count');
   const tbody = document.getElementById('cats-body');
@@ -2826,8 +3058,11 @@ function renderCatsAdmin() {
   if(!tbody) return;
   tbody.innerHTML = cats.map(c => {
     const count = products.filter(p=>p.cat===c.name||p.cat===c.id).length;
+    const thumb = c.image
+      ? `<img src="${c.image}" style="width:40px;height:40px;object-fit:cover;border-radius:8px;border:1px solid var(--border3);">`
+      : `<span style="font-size:26px;">${c.icon}</span>`;
     return `<tr>
-      <td style="font-size:24px;">${c.icon}</td>
+      <td>${thumb}</td>
       <td style="font-weight:600;color:var(--silver2);">${c.name}</td>
       <td style="font-family:monospace;color:var(--text3);font-size:12px;">${c.id}</td>
       <td style="text-align:center;color:var(--text2);">${count}</td>
@@ -2837,7 +3072,6 @@ function renderCatsAdmin() {
       </div></td>
     </tr>`;
   }).join('');
-
   document.querySelectorAll('[data-editcat]').forEach(btn=>{
     btn.onclick = function(){ openEditCat(this.getAttribute('data-editcat')); };
   });
@@ -2856,45 +3090,55 @@ function renderCatsAdmin() {
 
 function saveCat() {
   const editId = document.getElementById('cat-edit-id').value;
-  const name   = document.getElementById('cat-name').value.trim();
-  const icon   = document.getElementById('cat-icon').value.trim() || '📁';
-  const catId  = document.getElementById('cat-id-field').value.trim().toLowerCase().replace(/\s+/g,'') || name.replace(/\s+/g,'_');
+  const name   = (document.getElementById('cat-name')?.value||'').trim();
+  const icon   = (document.getElementById('cat-icon')?.value||'').trim() || '📁';
+  const rawId  = (document.getElementById('cat-id-field')?.value||'').trim();
+  const catId  = rawId.toLowerCase().replace(/\s+/g,'') || name.replace(/\s+/g,'_');
+  const image  = catImgBase64;
   if(!name){ showNotif('أدخل اسم التصنيف','error'); return; }
   if(editId) {
     const idx = cats.findIndex(x=>x.id===editId);
-    cats[idx] = {...cats[idx], name, icon};
+    if(idx<0) return;
+    const newId = catId || editId;
+    if(newId !== editId) products.forEach(p=>{ if(p.cat===editId||p.cat===cats[idx].name) p.cat=name; });
+    cats[idx] = {...cats[idx], name, icon, image: image||cats[idx].image||'', id: newId};
     showNotif('✓ تم تحديث التصنيف','success');
   } else {
-    if(cats.find(x=>x.id===catId)){ showNotif('المعرف موجود مسبقاً','error'); return; }
-    cats.push({id:catId, name, icon});
+    if(cats.find(x=>x.id===catId)){ showNotif('المعرف موجود مسبقاً — غيّره','error'); return; }
+    cats.push({id:catId, name, icon, image});
     showNotif('✓ تم إضافة التصنيف','success');
   }
   saveAllData(); resetCatForm(); renderCatsAdmin(); updateCatQuickBtns();
 }
 
 function openEditCat(id) {
-  const c = cats.find(x=>x.id===id);
-  if(!c) return;
-  document.getElementById('cat-edit-id').value   = c.id;
-  document.getElementById('cat-name').value      = c.name;
-  document.getElementById('cat-icon').value      = c.icon;
-  document.getElementById('cat-id-field').value  = c.id;
-  document.getElementById('cat-id-field').disabled = true;
-  (document.getElementById(('cat-form-title'))||{}).textContent = `<span class="ico" style="margin-left:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span> تعديل: ${c.name}`;
-  (document.getElementById(('cat-save-btn'))||{}).textContent   = 'حفظ التعديلات ←';
-  document.getElementById('cat-cancel-btn').style.display = 'inline-block';
+  const c = cats.find(x=>x.id===id); if(!c) return;
+  document.getElementById('cat-edit-id').value  = c.id;
+  document.getElementById('cat-name').value     = c.name;
+  document.getElementById('cat-icon').value     = c.icon;
+  document.getElementById('cat-id-field').value = c.id;
+  document.getElementById('cat-id-field').disabled = false;
+  const _cft = document.getElementById('cat-form-title'); if(_cft) _cft.innerHTML = `✏ تعديل: ${c.name}`;
+  const sb = document.getElementById('cat-save-btn'); if(sb) sb.textContent = 'حفظ التعديلات ←';
+  const cb = document.getElementById('cat-cancel-btn'); if(cb) cb.style.display = 'inline-block';
+  if(c.image) {
+    catImgBase64 = c.image;
+    const img=document.getElementById('cat-img-preview'); if(img) img.src=c.image;
+    const wrap=document.getElementById('cat-img-preview-wrap'); if(wrap) wrap.style.display='flex';
+  } else { clearCatImg(); }
   document.getElementById('apg-categories').scrollIntoView({behavior:'smooth'});
 }
 
 function resetCatForm() {
-  document.getElementById('cat-edit-id').value   = '';
-  document.getElementById('cat-name').value      = '';
-  document.getElementById('cat-icon').value      = '';
-  document.getElementById('cat-id-field').value  = '';
+  document.getElementById('cat-edit-id').value  = '';
+  document.getElementById('cat-name').value     = '';
+  document.getElementById('cat-icon').value     = '';
+  document.getElementById('cat-id-field').value = '';
   document.getElementById('cat-id-field').disabled = false;
-  (document.getElementById(('cat-form-title'))||{}).textContent   = '➕ إضافة تصنيف جديد';
-  (document.getElementById(('cat-save-btn'))||{}).textContent     = 'حفظ التصنيف ←';
-  document.getElementById('cat-cancel-btn').style.display = 'none';
+  clearCatImg();
+  const _rft=document.getElementById('cat-form-title'); if(_rft) _rft.innerHTML='➕ إضافة تصنيف جديد';
+  const sb=document.getElementById('cat-save-btn'); if(sb) sb.textContent='حفظ التصنيف ←';
+  const cb=document.getElementById('cat-cancel-btn'); if(cb) cb.style.display='none';
 }
 
 function updateCatQuickBtns() {
@@ -3197,17 +3441,28 @@ function submitOrder(){
   const myOrders = JSON.parse(localStorage.getItem('ccs_my_orders') || '[]');
   myOrders.unshift(orders[0].id);
   localStorage.setItem('ccs_my_orders', JSON.stringify(myOrders));
-  // notify admin via Firebase
+
+  // save first so Firebase listener picks it up on admin side
+  saveAllData();
+
+  // notify via Firebase (admin gets it even if on different device)
   notifyAdminFirebase('new_order', {
     id: orders[0].id,
     customer: orders[0].customer,
     product: orders[0].product,
     amount: orders[0].amount
   });
-  // admin notification bell
-  addAdminNotif('order', `🛍 طلب جديد — ${orders[0].customer}`, `${orders[0].product} — $${orders[0].amount}`);
-  // trigger admin alert only if admin is logged in
-  if(isAdminLoggedIn) showNewOrderAlert(orders[0]);
+
+  // if admin is open in same browser tab — show alert directly
+  if(isAdminLoggedIn) {
+    addAdminNotif('order', `🛍 طلب جديد — ${orders[0].customer}`, `${orders[0].product} — $${orders[0].amount}`);
+    showNewOrderAlert(orders[0]);
+    renderOrders();
+    renderDashOrders();
+    updateSalesDash();
+    updateAdminCounts();
+  }
+
   // show track order modal to customer
   showMyOrders();
 }
@@ -3782,7 +4037,16 @@ function showNotif(msg,type='') {
   clearTimeout(notifTimer);
   notifTimer = setTimeout(()=>el.classList.remove('show'),2800);
 }
-function copyPromo(){navigator.clipboard?.writeText('CORE30');showNotif('✓ تم نسخ كود الخصم CORE30','success');}
+function copyPromo(){
+  const code = promoBanner?.code || 'CORE30';
+  if(navigator.clipboard) {
+    navigator.clipboard.writeText(code).then(()=>showNotif(`✓ تم نسخ الكود: ${code}`,'success'));
+  } else {
+    const ta=document.createElement('textarea'); ta.value=code;
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+    showNotif(`✓ تم نسخ الكود: ${code}`,'success');
+  }
+}
 function subscribe(){const v=document.getElementById('nl-email').value;if(!v||!v.includes('@')){showNotif('أدخل بريداً إلكترونياً صحيحاً','error');return;}document.getElementById('nl-email').value='';showNotif('✓ تم الاشتراك في النشرة البريدية','success');}
 function sendContact(){showNotif('✓ تم إرسال رسالتك، سنرد قريباً','success');}
 
@@ -3797,6 +4061,11 @@ function doLogin(){
     showNotif('أهلاً بك في لوحة التحكم 👋','success');
     updateNotifBell();
     requestNotifPermission();
+    // restore last admin page
+    const lastAdmin = sessionStorage.getItem('ccs_last_admin_pg');
+    if(lastAdmin && lastAdmin !== 'dashboard') {
+      setTimeout(()=>{ const el=document.querySelector(`.sb-item[onclick*="'${lastAdmin}'"]`); showAdmin(lastAdmin, el); }, 100);
+    }
     return;
   }
   const staff = staffList.find(s=>s.username===u && s.password===p && s.status==='active');
@@ -3923,12 +4192,13 @@ function logout(){
   showNotif('تم تسجيل الخروج بنجاح');
 }
 function showAdmin(p, el) {
+  sessionStorage.setItem('ccs_last_admin_pg', p);
   document.querySelectorAll('.admin-pg').forEach(x=>x.classList.remove('active'));
   document.getElementById('apg-'+p).classList.add('active');
   document.querySelectorAll('.sb-item').forEach(x=>x.classList.remove('active'));
   if(el) el.classList.add('active');
   if(p==='dashboard'){renderDashOrders();updateSalesDash();buildChart('sales-chart',salesData);}
-  if(p==='settings'){renderSalesList();}
+  if(p==='settings'){renderSalesList();loadPromoSettings();loadStoreInfo();loadJoinBannerSettings();}
   if(p==='ads'){renderAdsAdmin();}
   if(p==='staff'){renderStaff();}
   if(p==='team'){renderTeamAdmin();}
@@ -3942,6 +4212,7 @@ function showAdmin(p, el) {
   if(p==='coupons') renderCoupons();
   if(p==='categories') renderCatsAdmin();
   if(p==='customers') renderCustomers();
+  if(p==='contactmsgs') renderContactMsgsAdmin();
   if(p==='reports')   renderReports();
   setTimeout(applyButtonPermissions, 150);
 }
@@ -4283,15 +4554,6 @@ function saveCoupon(){
   ['cp-code','cp-pct','cp-exp'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
 }
 function deleteCoupon(i){coupons.splice(i,1);renderCoupons();showNotif('تم حذف الكوبون','error'); saveAllData();}
-function renderCatsAdmin(){
-  (document.getElementById(('cats-body'))||{}).innerHTML=cats.map(c=>`<tr>
-    <td style="font-size:22px">${c.icon}</td>
-    <td style="font-weight:600;color:var(--silver2)">${c.name}</td>
-    <td>${products.filter(p=>p.cat===c.id).length}</td>
-    <td><span class="s-badge s-active">نشط</span></td>
-    <td><button class="a-action" onclick="showNotif('تم تعديل التصنيف ✓','success')">✏</button></td>
-  </tr>`).join('');
-}
 function buildChart(elId, data){
   const el = document.getElementById(elId);
   if(!el) return;
@@ -4483,6 +4745,106 @@ function moveFeature(id, dir) {
 }
 
 // ====== CONTACT MANAGEMENT ======
+let contactMessages = []; // رسائل الزوار
+
+const autoReplies = {
+  'استفسار عن منتج':    'شكراً لتواصلك! سيقوم فريقنا بمراجعة استفسارك حول المنتج والرد عليك خلال 24 ساعة. يمكنك تصفح منتجاتنا في المتجر ريثما نتواصل معك.',
+  'طلب مشروع مخصص':   'شكراً لثقتك بـ Core Code Store! استلمنا طلب مشروعك المخصص وسيتواصل معك أحد متخصصينا خلال 24 ساعة لمناقشة التفاصيل والميزانية.',
+  'دعم فني':            'استلمنا طلب الدعم الفني! فريق الدعم سيراجع مشكلتك ويتواصل معك في أقرب وقت. إذا كانت المشكلة عاجلة يمكنك التواصل معنا عبر الدردشة المباشرة.',
+  'شكوى أو مقترح':     'شكراً على تعليقك القيّم! آراء عملائنا تهمنا كثيراً وتساعدنا على التطوير المستمر. سنراجع شكواك/مقترحك ونتواصل معك قريباً.',
+  'شراكة أو تعاون':    'يسعدنا اهتمامك بالتعاون معنا! فريق الشراكات سيراجع طلبك ويتواصل معك خلال 48 ساعة لمناقشة إمكانيات التعاون.',
+  'أخرى':              'شكراً لرسالتك! استلمنا رسالتك وسيرد عليك فريقنا خلال 24 ساعة. نقدّر تواصلك معنا.',
+  'default':            'شكراً لتواصلك مع Core Code Store! استلمنا رسالتك وسيرد عليك فريقنا خلال 24 ساعة. نقدّر ثقتك بنا.',
+};
+
+function sendContactMsg() {
+  const name    = (document.getElementById('ct-sender-name')?.value||'').trim();
+  const email   = (document.getElementById('ct-sender-email')?.value||'').trim();
+  const phone   = (document.getElementById('ct-sender-phone')?.value||'').trim();
+  const subject = (document.getElementById('ct-sender-subject')?.value||'').trim();
+  const msg     = (document.getElementById('ct-sender-msg')?.value||'').trim();
+
+  if(!name)    { showNotif('أدخل اسمك الكامل','error'); return; }
+  if(!subject) { showNotif('اختر موضوع الرسالة','error'); return; }
+  if(!msg)     { showNotif('اكتب رسالتك','error'); return; }
+
+  const entry = {
+    id: Date.now(),
+    name, email, phone, subject, msg,
+    date: new Date().toISOString(),
+    status: 'new', // new | read | replied
+    reply: ''
+  };
+  contactMessages.unshift(entry);
+  saveAllData();
+
+  // show auto-reply
+  const replyText = autoReplies[subject] || autoReplies['default'];
+  (document.getElementById('contact-auto-reply')||{}).innerHTML =
+    `<strong>رسالتنا لك:</strong><br>${replyText}<br><br>
+     <span style="font-size:12px;color:var(--text3);">سيتم التواصل معك على: ${email||phone||'قناة التواصل التي أدخلتها'}</span>`;
+
+  document.getElementById('contact-form-box').style.display = 'none';
+  document.getElementById('contact-success-box').style.display = 'block';
+
+  // notify admin
+  addAdminNotif('chat', `📩 رسالة جديدة — ${name}`, `${subject}: ${msg.slice(0,50)}`);
+  showNotif('✓ تم إرسال رسالتك بنجاح','success');
+}
+
+function resetContactForm() {
+  ['ct-sender-name','ct-sender-email','ct-sender-phone','ct-sender-msg'].forEach(id=>{
+    const el = document.getElementById(id); if(el) el.value='';
+  });
+  const sel = document.getElementById('ct-sender-subject');
+  if(sel) sel.value='';
+  document.getElementById('contact-form-box').style.display = 'block';
+  document.getElementById('contact-success-box').style.display = 'none';
+}
+
+// === Admin: view contact messages ===
+function renderContactMsgsAdmin() {
+  const tbody = document.getElementById('ct-msgs-body');
+  const count = document.getElementById('ct-msgs-count');
+  if(!tbody) return;
+  if(count) count.textContent = contactMessages.length;
+  tbody.innerHTML = contactMessages.length
+    ? contactMessages.map(m=>`<tr style="background:${m.status==='new'?'rgba(80,100,220,.05)':'transparent'}">
+        <td>
+          <div style="font-weight:600;color:var(--silver2);">${m.name}</div>
+          <div style="font-size:11px;color:var(--text3);">${m.email||m.phone||'—'}</div>
+        </td>
+        <td style="font-size:12px;color:var(--silver3);">${m.subject}</td>
+        <td style="font-size:12px;color:var(--text2);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${m.msg}</td>
+        <td style="font-size:11px;color:var(--text3);">${new Date(m.date).toLocaleDateString('ar')}</td>
+        <td>
+          <span style="font-size:10px;padding:2px 8px;border-radius:4px;font-weight:700;
+            ${m.status==='new'?'background:rgba(80,100,220,.2);color:#8899ee;border:1px solid rgba(80,100,220,.3);':
+              m.status==='replied'?'background:rgba(40,120,60,.2);color:#6dbf8d;border:1px solid rgba(60,160,80,.3);':
+              'background:var(--bg4);color:var(--text3);border:1px solid var(--border2);'}">
+            ${m.status==='new'?'جديدة':m.status==='replied'?'تم الرد':'مقروءة'}
+          </span>
+        </td>
+        <td class="td-actions"><div class="td-actions-inner">
+          <button class="a-action a-action-edit" onclick="markContactRead(${m.id})">مقروءة</button>
+          <button class="a-action a-action-del" onclick="deleteContactMsg(${m.id})">🗑</button>
+        </div></td>
+      </tr>`).join('')
+    : '<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text3);">لا توجد رسائل بعد</td></tr>';
+}
+
+function markContactRead(id) {
+  const m = contactMessages.find(x=>x.id===id);
+  if(m) { m.status = m.status==='new'?'read':'replied'; saveAllData(); renderContactMsgsAdmin(); }
+}
+
+function deleteContactMsg(id) {
+  showConfirmBox('هل تريد حذف هذه الرسالة؟', ()=>{
+    contactMessages = contactMessages.filter(x=>x.id!==id);
+    saveAllData(); renderContactMsgsAdmin();
+    showNotif('🗑 تم حذف الرسالة','error');
+  });
+}
 let contactList = [
   {id:1, type:'email',     icon:'📧', title:'البريد الإلكتروني', value:'support@corecode.store', link:'mailto:support@corecode.store'},
   {id:2, type:'whatsapp',  icon:'💬', title:'واتساب',             value:'+970 59 000 0000',       link:'https://wa.me/970590000000'},
@@ -5554,8 +5916,22 @@ function resetLogo() {
   showNotif('تم استعادة الشعار الأصلي');
 }
 
+let heroBadgeText = 'متجر البرمجيات رقم 1';
+
 function saveStoreInfo() {
+  const badge = document.getElementById('set-hero-badge')?.value.trim();
+  if(badge) {
+    heroBadgeText = badge;
+    const el = document.getElementById('hero-badge-text');
+    if(el) el.textContent = badge;
+    saveAllData();
+  }
   showNotif('✓ تم حفظ معلومات المتجر', 'success');
+}
+
+function loadStoreInfo() {
+  const el = document.getElementById('set-hero-badge');
+  if(el) el.value = heroBadgeText;
 }
 
 function changePassword() {
@@ -5769,6 +6145,13 @@ function clearAdImage() {
   adImageBase64 = '';
   document.getElementById('ad-f-image').value = '';
   document.getElementById('ad-img-preview').style.display = 'none';
+}
+
+function previewAdColors() {
+  const c1 = document.getElementById('ad-f-color1')?.value || '#111122';
+  const c2 = document.getElementById('ad-f-color2')?.value || '#1a1a2e';
+  const prev = document.getElementById('ad-color-preview');
+  if(prev) prev.style.background = `linear-gradient(135deg,${c1},${c2})`;
 }
 
 function saveAd() {
@@ -6273,6 +6656,7 @@ function sendQuick(text) {
 function addMsgToConv(convId, text, from, senderName) {
   const conv = chatConversations.find(c=>c.id===convId);
   if(!conv) return;
+  if(!conv.messages) conv.messages = [];
   conv.messages.push({from, text, senderName, time: new Date().toISOString()});
   if(from==='visitor') conv.unread = (conv.unread||0)+1;
   else conv.unread = 0;
@@ -6281,6 +6665,7 @@ function addMsgToConv(convId, text, from, senderName) {
 function renderVisitorChat() {
   const conv = chatConversations.find(c=>c.id===activeChatId);
   if(!conv) return;
+  if(!conv.messages) conv.messages = [];
   const myConvs = getMyConversations();
   const msgs = document.getElementById('chat-msgs');
 
@@ -6484,6 +6869,7 @@ function renderAdminChat(convId) {
   const conv = chatConversations.find(c=>c.id===convId);
   const msgs = document.getElementById('admin-chat-msgs');
   if(!conv||!msgs) return;
+  if(!conv.messages) conv.messages = [];
   msgs.innerHTML = conv.messages.map(m=>{
     const time = new Date(m.time).toLocaleTimeString('ar',{hour:'2-digit',minute:'2-digit'});
     if(m.from==='visitor') {
@@ -6538,6 +6924,174 @@ function closeAdminChat(convId) {
 // show chat bubble
 setTimeout(()=>{ document.getElementById('chat-bubble').style.display='flex'; }, 2000);
 
+// ====== PROMO BANNER ======
+let promoBanner = {
+  active: true,
+  title: '🔥 عرض محدود — خصم 30%',
+  desc: 'على جميع القوالب والإضافات — ينتهي العرض قريبًا',
+  code: 'CORE30',
+  btn: 'احصل على الخصم ←'
+};
+
+function renderPromoBanner() {
+  const banner = document.getElementById('promo-banner');
+  if(!banner) return;
+  if(!promoBanner.active) { banner.style.display='none'; return; }
+  banner.style.display='block';
+  const el = id => document.getElementById(id);
+  if(el('promo-title'))        el('promo-title').innerHTML   = promoBanner.title;
+  if(el('promo-desc'))         el('promo-desc').textContent  = promoBanner.desc;
+  if(el('promo-code-display')) {
+    el('promo-code-display').childNodes[el('promo-code-display').childNodes.length-1].textContent = '\n          ' + promoBanner.code;
+    // simpler: update just the text node
+    const spans = el('promo-code-display');
+    // replace inner text keeping the SVG icon
+    const svgEl = spans.querySelector('svg');
+    spans.textContent = promoBanner.code;
+    if(svgEl) spans.insertBefore(svgEl, spans.firstChild);
+  }
+  if(el('promo-btn')) el('promo-btn').textContent = promoBanner.btn || 'احصل على الخصم ←';
+}
+
+function loadPromoSettings() {
+  const el = id => document.getElementById(id);
+  if(el('promo-active'))    el('promo-active').checked    = promoBanner.active;
+  if(el('set-promo-title')) el('set-promo-title').value   = promoBanner.title;
+  if(el('set-promo-desc'))  el('set-promo-desc').value    = promoBanner.desc;
+  if(el('set-promo-code'))  el('set-promo-code').value    = promoBanner.code;
+  if(el('set-promo-btn'))   el('set-promo-btn').value     = promoBanner.btn;
+}
+
+function savePromoSettings() {
+  const el = id => document.getElementById(id);
+  promoBanner = {
+    active: el('promo-active')?.checked || false,
+    title:  el('set-promo-title')?.value.trim() || promoBanner.title,
+    desc:   el('set-promo-desc')?.value.trim()  || promoBanner.desc,
+    code:   (el('set-promo-code')?.value.trim()  || promoBanner.code).toUpperCase(),
+    btn:    el('set-promo-btn')?.value.trim()   || promoBanner.btn,
+  };
+  saveAllData();
+  renderPromoBanner();
+  showNotif('✓ تم تحديث مربع العرض','success');
+}
+
+// ====== JOIN TEAM BANNER ======
+let joinBanner = {
+  icon: '🚀',
+  title: 'انضم إلى فريقنا',
+  desc: 'هل أنت مطور موهوب؟ مصمم مبدع؟ نحن نبحث عن أفضل الكفاءات للانضمام إلى فريقنا المتنامي',
+  btn: '📝 تقدّم للانضمام الآن ←',
+  image: ''
+};
+let joinImgBase64 = '';
+
+function renderJoinBanner() {
+  const el = id => document.getElementById(id);
+  if(el('join-banner-icon'))  el('join-banner-icon').textContent = joinBanner.icon;
+  if(el('join-banner-title')) el('join-banner-title').textContent = joinBanner.title;
+  if(el('join-banner-desc'))  el('join-banner-desc').textContent = joinBanner.desc;
+  if(el('join-banner-btn'))   el('join-banner-btn').textContent  = joinBanner.btn;
+  const bg = el('join-banner-bg');
+  if(bg) {
+    if(joinBanner.image) {
+      bg.style.background = `linear-gradient(135deg,rgba(15,26,15,.85),rgba(26,42,26,.85)),url('${joinBanner.image}') center/cover`;
+    } else {
+      bg.style.background = 'linear-gradient(135deg,#0f1a0f,#1a2a1a)';
+    }
+  }
+}
+
+function loadJoinBannerSettings() {
+  const el = id => document.getElementById(id);
+  if(el('set-join-icon'))  el('set-join-icon').value  = joinBanner.icon;
+  if(el('set-join-title')) el('set-join-title').value = joinBanner.title;
+  if(el('set-join-desc'))  el('set-join-desc').value  = joinBanner.desc;
+  if(el('set-join-btn'))   el('set-join-btn').value   = joinBanner.btn;
+  if(joinBanner.image) {
+    joinImgBase64 = joinBanner.image;
+    const thumb = el('set-join-img-thumb');
+    if(thumb) thumb.src = joinBanner.image;
+    const prev = el('set-join-img-preview');
+    if(prev) prev.style.display = 'flex';
+  }
+}
+
+function previewJoinImg(input) {
+  const file = input.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    joinImgBase64 = e.target.result;
+    const thumb = document.getElementById('set-join-img-thumb');
+    if(thumb) thumb.src = joinImgBase64;
+    const prev = document.getElementById('set-join-img-preview');
+    if(prev) prev.style.display = 'flex';
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearJoinImg() {
+  joinImgBase64 = '';
+  const f = document.getElementById('set-join-img'); if(f) f.value='';
+  const p = document.getElementById('set-join-img-preview'); if(p) p.style.display='none';
+}
+
+function saveJoinBanner() {
+  const el = id => document.getElementById(id);
+  joinBanner = {
+    icon:  el('set-join-icon')?.value.trim()  || joinBanner.icon,
+    title: el('set-join-title')?.value.trim() || joinBanner.title,
+    desc:  el('set-join-desc')?.value.trim()  || joinBanner.desc,
+    btn:   el('set-join-btn')?.value.trim()   || joinBanner.btn,
+    image: joinImgBase64
+  };
+  saveAllData();
+  renderJoinBanner();
+  showNotif('✓ تم تحديث مربع الانضمام','success');
+}
+
+// ====== VISITOR COUNTER ======
+function initVisitorCounter() {
+  const COUNTER_KEY = 'ccs_visits';
+  const el = document.getElementById('s-visitors');
+
+  function formatNum(n) {
+    if(n >= 1000000) return (n/1000000).toFixed(1) + 'M';
+    if(n >= 1000) return (n/1000).toFixed(1) + 'K';
+    return n.toString();
+  }
+
+  if(firebaseReady && db) {
+    // increment visit count in Firebase
+    const ref = db.ref(COUNTER_KEY);
+    ref.transaction(current => (current || 0) + 1);
+    // listen for realtime updates
+    ref.on('value', snap => {
+      const count = snap.val() || 0;
+      if(el) el.textContent = formatNum(count);
+    });
+  } else {
+    // fallback: localStorage counter
+    let count = parseInt(localStorage.getItem(COUNTER_KEY)||'0') + 1;
+    localStorage.setItem(COUNTER_KEY, count);
+    if(el) el.textContent = formatNum(count);
+  }
+}
+
+function updateHomeStat() {
+  // update products count
+  const sp = document.getElementById('s-prods');
+  if(sp) sp.textContent = products.filter(p=>p.status!=='inactive').length || 0;
+  // update average rating
+  const sr = document.getElementById('s-rating');
+  if(sr) {
+    const avg = siteRatings.length
+      ? (siteRatings.reduce((s,x)=>s+x.stars,0)/siteRatings.length).toFixed(1)
+      : '—';
+    sr.innerHTML = siteRatings.length ? avg + ' <span style="color:#f5c518;">⭐</span>' : '—';
+  }
+}
+
 // ====== ADS SLIDER ======
 let adCurrent = 0;
 const adTotal = 4;
@@ -6566,6 +7120,24 @@ startAdAuto();
 renderHomeCats();
 renderFeatured();
 renderTeamDisplay();
+updateHomeStat();
+renderPromoBanner();
+renderJoinBanner();
+setTimeout(initVisitorCounter, 800);
+
+// ── Restore last page after reload ──
+(function restoreLastPage() {
+  const lastPage  = sessionStorage.getItem('ccs_last_page');
+  const lastAdmin = sessionStorage.getItem('ccs_last_admin_pg');
+  if(lastPage && lastPage !== 'home' && document.getElementById('page-' + lastPage)) {
+    // restore visitor page
+    if(lastPage !== 'admin') {
+      showPage(lastPage);
+    } else {
+      // was on admin — need login again, skip
+    }
+  }
+})();
 
 // ====== FIREBASE REALTIME STORAGE ======
 
@@ -6587,7 +7159,7 @@ function buildPayload() {
     products, orders, coupons, adsData, teamList, staffList,
     contactList, featuresList, featuresSectionTitle,
     jobApplications, siteRatings, staffRatings,
-    chatConversations, sales, adminPassword,
+    chatConversations, sales, contactMessages, promoBanner, heroBadgeText, joinBanner, adminPassword,
     _ts: Date.now(), _v: '2.0'
   };
 }
@@ -6672,15 +7244,44 @@ function applyLoadedData(d) {
   if(d.jobApplications)         jobApplications      = d.jobApplications;
   if(d.siteRatings)             siteRatings          = d.siteRatings;
   if(d.staffRatings)            staffRatings         = d.staffRatings;
-  if(d.chatConversations)       chatConversations    = d.chatConversations;
+  if(d.chatConversations) {
+    chatConversations = (Array.isArray(d.chatConversations)?d.chatConversations:Object.values(d.chatConversations||{}))
+      .map(c=>({...c, messages: Array.isArray(c.messages)?c.messages:Object.values(c.messages||{})}));
+  }
+  if(d.contactMessages)         contactMessages      = d.contactMessages;
+  if(d.promoBanner)             promoBanner          = {...promoBanner, ...d.promoBanner};
+  if(d.heroBadgeText)           { heroBadgeText = d.heroBadgeText; const el=document.getElementById('hero-badge-text'); if(el) el.textContent=d.heroBadgeText; }
+  if(d.joinBanner)              joinBanner           = {...joinBanner, ...d.joinBanner};
   if(d.sales)                   sales                = d.sales;
   if(d.adminPassword)           adminPassword        = d.adminPassword;
 }
 
+function normalizeArrays() {
+  // Firebase converts arrays to objects if they have gaps — convert back
+  const toArr = v => Array.isArray(v) ? v : (v && typeof v==='object' ? Object.values(v) : []);
+  products          = toArr(products);
+  orders            = toArr(orders);
+  coupons           = toArr(coupons);
+  adsData           = toArr(adsData);
+  teamList          = toArr(teamList);
+  staffList         = toArr(staffList);
+  contactList       = toArr(contactList);
+  featuresList      = toArr(featuresList);
+  jobApplications   = toArr(jobApplications);
+  siteRatings       = toArr(siteRatings);
+  staffRatings      = toArr(staffRatings);
+  sales             = toArr(sales);
+  contactMessages   = toArr(contactMessages);
+  chatConversations = toArr(chatConversations).map(c=>({...c, messages: toArr(c.messages)}));
+}
+
 function refreshAllViews() {
+  normalizeArrays();
   // refresh visitor pages
   renderFeatured(); renderHomeCats(); renderFeaturesDisplay();
   renderTeamDisplay(); renderContactDisplay(); renderReviews();
+  updateHomeStat();
+  renderPromoBanner();
   // refresh admin if open
   if(isAdminLoggedIn) {
     updateAdminCounts(); updateSalesDash(); updateChatBadge();
@@ -6862,24 +7463,45 @@ window.notifyAdminFirebase = notifyAdminFirebase;
 
 // ── Listen for new notifications (orders, chat) → alert admin ──
 if(firebaseReady && db) db.ref('ccs_notifications').orderByChild('ts').startAt(Date.now()).on('child_added', snap => {
-  if(!isAdminLoggedIn) return;
   const n = snap.val();
   if(!n || n.read) return;
+  // mark read immediately
+  snap.ref.update({read:true});
+  if(!isAdminLoggedIn) return;
   if(n.type === 'new_order') {
+    addAdminNotif('order', `🛍 طلب جديد — ${n.data?.customer||'زبون'}`, `${n.data?.product||''} — $${n.data?.amount||''}`);
     showNotif(`🛍 طلب جديد من ${n.data?.customer||'زبون'}!`,'success');
-    playAlertSound5s?.();
-    if(document.querySelector('.admin-pg.active')?.id==='apg-orders') renderOrders();
+    playCartSound?.();
+    // refresh orders view
+    const activePg = document.querySelector('.admin-pg.active');
     renderDashOrders(); updateSalesDash(); updateAdminCounts();
-    // mark as read
-    snap.ref.update({read:true});
+    if(activePg?.id==='apg-orders') renderOrders();
+    if(activePg?.id==='apg-dashboard') renderDashOrders();
   }
   if(n.type === 'new_chat') {
     updateChatBadge();
-    if(document.querySelector('.admin-pg.active')?.id==='apg-chat') renderAdminChatList();
-    snap.ref.update({read:true});
+    const activePg = document.querySelector('.admin-pg.active');
+    if(activePg?.id==='apg-chat') renderAdminChatList();
   }
 });
 
+window.sendContactMsg = sendContactMsg;
+window.resetContactForm = resetContactForm;
+window.renderContactMsgsAdmin = renderContactMsgsAdmin;
+window.markContactRead = markContactRead;
+window.deleteContactMsg = deleteContactMsg;
+window.saveJoinBanner = saveJoinBanner;
+window.previewJoinImg = previewJoinImg;
+window.clearJoinImg = clearJoinImg;
+window.loadJoinBannerSettings = loadJoinBannerSettings;
+window.renderJoinBanner = renderJoinBanner;
+window.savePromoSettings = savePromoSettings;
+window.renderPromoBanner = renderPromoBanner;
+window.loadPromoSettings = loadPromoSettings;
+window.saveStoreInfo = saveStoreInfo;
+window.loadStoreInfo = loadStoreInfo;
+window.initVisitorCounter = initVisitorCounter;
+window.updateHomeStat = updateHomeStat;
 window.renderCustomers = renderCustomers;
 window.renderReports = renderReports;
 // ── Clear all data (run clearAllSiteData() from browser console) ──
@@ -6953,6 +7575,8 @@ window.deleteCoupon = deleteCoupon;
 window.addGalleryImages = addGalleryImages;
 window.removeGalleryImg = removeGalleryImg;
 window.openGalleryImg = openGalleryImg;
+window.previewCatImg = previewCatImg;
+window.clearCatImg = clearCatImg;
 window.saveCat = saveCat;
 window.openEditCat = openEditCat;
 window.resetCatForm = resetCatForm;
@@ -6969,6 +7593,7 @@ window.moveAd = moveAd;
 window.openAddAdModal = openAddAdModal;
 window.openEditAdModal = openEditAdModal;
 window.closeAdModal = closeAdModal;
+window.previewAdColors = previewAdColors;
 window.previewAdImage = previewAdImage;
 window.clearAdImage = clearAdImage;
 window.saveAd = saveAd;
