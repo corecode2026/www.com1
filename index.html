@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title id="page-title">Core Code Store</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
@@ -481,6 +482,36 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
   .form-grid{grid-template-columns:1fr;}
 }
 </style>
+<!-- Firebase SDK with multiple CDN fallbacks -->
+<script>
+(function loadFirebase(cb) {
+  var cdns = [
+    ['https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js',
+     'https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js'],
+    ['https://cdn.jsdelivr.net/npm/firebase@10.12.0/firebase-app-compat.min.js',
+     'https://cdn.jsdelivr.net/npm/firebase@10.12.0/firebase-database-compat.min.js'],
+    ['https://unpkg.com/firebase@10.12.0/firebase-app-compat.js',
+     'https://unpkg.com/firebase@10.12.0/firebase-database-compat.js']
+  ];
+  var tried = 0;
+  function tryNext() {
+    if(tried >= cdns.length) { window._firebaseFailed = true; return; }
+    var pair = cdns[tried++];
+    var s1 = document.createElement('script');
+    s1.src = pair[0];
+    s1.onerror = tryNext;
+    s1.onload = function() {
+      var s2 = document.createElement('script');
+      s2.src = pair[1];
+      s2.onerror = tryNext;
+      s2.onload = function() { window._firebaseLoaded = true; };
+      document.head.appendChild(s2);
+    };
+    document.head.appendChild(s1);
+  }
+  tryNext();
+})();
+</script>
 </head>
 <body>
 
@@ -2344,7 +2375,52 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
   </div>
 </div>
 
-<script defer>
+
+
+
+
+<script>
+// ====== FIREBASE INIT ======
+let db = null;
+let firebaseReady = false;
+const FB_CONFIG = {
+  apiKey: "AIzaSyD3TxoPFeA5LX9afehXIPdtwal_-BmCAj4",
+  authDomain: "corecode22.firebaseapp.com",
+  databaseURL: "https://corecode22-default-rtdb.firebaseio.com",
+  projectId: "corecode22",
+  storageBucket: "corecode22.firebasestorage.app",
+  messagingSenderId: "866335033715",
+  appId: "1:866335033715:web:a310487af933c7541cdd06"
+};
+
+function tryInitFirebase() {
+  if(typeof firebase === 'undefined' || !window._firebaseLoaded) {
+    return false;
+  }
+  try {
+    if(!firebase.apps.length) firebase.initializeApp(FB_CONFIG);
+    db = firebase.database();
+    firebaseReady = true;
+    console.log('✅ Firebase connected');
+    startFirebaseListener();
+    return true;
+  } catch(e) {
+    console.warn('⚠ Firebase init failed:', e.message);
+    return false;
+  }
+}
+
+// Try immediately, then poll until loaded (max 10s)
+if(!tryInitFirebase()) {
+  let attempts = 0;
+  const fbInterval = setInterval(()=>{
+    attempts++;
+    if(tryInitFirebase() || attempts > 20) {
+      clearInterval(fbInterval);
+      if(!firebaseReady) console.warn('⚠ Firebase unavailable — using localStorage');
+    }
+  }, 500);
+}
 // ====== DATA ======
 let products = [
   {id:1,name:'موقع تجاري WooCommerce',desc:'موقع إلكتروني متكامل مع WooCommerce وثيمات مخصصة',price:120,old:180,cat:'websites',icon:'🌐',badge:'hot',features:['كود نظيف','WooCommerce','ثيمات مخصصة','Responsive','SEO جاهز','دعم فني']},
@@ -2810,6 +2886,13 @@ function submitOrder(){
   const myOrders = JSON.parse(localStorage.getItem('ccs_my_orders') || '[]');
   myOrders.unshift(orders[0].id);
   localStorage.setItem('ccs_my_orders', JSON.stringify(myOrders));
+  // notify admin via Firebase
+  notifyAdminFirebase('new_order', {
+    id: orders[0].id,
+    customer: orders[0].customer,
+    product: orders[0].product,
+    amount: orders[0].amount
+  });
   // trigger admin alert only if admin is logged in
   if(isAdminLoggedIn) showNewOrderAlert(orders[0]);
   // show track order modal to customer
@@ -5726,12 +5809,13 @@ renderFeatured();
 renderTeamDisplay();
 
 // ====== LOCAL STORAGE — حفظ البيانات ======
-// ====== STORAGE & PROTECTION SYSTEM ======
+// ====== FIREBASE REALTIME STORAGE ======
 const STORE_KEY  = 'ccs_data_v2';
 const BACKUP_KEY = 'ccs_backup_v2';
 const SALT = 'CoreCode$Store#2025!';
+const FB_PATH = 'ccs_store'; // Firebase path
 
-// Simple XOR-based obfuscation (protects against casual snooping)
+// XOR obfuscation for localStorage backup
 function obfuscate(str) {
   return btoa(unescape(encodeURIComponent(
     str.split('').map((c,i)=>String.fromCharCode(c.charCodeAt(0)^SALT.charCodeAt(i%SALT.length))).join('')
@@ -5754,54 +5838,63 @@ function buildPayload() {
   };
 }
 
+// ── Save: Firebase PRIMARY + localStorage BACKUP ──
 function saveAllData() {
+  const payload = buildPayload();
+  // Save to Firebase (real-time sync)
+  if(firebaseReady && db) {
+    try { db.ref(FB_PATH).set(payload); } catch(e){ console.warn('Firebase save error:', e); }
+  }
+  // Save to localStorage as backup
   try {
-    const payload = JSON.stringify(buildPayload());
-    const encoded = obfuscate(payload);
+    const encoded = obfuscate(JSON.stringify(payload));
     localStorage.setItem(STORE_KEY, encoded);
-    // keep rolling backup (last 3 saves)
     const backups = JSON.parse(localStorage.getItem(BACKUP_KEY)||'[]');
     backups.unshift({ts: Date.now(), data: encoded});
     localStorage.setItem(BACKUP_KEY, JSON.stringify(backups.slice(0,3)));
-    // refresh visitor-facing dynamic sections instantly
-    renderContactDisplay();
-    renderFeaturesDisplay();
-    renderTeamDisplay();
-  } catch(e) {
-    console.warn('Storage error:', e);
-    showNotif('⚠ تحذير: تعذّر حفظ البيانات — المساحة ممتلئة','error');
-  }
+  } catch(e){ console.warn('localStorage backup error:', e); }
+  // refresh visitor-facing sections
+  renderContactDisplay();
+  renderFeaturesDisplay();
+  renderTeamDisplay();
 }
 
+// ── Load: Firebase FIRST, fallback to localStorage ──
 function loadAllData() {
+  // Try localStorage first for instant load
   try {
     const raw = localStorage.getItem(STORE_KEY);
-    if(!raw) return;
-    const decoded = deobfuscate(raw);
-    if(!decoded) { tryRestoreBackup(); return; }
-    const d = JSON.parse(decoded);
-    applyLoadedData(d);
-  } catch(e) {
-    console.warn('Load error, trying backup:', e);
-    tryRestoreBackup();
-  }
+    if(raw) {
+      const decoded = deobfuscate(raw);
+      if(decoded) applyLoadedData(JSON.parse(decoded));
+    }
+  } catch(e){}
+  // Then sync from Firebase (authoritative source)
+  if(firebaseReady && db) db.ref(FB_PATH).once('value').then(snap => {
+    const d = snap.val();
+    if(d && d._ts) {
+      applyLoadedData(d);
+      refreshAllViews();
+    }
+  }).catch(e => console.warn('Firebase load error:', e));
 }
 
-function tryRestoreBackup() {
-  try {
-    const backups = JSON.parse(localStorage.getItem(BACKUP_KEY)||'[]');
-    for(const b of backups) {
-      try {
-        const decoded = deobfuscate(b.data);
-        if(!decoded) continue;
-        const d = JSON.parse(decoded);
-        applyLoadedData(d);
-        console.log('Restored from backup:', new Date(b.ts).toLocaleString());
-        showNotif('⚠ تم استعادة البيانات من النسخة الاحتياطية');
-        return;
-      } catch(e){ continue; }
-    }
-  } catch(e){ console.warn('Backup restore failed'); }
+// ── Real-time listener: updates ALL connected browsers instantly ──
+function startFirebaseListener() {
+  if(!firebaseReady || !db) return;
+  db.ref(FB_PATH).on('value', snap => {
+    const d = snap.val();
+    if(!d) return;
+    // only update if newer than what we have
+    if(d._ts && d._ts <= (window._lastFbTs||0)) return;
+    window._lastFbTs = d._ts;
+    applyLoadedData(d);
+    refreshAllViews();
+    // update localStorage backup
+    try {
+      localStorage.setItem(STORE_KEY, obfuscate(JSON.stringify(d)));
+    } catch(e){}
+  });
 }
 
 function applyLoadedData(d) {
@@ -5823,55 +5916,37 @@ function applyLoadedData(d) {
   if(d.adminPassword)           adminPassword        = d.adminPassword;
 }
 
-// ── Auto-sync: listen for changes from other tabs/windows ──
-window.addEventListener('storage', (e) => {
-  if(e.key !== STORE_KEY || !e.newValue) return;
-  try {
-    const decoded = deobfuscate(e.newValue);
-    if(!decoded) return;
-    const d = JSON.parse(decoded);
-    applyLoadedData(d);
-    // refresh current admin view
-    if(document.getElementById('page-admin')?.classList.contains('active')) {
-      renderDashOrders(); updateSalesDash(); updateAdminCounts();
-      updateChatBadge(); renderAdminChatList();
-      const activePg = document.querySelector('.admin-pg.active');
-      if(activePg) {
-        const id = activePg.id.replace('apg-','');
-        if(id==='orders') renderOrders();
-        if(id==='products') renderAdminProds();
-        if(id==='chat') renderAdminChatList();
-      }
+function refreshAllViews() {
+  // refresh visitor pages
+  renderFeatured(); renderHomeCats(); renderFeaturesDisplay();
+  renderTeamDisplay(); renderContactDisplay(); renderReviews();
+  // refresh admin if open
+  if(isAdminLoggedIn) {
+    updateAdminCounts(); updateSalesDash(); updateChatBadge();
+    const activePg = document.querySelector('.admin-pg.active');
+    if(activePg) {
+      const id = activePg.id.replace('apg-','');
+      if(id==='dashboard')  { renderDashOrders(); updateSalesDash(); }
+      if(id==='orders')     renderOrders();
+      if(id==='products')   renderAdminProds();
+      if(id==='chat')       renderAdminChatList();
+      if(id==='jobs')       renderJobsAdmin();
+      if(id==='customers')  {} // handled
     }
-    // refresh visitor view
-    renderFeatured(); renderHomeCats(); renderFeaturesDisplay();
-    renderTeamDisplay(); renderContactDisplay();
-  } catch(e){ console.warn('Sync error:', e); }
-});
+  }
+  // update visitor chat if open
+  if(activeChatId) renderVisitorChat();
+}
 
-// ── Storage health check every 30s ──
-setInterval(()=>{
-  try {
-    const raw = localStorage.getItem(STORE_KEY);
-    if(!raw) return;
-    const decoded = deobfuscate(raw);
-    if(!decoded) { tryRestoreBackup(); return; }
-    // re-sync if another tab saved newer data
-    const d = JSON.parse(decoded);
-    if(d._ts && d._ts > (window._lastSaveTs||0)) {
-      applyLoadedData(d);
-      window._lastSaveTs = d._ts;
-      // silent refresh of dynamic elements
-      updateChatBadge();
-      if(isAdminLoggedIn) {
-        renderDashOrders(); updateSalesDash(); updateAdminCounts();
-        const activePg = document.querySelector('.admin-pg.active');
-        if(activePg?.id==='apg-orders') renderOrders();
-        if(activePg?.id==='apg-chat') renderAdminChatList();
-      }
-    }
-  } catch(e){}
-}, 30000);
+// ── Notify admin of new orders/messages via Firebase ──
+function notifyAdminFirebase(type, data) {
+  if(!firebaseReady || !db) return;
+  db.ref(`ccs_notifications`).push({
+    type, data,
+    ts: Date.now(),
+    read: false
+  });
+}
 
 // ── Export backup ──
 function exportBackup() {
@@ -5894,13 +5969,17 @@ function importBackup(input) {
       const d = JSON.parse(e.target.result);
       applyLoadedData(d);
       saveAllData();
-      location.reload();
+      showNotif('✅ تم استعادة البيانات بنجاح','success');
+      setTimeout(()=>location.reload(), 1500);
     } catch(err) {
       showNotif('❌ الملف غير صالح','error');
     }
   };
   reader.readAsText(file);
 }
+
+
+
 
 // Load on start
 loadAllData();
@@ -6011,6 +6090,29 @@ window.openEditStaff = openEditStaff;
 window.resetStaffForm = resetStaffForm;
 window.toggleStaffStatus = toggleStaffStatus;
 window.togglePassVis = togglePassVis;
+window.startFirebaseListener = startFirebaseListener;
+window.notifyAdminFirebase = notifyAdminFirebase;
+
+// ── Listen for new notifications (orders, chat) → alert admin ──
+if(firebaseReady && db) db.ref('ccs_notifications').orderByChild('ts').startAt(Date.now()).on('child_added', snap => {
+  if(!isAdminLoggedIn) return;
+  const n = snap.val();
+  if(!n || n.read) return;
+  if(n.type === 'new_order') {
+    showNotif(`🛍 طلب جديد من ${n.data?.customer||'زبون'}!`,'success');
+    playAlertSound5s?.();
+    if(document.querySelector('.admin-pg.active')?.id==='apg-orders') renderOrders();
+    renderDashOrders(); updateSalesDash(); updateAdminCounts();
+    // mark as read
+    snap.ref.update({read:true});
+  }
+  if(n.type === 'new_chat') {
+    updateChatBadge();
+    if(document.querySelector('.admin-pg.active')?.id==='apg-chat') renderAdminChatList();
+    snap.ref.update({read:true});
+  }
+});
+
 window.exportBackup = exportBackup;
 window.importBackup = importBackup;
 window.updateSalesDash = updateSalesDash;
