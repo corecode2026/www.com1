@@ -46,7 +46,7 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-h
 
 /* ===== HERO ===== */
 .hero{position:relative;padding:5rem 2rem 4rem;text-align:center;overflow:hidden;}
-.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(180,180,180,0.04) 0%,transparent 70%);}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(180,180,180,0.04) 0%,transparent 70%);pointer-events:none;}
 .hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.04);border:1px solid var(--border3);border-radius:20px;padding:5px 14px;font-size:12px;color:var(--text2);margin-bottom:1.5rem;}
 .hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
@@ -442,6 +442,8 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
 .ticker-text{font-size:12px;color:var(--text2);max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .ticker-name{font-size:11px;color:var(--text3);}
 
+@keyframes bellRing{0%{transform:rotate(0)}20%{transform:rotate(15deg)}40%{transform:rotate(-15deg)}60%{transform:rotate(10deg)}80%{transform:rotate(-10deg)}100%{transform:rotate(0)}}
+
 .star-btn{transition:.1s;user-select:none;display:inline-block;}
 .star-btn:hover{transform:scale(1.15);}
 .chat-q-btn{background:var(--bg4);border:1px solid var(--border3);color:var(--text2);padding:5px 10px;border-radius:12px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:11px;transition:.15s;}
@@ -540,17 +542,53 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
     <button class="nav-link" onclick="openTrackSearch()">📦 تتبع طلبي</button>
   </div>
   <div class="topbar-right">
+    <!-- Admin Notification Bell (hidden for visitors) -->
+    <button class="icon-btn" id="notif-bell-btn" onclick="toggleNotifPanel()" title="الإشعارات" style="display:none;position:relative;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+        <path d="M13.73 21a2 2 0 01-3.46 0"/>
+      </svg>
+      <span id="notif-bell-count" style="
+        position:absolute;top:-4px;right:-4px;
+        background:#ff3b30;color:#fff;border-radius:50%;
+        min-width:16px;height:16px;font-size:9px;font-weight:700;
+        display:none;align-items:center;justify-content:center;
+        padding:0 3px;line-height:16px;text-align:center;
+        border:2px solid var(--bg);
+      ">0</span>
+    </button>
     <button class="icon-btn" onclick="showPage('wishlist')" title="المفضلة">
-      ♡
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
       <span class="badge-dot" id="wl-count" style="display:none">0</span>
     </button>
     <button class="icon-btn" onclick="openCart()" title="السلة">
-      🛒
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 001.89 1.61h9.72a2 2 0 001.89-1.32L23 6H6"/></svg>
       <span class="badge-dot" id="cart-count" style="display:none">0</span>
     </button>
     <button class="admin-topbtn" id="admin-secret-btn" onclick="showPage('login')">⚙ إدارة</button>
   </div>
 </nav>
+
+<!-- ===== NOTIFICATION PANEL ===== -->
+<div id="notif-panel" style="
+  position:fixed;top:62px;left:20px;z-index:7000;
+  width:340px;max-height:480px;
+  background:var(--bg2);border:1px solid var(--border3);
+  border-radius:14px;box-shadow:0 8px 40px rgba(0,0,0,.7);
+  display:none;flex-direction:column;overflow:hidden;
+  animation:fadeIn .2s ease;">
+  <div style="padding:14px 16px;border-bottom:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between;">
+    <span style="font-size:14px;font-weight:700;color:var(--silver2);">🔔 الإشعارات</span>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button onclick="markAllRead()" style="background:none;border:none;color:var(--text3);cursor:pointer;font-family:'Cairo',sans-serif;font-size:11px;transition:.2s;" onmouseover="this.style.color='var(--silver2)'" onmouseout="this.style.color='var(--text3)'">تعليم الكل كمقروء</button>
+      <button onclick="clearAllNotifs()" style="background:none;border:none;color:var(--red);cursor:pointer;font-family:'Cairo',sans-serif;font-size:11px;">مسح الكل</button>
+    </div>
+  </div>
+  <div id="notif-panel-list" style="overflow-y:auto;flex:1;"></div>
+  <div style="padding:10px 16px;border-top:1px solid var(--border2);text-align:center;">
+    <button onclick="showAdmin('orders',null);showPage('admin');toggleNotifPanel()" style="background:none;border:none;color:var(--silver3);cursor:pointer;font-family:'Cairo',sans-serif;font-size:12px;">عرض جميع الطلبات ←</button>
+  </div>
+</div>
 
 <!-- ===== CART SIDEBAR ===== -->
 <div class="cart-overlay-bg" id="cart-bg" onclick="closeCart()"></div>
@@ -560,7 +598,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
     <button class="modal-close" onclick="closeCart()">✕</button>
   </div>
   <div class="cart-body" id="cart-body">
-    <div class="cart-empty"><span>🛒</span>السلة فارغة حتى الآن</div>
+    <div class="cart-empty"><span class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 001.89 1.61h9.72a2 2 0 001.89-1.32L23 6H6"/></svg></span>السلة فارغة حتى الآن</div>
   </div>
   <div class="cart-foot">
     <!-- coupon field -->
@@ -797,7 +835,21 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
       </div>
 
       <div class="form-actions">
-        <button class="btn-silver" style="width:100%;justify-content:center;font-size:15px;padding:13px;" onclick="submitOrder()">✅ تأكيد الطلب وإرسال ←</button>
+        <div style="background:rgba(180,30,30,.12);border:1px solid rgba(220,60,60,.35);border-radius:10px;padding:14px 16px;margin-bottom:14px;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e05555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span style="font-size:13px;font-weight:800;color:#e07070;">تنبيه هام</span>
+          </div>
+          <p style="font-size:12px;color:rgba(220,180,180,.85);line-height:1.85;margin:0;">
+            يُرجى العلم أن تقديم طلب الشراء عبر الموقع الإلكتروني <strong style="color:#e07070;">لا يُعدّ تأكيداً نهائياً</strong> للطلب، ولا يترتب عليك الدفع في هذه المرحلة.<br><br>
+            بعد استلام الطلب، سيقوم فريق الدعم المختص بمراجعته والتواصل معكم لتأكيد التفاصيل وإتمام إجراءات الطلب.<br><br>
+            <strong style="color:#e07070;">يُرجى عدم إجراء أي عملية دفع</strong> إلا بعد الحصول على تأكيد رسمي من فريق الدعم الفني.
+          </p>
+        </div>
+        <button class="btn-silver" style="width:100%;justify-content:center;font-size:15px;padding:13px;background:linear-gradient(135deg,#1a2e1a,#0d1a0d);border-color:rgba(60,160,80,.4);color:#88ffaa;" onclick="submitOrder()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left:6px;vertical-align:middle;"><polyline points="20 6 9 17 4 12"/></svg>
+          تأكيد إرسال الطلب ←
+        </button>
       </div>
       <p style="text-align:center;font-size:11px;color:var(--text3);margin-top:10px;">سيتم التواصل معك عبر واتساب خلال دقائق</p>
     </div>
@@ -826,6 +878,10 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
       <div class="form-group" style="margin-bottom:12px;">
         <label class="form-label">اسمك (اختياري)</label>
         <input type="text" class="form-input" id="rating-name" placeholder="اسمك">
+      </div>
+      <div class="form-group" style="margin-bottom:12px;">
+        <label class="form-label">بريدك الإلكتروني (اختياري)</label>
+        <input type="email" class="form-input" id="rating-email" placeholder="email@example.com" dir="ltr">
       </div>
       <div class="form-group" style="margin-bottom:14px;">
         <label class="form-label">رأيك وملاحظاتك</label>
@@ -962,9 +1018,14 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
       <div class="hero-tagline-line"></div>
     </div>
 
-    <div class="hero-btns">
-      <button class="btn-silver" onclick="showPage('shop')">🛍 تسوق الآن</button>
-      <button class="btn-outline" onclick="showPage('about')">تعرف علينا</button>
+    <div class="hero-btns" style="position:relative;z-index:10;">
+      <button class="btn-silver" onclick="showPage('shop')" style="pointer-events:auto;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:6px;vertical-align:middle;"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        تسوق الآن
+      </button>
+      <button class="btn-silver" style="pointer-events:auto;" onclick="document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById('page-about').classList.add('active');document.querySelectorAll('.nav-link').forEach(x=>x.classList.remove('active'));document.getElementById('nl-about').classList.add('active');window.scrollTo(0,0);setTimeout(()=>{const el=document.getElementById('team-grid-display');if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},300);">
+        تعرف علينا
+      </button>
     </div>
   </div>
 
@@ -1129,11 +1190,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
       <button class="sec-btn" onclick="document.getElementById('rating-modal').classList.add('open')">+ أضف تقييمك</button>
     </div>
     <!-- Static default reviews shown if no real ratings yet -->
-    <div id="home-reviews-static" class="reviews-grid">
-      <div class="review-card"><div class="review-stars" style="color:#f5c518;">★★★★★</div><div class="review-text">منتج رائع جداً، الكود نظيف ومنظم ويعمل بشكل مثالي. الدعم الفني كان سريعاً جداً في الرد على استفساراتي.</div><div class="review-author"><div class="review-avatar">👨</div><div><div class="review-name">أحمد العلي</div><div class="review-date">2025-05-20</div></div></div></div>
-      <div class="review-card"><div class="review-stars" style="color:#f5c518;">★★★★★</div><div class="review-text">اشتريت بوت التيليغرام وكان يفوق التوقعات! التوثيق ممتاز وسهل التركيب. بالتأكيد سأشتري منتجات أخرى.</div><div class="review-author"><div class="review-avatar">👩</div><div><div class="review-name">سارة محمود</div><div class="review-date">2025-05-18</div></div></div></div>
-      <div class="review-card"><div class="review-stars" style="color:#f5c518;">★★★★☆</div><div class="review-text">جودة عالية وتسليم سريع. الموقع سهل الاستخدام وعملية الشراء بسيطة. أنصح بشدة لكل مطور.</div><div class="review-author"><div class="review-avatar">👨‍💻</div><div><div class="review-name">محمد خالد</div><div class="review-date">2025-05-15</div></div></div></div>
-    </div>
+    <div id="home-reviews-static" class="reviews-grid" style="display:none;"></div>
     <!-- Real reviews from users (hidden until there are real ones) -->
     <div id="home-reviews" style="display:none;" class="reviews-grid"></div>
   </div>
@@ -1396,29 +1453,37 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
       <div class="sb-group">المتجر</div>
       <div class="sb-item" onclick="showAdmin('products',this)"><span>📦</span> المنتجات</div>
       <div class="sb-item" onclick="openAddProduct()"><span>➕</span> إضافة منتج</div>
-      <div class="sb-item" onclick="showAdmin('categories',this)"><span>🏷</span> التصنيفات</div>
+      <div class="sb-item" onclick="showAdmin('categories',this)"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></span> التصنيفات</div>
       <div class="sb-group">المبيعات</div>
-      <div class="sb-item" onclick="showAdmin('orders',this)"><span>🧾</span> الطلبات</div>
-      <div class="sb-item" onclick="showAdmin('chat',this)"><span>💬</span> الدردشات <span id="sb-chat-badge" style="display:none;background:#ff3b30;color:#fff;border-radius:50%;width:16px;height:16px;font-size:10px;display:inline-flex;align-items:center;justify-content:center;margin-right:4px;">0</span></div>
-      <div class="sb-item" onclick="showAdmin('customers',this)"><span>👥</span> العملاء</div>
-      <div class="sb-item" onclick="showAdmin('reports',this)"><span>📈</span> التقارير</div>
+      <div class="sb-item" onclick="showAdmin('orders',this)"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span> الطلبات</div>
+      <div class="sb-item" onclick="showAdmin('chat',this)"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span> الدردشات <span id="sb-chat-badge" style="display:none;background:#ff3b30;color:#fff;border-radius:50%;width:16px;height:16px;font-size:10px;display:inline-flex;align-items:center;justify-content:center;margin-right:4px;">0</span></div>
+      <div class="sb-item" onclick="showAdmin('customers',this)"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span> العملاء</div>
+      <div class="sb-item" onclick="showAdmin('reports',this)"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span> التقارير</div>
       <div class="sb-group">الإعلانات</div>
       <div class="sb-item" onclick="showAdmin('ads',this)"><span>🎬</span> إدارة الإعلانات</div>
       <div class="sb-group">الإعدادات</div>
-      <div class="sb-item" onclick="showAdmin('coupons',this)"><span>🎟</span> كوبونات الخصم</div>
-      <div class="sb-item" onclick="showAdmin('contact',this)"><span>📱</span> معلومات التواصل</div>
-      <div class="sb-item" onclick="showAdmin('features',this)"><span>✨</span> مميزات الموقع</div>
-      <div class="sb-item" onclick="showAdmin('jobs',this)"><span>📨</span> طلبات التقديم</div>
-      <div class="sb-item" onclick="showAdmin('team',this)"><span>🧑‍🤝‍🧑</span> فريق العمل</div>
-      <div class="sb-item" onclick="showAdmin('staff',this)"><span>👨‍💼</span> الموظفون</div>
+      <div class="sb-item" onclick="showAdmin('coupons',this)"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/></svg></span> كوبونات الخصم</div>
+      <div class="sb-item" onclick="showAdmin('contact',this)"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></span> معلومات التواصل</div>
+      <div class="sb-item" onclick="showAdmin('features',this)"><span class="ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="#f5c518" stroke="#f5c518" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></span> مميزات الموقع</div>
+      <div class="sb-item" onclick="showAdmin('reviews',this)"><span class="ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="#f5c518" stroke="#f5c518" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></span> التقييمات</div>
+      <div class="sb-item" onclick="showAdmin('jobs',this)"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg></span> طلبات التقديم</div>
+      <div class="sb-item" onclick="showAdmin('team',this)"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span> فريق العمل</div>
+      <div class="sb-item" onclick="showAdmin('staff',this)"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span> الموظفون</div>
       <div class="sb-item" onclick="showAdmin('settings',this)"><span>⚙</span> الإعدادات</div>
       <div class="sb-item" onclick="logout()"><span>🚪</span> تسجيل الخروج</div>
+
+      <!-- Mini Ratings Summary above settings -->
+      <div id="sb-ratings-mini" style="margin:8px 10px 0;background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:10px 12px;cursor:pointer;" onclick="showAdmin('reviews',document.querySelector('.sb-item[onclick*=reviews]'))">
+        <div style="font-size:11px;color:var(--text3);margin-bottom:6px;font-weight:600;">آخر التقييمات</div>
+        <div id="sb-ratings-list" style="display:flex;flex-direction:column;gap:5px;"></div>
+        <div id="sb-ratings-empty" style="font-size:11px;color:var(--text3);text-align:center;padding:6px 0;">لا توجد تقييمات بعد</div>
+      </div>
     </div>
     <div class="admin-main">
 
       <!-- DASHBOARD -->
       <div class="admin-pg active" id="apg-dashboard">
-        <div class="admin-pg-title">📊 لوحة التحكم الرئيسية</div>
+        <div class="admin-pg-title"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:8px;vertical-align:middle;"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> لوحة التحكم</div>
         <div class="dash-grid">
           <div class="dash-card"><div class="dash-card-icon">💰</div><div class="dash-card-val" id="dash-total-sales">$0</div><div class="dash-card-label">إجمالي المبيعات المسجلة</div><div class="dash-card-trend trend-up" id="dash-sales-trend">—</div></div>
           <div class="dash-card"><div class="dash-card-icon">🧾</div><div class="dash-card-val" id="a-orders-count">62</div><div class="dash-card-label">إجمالي الطلبات</div><div class="dash-card-trend trend-up">↑ 9% هذا الشهر</div></div>
@@ -1453,7 +1518,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
 
       <!-- PRODUCTS -->
       <div class="admin-pg" id="apg-products">
-        <div class="admin-pg-title">📦 إدارة المنتجات</div>
+        <div class="admin-pg-title"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:8px;vertical-align:middle;"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg> إدارة المنتجات</div>
         <div class="tbl-box">
           <div class="tbl-head">
             <span class="tbl-head-title">قائمة المنتجات (<span id="ap-count">0</span>)</span>
@@ -1543,6 +1608,15 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
             </div>
           </div>
           <div class="form-group" style="margin-bottom:14px;"><label class="form-label">الوصف المختصر</label><textarea class="form-textarea" id="np-desc" placeholder="وصف مختصر للمنتج..."></textarea></div>
+
+          <!-- Gallery Images -->
+          <div class="form-group" style="margin-bottom:14px;">
+            <label class="form-label">صور ملحقات / معرض الصور <span style="color:var(--text3);font-weight:400;">(اختياري — تظهر في صفحة المنتج)</span></label>
+            <input type="file" class="form-input" id="np-gallery-file" accept="image/*" multiple style="cursor:pointer;margin-bottom:10px;" onchange="addGalleryImages(this)">
+            <div id="np-gallery-preview" style="display:flex;flex-wrap:wrap;gap:8px;min-height:0;"></div>
+            <div style="font-size:11px;color:var(--text3);margin-top:5px;">يمكنك اختيار أكثر من صورة — ستظهر كـ gallery في صفحة المنتج</div>
+          </div>
+
           <div class="form-actions">
             <button class="btn-silver" id="prod-save-btn" onclick="saveProduct()">حفظ المنتج ←</button>
             <button class="btn-outline" onclick="showAdmin('products',null)">إلغاء</button>
@@ -1553,11 +1627,36 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
 
       <!-- CATEGORIES -->
       <div class="admin-pg" id="apg-categories">
-        <div class="admin-pg-title">🏷 إدارة التصنيفات</div>
+        <div class="admin-pg-title"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:8px;vertical-align:middle;"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> إدارة التصنيفات</div>
+        <!-- Add/Edit form -->
+        <div class="form-card" style="max-width:100%;margin-bottom:1.5rem;">
+          <div class="form-card-title" id="cat-form-title">➕ إضافة تصنيف جديد</div>
+          <input type="hidden" id="cat-edit-id">
+          <div class="form-grid" style="margin-bottom:14px;">
+            <div class="form-group">
+              <label class="form-label">اسم التصنيف *</label>
+              <input type="text" class="form-input" id="cat-name" placeholder="مثال: مواقع إلكترونية">
+            </div>
+            <div class="form-group">
+              <label class="form-label">الأيقونة (emoji) *</label>
+              <input type="text" class="form-input" id="cat-icon" placeholder="🌐" maxlength="4">
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:14px;">
+            <label class="form-label">المعرف (id) — حروف إنجليزية بدون مسافة</label>
+            <input type="text" class="form-input" id="cat-id-field" placeholder="مثال: websites" dir="ltr">
+            <div style="font-size:11px;color:var(--text3);margin-top:3px;">يُستخدم داخلياً — لا يظهر للزبائن</div>
+          </div>
+          <div class="form-actions">
+            <button class="btn-silver" id="cat-save-btn" onclick="saveCat()">حفظ التصنيف ←</button>
+            <button class="btn-outline" id="cat-cancel-btn" style="display:none;" onclick="resetCatForm()">إلغاء</button>
+          </div>
+        </div>
+        <!-- List -->
         <div class="tbl-box">
-          <div class="tbl-head"><span class="tbl-head-title">التصنيفات الحالية</span></div>
+          <div class="tbl-head"><span class="tbl-head-title">التصنيفات (<span id="cats-count">0</span>)</span></div>
           <table class="a-table">
-            <thead><tr><th>الأيقونة</th><th>الاسم</th><th>عدد المنتجات</th><th>الحالة</th><th>إجراءات</th></tr></thead>
+            <thead><tr><th>الأيقونة</th><th>الاسم</th><th>المعرف</th><th>المنتجات</th><th>إجراءات</th></tr></thead>
             <tbody id="cats-body"></tbody>
           </table>
         </div>
@@ -1566,7 +1665,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
       <!-- ORDERS -->
       <!-- CHAT ADMIN -->
       <div class="admin-pg" id="apg-chat">
-        <div class="admin-pg-title">💬 إدارة الدردشات</div>
+        <div class="admin-pg-title"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:8px;vertical-align:middle;"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> إدارة الدردشات</div>
         <div style="display:flex;gap:14px;height:calc(100vh - 160px);min-height:400px;">
           <!-- conversations list -->
           <div style="width:240px;flex-shrink:0;background:var(--bg2);border:1px solid var(--border2);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;">
@@ -1596,7 +1695,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
 
       <!-- ORDERS -->
       <div class="admin-pg" id="apg-orders">
-        <div class="admin-pg-title">🧾 إدارة الطلبات</div>
+        <div class="admin-pg-title"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:8px;vertical-align:middle;"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> إدارة الطلبات</div>
         <div class="tbl-box">
           <div class="tbl-head">
             <span class="tbl-head-title">جميع الطلبات</span>
@@ -1618,18 +1717,13 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
 
       <!-- CUSTOMERS -->
       <div class="admin-pg" id="apg-customers">
-        <div class="admin-pg-title">👥 إدارة العملاء</div>
+        <div class="admin-pg-title"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:8px;vertical-align:middle;"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg> العملاء</div>
         <div class="tbl-box">
-          <div class="tbl-head"><span class="tbl-head-title">قائمة العملاء</span></div>
+          <div class="tbl-head"><span class="tbl-head-title">قائمة العملاء (من الطلبات الواردة)</span></div>
           <table class="a-table">
-            <thead><tr><th>الاسم</th><th>البريد</th><th>الطلبات</th><th>المبلغ الكلي</th><th>تاريخ الانضمام</th><th>الحالة</th></tr></thead>
-            <tbody>
-              <tr><td>أحمد العلي</td><td>ahmed@mail.com</td><td>8</td><td>$640</td><td>2025-01-12</td><td><span class="s-badge s-active">نشط</span></td></tr>
-              <tr><td>سارة محمود</td><td>sara@mail.com</td><td>5</td><td>$420</td><td>2025-02-08</td><td><span class="s-badge s-active">نشط</span></td></tr>
-              <tr><td>محمد خالد</td><td>mhd@mail.com</td><td>3</td><td>$210</td><td>2025-03-15</td><td><span class="s-badge s-active">نشط</span></td></tr>
-              <tr><td>ليلى يوسف</td><td>layla@mail.com</td><td>6</td><td>$380</td><td>2025-01-30</td><td><span class="s-badge s-active">نشط</span></td></tr>
-              <tr><td>خالد نمر</td><td>khaled@mail.com</td><td>1</td><td>$30</td><td>2025-05-10</td><td><span class="s-badge s-inactive">غير نشط</span></td></tr>
-              <tr><td>نور الهدى</td><td>nour@mail.com</td><td>4</td><td>$290</td><td>2025-04-22</td><td><span class="s-badge s-active">نشط</span></td></tr>
+            <thead><tr><th>الاسم</th><th>البريد</th><th>الهاتف</th><th>الطلبات</th><th>المبلغ الكلي</th></tr></thead>
+            <tbody id="customers-body">
+              <tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--text3);">ستظهر هنا بيانات العملاء من الطلبات الواردة</td></tr>
             </tbody>
           </table>
         </div>
@@ -1637,22 +1731,22 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
 
       <!-- REPORTS -->
       <div class="admin-pg" id="apg-reports">
-        <div class="admin-pg-title">📈 التقارير والإحصائيات</div>
+        <div class="admin-pg-title"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:8px;vertical-align:middle;"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> التقارير</div>
         <div class="chart-wrap">
-          <div class="chart-title">📊 المبيعات الشهرية 2025</div>
+          <div class="chart-title">📊 المبيعات الشهرية</div>
           <div class="bar-chart" id="report-chart"></div>
         </div>
-        <div class="dash-grid">
-          <div class="dash-card"><div class="dash-card-icon">📦</div><div class="dash-card-val">مواقع</div><div class="dash-card-label">الأكثر مبيعًا</div><div class="dash-card-trend trend-up">42% من المبيعات</div></div>
-          <div class="dash-card"><div class="dash-card-icon">🌍</div><div class="dash-card-val">فلسطين</div><div class="dash-card-label">أكبر سوق</div><div class="dash-card-trend" style="color:var(--silver3)">35% من العملاء</div></div>
-          <div class="dash-card"><div class="dash-card-icon">💳</div><div class="dash-card-val">PayPal</div><div class="dash-card-label">أكثر طريقة دفع</div><div class="dash-card-trend" style="color:var(--silver3)">58% من الطلبات</div></div>
-          <div class="dash-card"><div class="dash-card-icon">🔄</div><div class="dash-card-val">68%</div><div class="dash-card-label">نسبة العملاء المتكررين</div><div class="dash-card-trend trend-up">↑ 5% هذا الشهر</div></div>
+        <div class="dash-grid" id="reports-stats">
+          <div class="dash-card"><div class="dash-card-icon">🧾</div><div class="dash-card-val" id="rep-orders">0</div><div class="dash-card-label">إجمالي الطلبات</div></div>
+          <div class="dash-card"><div class="dash-card-icon">💰</div><div class="dash-card-val" id="rep-sales">$0</div><div class="dash-card-label">إجمالي المبيعات</div></div>
+          <div class="dash-card"><div class="dash-card-icon">⭐</div><div class="dash-card-val" id="rep-rating">—</div><div class="dash-card-label">متوسط التقييم</div></div>
+          <div class="dash-card"><div class="dash-card-icon">👥</div><div class="dash-card-val" id="rep-customers">0</div><div class="dash-card-label">عدد العملاء</div></div>
         </div>
       </div>
 
       <!-- COUPONS -->
       <div class="admin-pg" id="apg-coupons">
-        <div class="admin-pg-title">🎟 كوبونات الخصم</div>
+        <div class="admin-pg-title"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:8px;vertical-align:middle;"><path d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/></svg> كوبونات الخصم</div>
         <div class="form-card">
           <div class="form-card-title">إنشاء كوبون جديد</div>
           <div class="form-grid" style="margin-bottom:14px;">
@@ -1673,7 +1767,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
 
       <!-- FEATURES MANAGEMENT -->
       <div class="admin-pg" id="apg-features">
-        <div class="admin-pg-title">✨ إدارة مميزات الموقع</div>
+        <div class="admin-pg-title"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:8px;vertical-align:middle;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> مميزات الموقع</div>
 
         <!-- Section title -->
         <div class="form-card" style="max-width:100%;margin-bottom:1.5rem;">
@@ -1735,7 +1829,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
 
       <!-- CONTACT MANAGEMENT -->
       <div class="admin-pg" id="apg-contact">
-        <div class="admin-pg-title">📱 إدارة معلومات التواصل</div>
+        <div class="admin-pg-title"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:8px;vertical-align:middle;"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg> معلومات التواصل</div>
 
         <!-- Add/Edit form -->
         <div class="form-card" style="max-width:100%;margin-bottom:1.5rem;">
@@ -1796,9 +1890,37 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
         </div>
       </div>
 
+      <!-- REVIEWS ADMIN -->
+      <div class="admin-pg" id="apg-reviews">
+        <div class="admin-pg-title"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:8px;vertical-align:middle;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> سجل التقييمات</div>
+
+        <!-- Site Ratings -->
+        <div class="tbl-box" style="margin-bottom:1.5rem;">
+          <div class="tbl-head">
+            <span class="tbl-head-title">تقييمات الموقع (<span id="site-ratings-count">0</span>)</span>
+            <span id="site-ratings-avg" style="font-size:12px;color:#f5c518;font-weight:700;"></span>
+          </div>
+          <table class="a-table">
+            <thead><tr><th>العميل</th><th>البريد</th><th>التقييم</th><th>التعليق</th><th>التاريخ</th><th>إجراءات</th></tr></thead>
+            <tbody id="site-ratings-body"></tbody>
+          </table>
+        </div>
+
+        <!-- Staff Ratings -->
+        <div class="tbl-box">
+          <div class="tbl-head">
+            <span class="tbl-head-title">تقييمات أعضاء الفريق (<span id="staff-ratings-count">0</span>)</span>
+          </div>
+          <table class="a-table">
+            <thead><tr><th>العميل</th><th>العضو المُقيَّم</th><th>التقييم</th><th>التعليق</th><th>التاريخ</th><th>إجراءات</th></tr></thead>
+            <tbody id="staff-ratings-body"></tbody>
+          </table>
+        </div>
+      </div>
+
       <!-- JOB APPLICATIONS -->
       <div class="admin-pg" id="apg-jobs">
-        <div class="admin-pg-title">📨 طلبات التقديم للفريق</div>
+        <div class="admin-pg-title"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:8px;vertical-align:middle;"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg> طلبات التقديم</div>
         <div class="tbl-box">
           <div class="tbl-head">
             <span class="tbl-head-title">الطلبات الواردة (<span id="jobs-count">0</span>)</span>
@@ -1821,7 +1943,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
 
       <!-- TEAM MANAGEMENT -->
       <div class="admin-pg" id="apg-team">
-        <div class="admin-pg-title">🧑‍🤝‍🧑 إدارة فريق العمل</div>
+        <div class="admin-pg-title"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:8px;vertical-align:middle;"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg> إدارة فريق العمل</div>
 
         <!-- Add/Edit Form -->
         <div class="form-card" style="max-width:100%;margin-bottom:1.5rem;">
@@ -1848,9 +1970,26 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
             </div>
           </div>
           <!-- image preview -->
-          <div id="tm-img-preview-wrap" style="display:none;margin-bottom:14px;display:flex;align-items:center;gap:10px;">
-            <img id="tm-img-preview" style="width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid var(--border3);">
-            <button type="button" onclick="clearTeamImg()" style="background:none;border:none;color:var(--red);cursor:pointer;font-family:'Cairo',sans-serif;font-size:12px;">✕ إزالة الصورة</button>
+          <div id="tm-img-preview-wrap" style="display:none;margin-bottom:14px;">
+            <!-- Zoom crop area -->
+            <div style="display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap;">
+              <!-- crop viewport -->
+              <div style="flex-shrink:0;">
+                <div style="font-size:11px;color:var(--text3);margin-bottom:5px;">معاينة (اسحب للتحريك، عجلة الماوس للتكبير)</div>
+                <div id="tm-crop-wrap" style="width:90px;height:90px;border-radius:50%;overflow:hidden;border:2px solid var(--silver4);position:relative;cursor:move;background:var(--bg4);">
+                  <img id="tm-img-preview" style="position:absolute;transform-origin:center;user-select:none;-webkit-user-drag:none;" draggable="false">
+                </div>
+              </div>
+              <!-- controls -->
+              <div style="flex:1;display:flex;flex-direction:column;gap:6px;justify-content:center;">
+                <div style="font-size:11px;color:var(--text3);">تكبير / تصغير</div>
+                <input type="range" id="tm-zoom" min="100" max="300" value="100" style="width:100%;accent-color:var(--silver3);" oninput="applyTeamZoom()">
+                <div style="display:flex;gap:6px;">
+                  <button type="button" onclick="resetTeamZoom()" style="background:var(--bg4);border:1px solid var(--border3);color:var(--text2);padding:4px 10px;border-radius:6px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:11px;">↺ إعادة تعيين</button>
+                  <button type="button" onclick="clearTeamImg()" style="background:none;border:1px solid rgba(200,60,60,.3);color:var(--red);padding:4px 10px;border-radius:6px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:11px;">✕ إزالة</button>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="form-grid" style="margin-bottom:14px;">
             <div class="form-group">
@@ -1951,6 +2090,28 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
                 <option value="active">نشط ✓</option>
                 <option value="inactive">موقوف</option>
               </select>
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:14px;">
+            <label class="form-label">الصورة الشخصية (اختياري)</label>
+            <input type="file" class="form-input" id="sf-img-file" accept="image/*" style="cursor:pointer;margin-bottom:8px;" onchange="previewStaffImg(this)">
+            <div id="sf-img-preview-wrap" style="display:none;">
+              <div style="display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap;">
+                <div style="flex-shrink:0;">
+                  <div style="font-size:11px;color:var(--text3);margin-bottom:5px;">معاينة (اسحب للتحريك، عجلة الماوس للتكبير)</div>
+                  <div id="sf-crop-wrap" style="width:90px;height:90px;border-radius:50%;overflow:hidden;border:2px solid var(--silver4);position:relative;cursor:move;background:var(--bg4);">
+                    <img id="sf-img-preview" style="position:absolute;transform-origin:center;user-select:none;-webkit-user-drag:none;" draggable="false">
+                  </div>
+                </div>
+                <div style="flex:1;display:flex;flex-direction:column;gap:6px;justify-content:center;">
+                  <div style="font-size:11px;color:var(--text3);">تكبير / تصغير</div>
+                  <input type="range" id="sf-zoom" min="100" max="300" value="100" style="width:100%;accent-color:var(--silver3);" oninput="applyStaffZoom()">
+                  <div style="display:flex;gap:6px;">
+                    <button type="button" onclick="resetStaffZoom()" style="background:var(--bg4);border:1px solid var(--border3);color:var(--text2);padding:4px 10px;border-radius:6px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:11px;">↺ إعادة تعيين</button>
+                    <button type="button" onclick="clearStaffImg()" style="background:none;border:1px solid rgba(200,60,60,.3);color:var(--red);padding:4px 10px;border-radius:6px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:11px;">✕ إزالة</button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="form-group" style="margin-bottom:14px;">
@@ -2076,7 +2237,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
 
         <!-- MANUAL SALE -->
         <div class="form-card" style="max-width:100%;" id="manual-sale-section">
-          <div class="form-card-title">💰 تسجيل بيع يدوي</div>
+          <div class="form-card-title"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:6px;vertical-align:middle;"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg> تسجيل بيع يدوي</div>
           <div class="form-grid" style="margin-bottom:14px;">
             <div class="form-group">
               <label class="form-label">اسم العميل / الجهة *</label>
@@ -2383,6 +2544,10 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
 // ====== FIREBASE INIT ======
 let db = null;
 let firebaseReady = false;
+const FB_PATH    = 'ccs_store';
+const STORE_KEY  = 'ccs_data_v2';
+const BACKUP_KEY = 'ccs_backup_v2';
+const SALT       = 'CoreCode$Store#2025!';
 const FB_CONFIG = {
   apiKey: "AIzaSyD3TxoPFeA5LX9afehXIPdtwal_-BmCAj4",
   authDomain: "corecode22.firebaseapp.com",
@@ -2443,34 +2608,11 @@ let products = [
 
 let cart = [];
 let wishlist = [];
-let orders = [
-  {id:'#1048',customer:'أحمد العلي',product:'موقع تجاري WooCommerce',amount:120,date:'2025-06-04',status:'done'},
-  {id:'#1047',customer:'سارة محمود',product:'بوت تيليغرام متكامل',amount:45,date:'2025-06-03',status:'pending'},
-  {id:'#1046',customer:'محمد خالد',product:'تطبيق أندرويد Flutter',amount:200,date:'2025-06-02',status:'done'},
-  {id:'#1045',customer:'ليلى يوسف',product:'سكريبت تحليل البيانات',amount:30,date:'2025-06-01',status:'canceled'},
-  {id:'#1044',customer:'خالد نمر',product:'إضافة WordPress SEO',amount:35,date:'2025-05-30',status:'done'},
-  {id:'#1043',customer:'نور الهدى',product:'داشبورد React',amount:90,date:'2025-05-29',status:'done'},
-  {id:'#1042',customer:'أحمد العلي',product:'API Gateway PHP',amount:75,date:'2025-05-28',status:'pending'},
-  {id:'#1041',customer:'رنا فارس',product:'قالب HTML5',amount:25,date:'2025-05-27',status:'done'},
-];
-let coupons = [
-  {code:'CORE30',pct:30,exp:'2025-07-01',uses:12,status:'active'},
-  {code:'NEWUSER',pct:15,exp:'2025-08-01',uses:45,status:'active'},
-  {code:'SUMMER20',pct:20,exp:'2025-06-30',uses:8,status:'active'},
-];
-const cats = [
-  {id:'websites',name:'مواقع إلكترونية',icon:'🌐'},
-  {id:'apps',name:'تطبيقات موبايل',icon:'📱'},
-  {id:'bots',name:'بوتات وأتمتة',icon:'🤖'},
-  {id:'scripts',name:'سكريبتات',icon:'⚡'},
-  {id:'plugins',name:'إضافات',icon:'🔌'},
-  {id:'templates',name:'قوالب',icon:'🎨'},
-  {id:'games',name:'ألعاب',icon:'🎯'},
-  {id:'apis',name:'APIs',icon:'🔗'},
-];
+let orders = [];
+let coupons = [];
 const salesData = [
-  {month:'يناير',val:1400},{month:'فبراير',val:1800},{month:'مارس',val:2100},
-  {month:'أبريل',val:1950},{month:'مايو',val:2400},{month:'يونيو',val:2840},
+  {month:'يناير',val:0},{month:'فبراير',val:0},{month:'مارس',val:0},
+  {month:'أبريل',val:0},{month:'مايو',val:0},{month:'يونيو',val:0},
 ];
 let adsData = [
   {id:1,tag:'⚡ عرض اليوم',title:'خصم',highlight:'50%',titleAfter:'على تطبيقات الموبايل',desc:'احصل على تطبيق Flutter أو iOS احترافي بنصف السعر — لفترة محدودة فقط!',btn:'اكتشف التطبيقات ←',link:'apps',icon:'📱',visual:'phone',color1:'#111122',color2:'#1a1a2e',image:'',active:true},
@@ -2493,7 +2635,7 @@ function showPage(p) {
   if(p==='home'){renderHomeCats();renderFeatured();}
   if(p==='shop') renderShop();
   if(p==='wishlist') renderWishlist();
-  if(p==='admin'){renderAdminProds();renderDashOrders();renderOrders();renderCoupons();renderCatsAdmin();buildChart('sales-chart',salesData);buildChart('report-chart',salesData);updateAdminCounts();updateSalesDash();}
+  if(p==='admin'){renderAdminProds();renderDashOrders();renderOrders();renderCoupons();renderCatsAdmin();buildChart('sales-chart',salesData);buildChart('report-chart',salesData);updateAdminCounts();updateSalesDash();renderSbRatingsMini();}
 }
 
 // ====== HOME ======
@@ -2555,6 +2697,7 @@ function renderProdCard(p) {
         </div>
         <div style="display:flex;gap:6px;align-items:center;">
           <button class="wishlist-btn ${inWL?'active':''}" onclick="toggleWL(${p.id},this)" title="المفضلة">${inWL?'♥':'♡'}</button>
+          <button class="add-btn" onclick="addToCart(${p.id})" title="أضف للسلة" style="padding:8px 10px;font-size:16px;min-width:auto;">🛒</button>
           <button class="add-btn" onclick="openModal(${p.id})">التفاصيل</button>
         </div>
       </div>
@@ -2566,10 +2709,28 @@ function renderProdCard(p) {
 function openModal(id) {
   const p = products.find(x=>x.id===id);
   if(!p) return;
-  document.getElementById('modal-title').textContent = p.name;
-  document.getElementById('modal-body').innerHTML = `
+  (document.getElementById(('modal-title'))||{}).textContent = p.name;
+
+  // main thumb
+  const thumbHtml = p.image
+    ? `<img src="${p.image}" style="width:100%;height:100%;object-fit:cover;border-radius:10px;">`
+    : `<span style="font-size:60px;">${p.icon}</span>`;
+
+  // gallery
+  const gallery = p.gallery && p.gallery.length
+    ? `<div style="margin-top:10px;">
+        <div style="font-size:12px;color:var(--text3);margin-bottom:6px;font-weight:600;">📸 صور إضافية</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          ${p.gallery.map(img=>`
+            <div onclick="openGalleryImg('${img}')" style="width:64px;height:64px;border-radius:8px;overflow:hidden;cursor:zoom-in;border:1px solid var(--border3);transition:.2s;" onmouseover="this.style.borderColor='var(--silver4)'" onmouseout="this.style.borderColor='var(--border3)'">
+              <img src="${img}" style="width:100%;height:100%;object-fit:cover;">
+            </div>`).join('')}
+        </div>
+       </div>` : '';
+
+  (document.getElementById(('modal-body'))||{}).innerHTML = `
     <div class="modal-product">
-      <div class="modal-thumb">${p.icon}</div>
+      <div class="modal-thumb" style="${p.image?'padding:0;overflow:hidden;':''}">${thumbHtml}</div>
       <div class="modal-info">
         <h2>${p.name}</h2>
         <div class="prod-tags" style="margin-bottom:8px;">
@@ -2578,6 +2739,7 @@ function openModal(id) {
           ${p.badge==='sale'?'<span class="tag tag-sale">💚 تخفيض</span>':''}
         </div>
         <p>${p.desc}</p>
+        ${gallery}
         <div class="modal-price">${p.old?`<span class="prod-old">$${p.old}</span> `:''}$${p.price}</div>
         <div class="modal-btns">
           <button class="btn-silver" onclick="addToCart(${p.id});closeModal()">🛒 أضف للسلة</button>
@@ -2591,10 +2753,151 @@ function openModal(id) {
     </div>`;
   document.getElementById('prod-modal').classList.add('open');
 }
+
+function openGalleryImg(src) {
+  let ov = document.getElementById('gallery-zoom-overlay');
+  if(!ov) {
+    ov = document.createElement('div');
+    ov.id = 'gallery-zoom-overlay';
+    ov.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:9999;display:flex;align-items:center;justify-content:center;cursor:zoom-out;';
+    ov.onclick = ()=>ov.remove();
+    document.body.appendChild(ov);
+  }
+  ov.innerHTML = `<img src="${src}" style="max-width:90vw;max-height:90vh;object-fit:contain;border-radius:10px;">`;
+}
 function closeModal(){document.getElementById('prod-modal').classList.remove('open');}
 document.getElementById('prod-modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
 
-// ====== CART SOUND ======
+// ====== GALLERY IMAGES ======
+let prodGalleryImages = []; // base64 array
+
+function addGalleryImages(input) {
+  const files = Array.from(input.files);
+  files.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      prodGalleryImages.push(e.target.result);
+      renderGalleryPreview();
+    };
+    reader.readAsDataURL(file);
+  });
+  input.value = '';
+}
+
+function renderGalleryPreview() {
+  const wrap = document.getElementById('np-gallery-preview');
+  if(!wrap) return;
+  wrap.innerHTML = prodGalleryImages.map((img,i)=>`
+    <div style="position:relative;width:70px;height:70px;flex-shrink:0;">
+      <img src="${img}" style="width:70px;height:70px;object-fit:cover;border-radius:8px;border:1px solid var(--border3);">
+      <button onclick="removeGalleryImg(${i})" style="position:absolute;top:-5px;right:-5px;width:18px;height:18px;border-radius:50%;background:#e05555;border:none;color:#fff;cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;line-height:1;">✕</button>
+    </div>`).join('');
+}
+
+function removeGalleryImg(idx) {
+  prodGalleryImages.splice(idx,1);
+  renderGalleryPreview();
+}
+
+// ====== CATEGORIES CRUD ======
+let cats = [
+  {id:'websites',name:'مواقع إلكترونية',icon:'🌐'},
+  {id:'apps',    name:'تطبيقات موبايل', icon:'📱'},
+  {id:'bots',    name:'بوتات وأتمتة',   icon:'🤖'},
+  {id:'scripts', name:'سكريبتات',        icon:'⚡'},
+  {id:'plugins', name:'إضافات',          icon:'🔌'},
+  {id:'templates',name:'قوالب',          icon:'🎨'},
+  {id:'games',   name:'ألعاب',           icon:'🎯'},
+  {id:'apis',    name:'APIs',            icon:'🔗'},
+];
+
+function renderCatsAdmin() {
+  const el = document.getElementById('cats-count');
+  const tbody = document.getElementById('cats-body');
+  if(el) el.textContent = cats.length;
+  if(!tbody) return;
+  tbody.innerHTML = cats.map(c => {
+    const count = products.filter(p=>p.cat===c.name||p.cat===c.id).length;
+    return `<tr>
+      <td style="font-size:24px;">${c.icon}</td>
+      <td style="font-weight:600;color:var(--silver2);">${c.name}</td>
+      <td style="font-family:monospace;color:var(--text3);font-size:12px;">${c.id}</td>
+      <td style="text-align:center;color:var(--text2);">${count}</td>
+      <td class="td-actions"><div class="td-actions-inner">
+        <button class="a-action a-action-edit" data-editcat="${c.id}"><span class="ico" style="margin-left:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span> تعديل</button>
+        <button class="a-action a-action-del" data-delcat="${c.id}"><span class="ico" style="margin-left:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg></span> حذف</button>
+      </div></td>
+    </tr>`;
+  }).join('');
+
+  document.querySelectorAll('[data-editcat]').forEach(btn=>{
+    btn.onclick = function(){ openEditCat(this.getAttribute('data-editcat')); };
+  });
+  document.querySelectorAll('[data-delcat]').forEach(btn=>{
+    btn.onclick = function(){
+      const id = this.getAttribute('data-delcat');
+      const c = cats.find(x=>x.id===id);
+      showConfirmBox(`هل تريد حذف تصنيف "${c?.name}"؟`, ()=>{
+        cats = cats.filter(x=>x.id!==id);
+        saveAllData(); renderCatsAdmin(); updateCatQuickBtns();
+        showNotif('🗑 تم حذف التصنيف','error');
+      });
+    };
+  });
+}
+
+function saveCat() {
+  const editId = document.getElementById('cat-edit-id').value;
+  const name   = document.getElementById('cat-name').value.trim();
+  const icon   = document.getElementById('cat-icon').value.trim() || '📁';
+  const catId  = document.getElementById('cat-id-field').value.trim().toLowerCase().replace(/\s+/g,'') || name.replace(/\s+/g,'_');
+  if(!name){ showNotif('أدخل اسم التصنيف','error'); return; }
+  if(editId) {
+    const idx = cats.findIndex(x=>x.id===editId);
+    cats[idx] = {...cats[idx], name, icon};
+    showNotif('✓ تم تحديث التصنيف','success');
+  } else {
+    if(cats.find(x=>x.id===catId)){ showNotif('المعرف موجود مسبقاً','error'); return; }
+    cats.push({id:catId, name, icon});
+    showNotif('✓ تم إضافة التصنيف','success');
+  }
+  saveAllData(); resetCatForm(); renderCatsAdmin(); updateCatQuickBtns();
+}
+
+function openEditCat(id) {
+  const c = cats.find(x=>x.id===id);
+  if(!c) return;
+  document.getElementById('cat-edit-id').value   = c.id;
+  document.getElementById('cat-name').value      = c.name;
+  document.getElementById('cat-icon').value      = c.icon;
+  document.getElementById('cat-id-field').value  = c.id;
+  document.getElementById('cat-id-field').disabled = true;
+  (document.getElementById(('cat-form-title'))||{}).textContent = `<span class="ico" style="margin-left:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span> تعديل: ${c.name}`;
+  (document.getElementById(('cat-save-btn'))||{}).textContent   = 'حفظ التعديلات ←';
+  document.getElementById('cat-cancel-btn').style.display = 'inline-block';
+  document.getElementById('apg-categories').scrollIntoView({behavior:'smooth'});
+}
+
+function resetCatForm() {
+  document.getElementById('cat-edit-id').value   = '';
+  document.getElementById('cat-name').value      = '';
+  document.getElementById('cat-icon').value      = '';
+  document.getElementById('cat-id-field').value  = '';
+  document.getElementById('cat-id-field').disabled = false;
+  (document.getElementById(('cat-form-title'))||{}).textContent   = '➕ إضافة تصنيف جديد';
+  (document.getElementById(('cat-save-btn'))||{}).textContent     = 'حفظ التصنيف ←';
+  document.getElementById('cat-cancel-btn').style.display = 'none';
+}
+
+function updateCatQuickBtns() {
+  // Update quick buttons in product form
+  const wrap = document.getElementById('cat-quick-btns');
+  const datalist = document.getElementById('cat-suggestions');
+  if(wrap) wrap.innerHTML = cats.map(c=>`<button type="button" class="cat-quick" onclick="setCat('${c.name}')">${c.icon} ${c.name}</button>`).join('');
+  if(datalist) datalist.innerHTML = cats.map(c=>`<option value="${c.name}">`).join('');
+  // Update home cats
+  renderHomeCats();
+}
 function playCartSound() {
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -2745,7 +3048,7 @@ function updateCartUI() {
   const discount  = calcDiscount();
   const total     = Math.max(0, subtotal - discount);
 
-  document.getElementById('cart-total').textContent = '$'+total.toFixed(2);
+  (document.getElementById(('cart-total'))||{}).textContent = '$'+total.toFixed(2);
 
   // subtotal & discount rows
   const subRow = document.getElementById('cart-subtotal-row');
@@ -2753,9 +3056,9 @@ function updateCartUI() {
   if(appliedCoupon && discount > 0) {
     subRow.style.display = 'flex';
     discRow.style.display = 'flex';
-    document.getElementById('cart-subtotal').textContent = '$'+subtotal.toFixed(2);
-    document.getElementById('cart-discount-val').textContent = '-$'+discount.toFixed(2);
-    document.getElementById('cart-coupon-code-label').textContent = appliedCoupon.code+' '+appliedCoupon.pct+'%';
+    (document.getElementById(('cart-subtotal'))||{}).textContent = '$'+subtotal.toFixed(2);
+    (document.getElementById(('cart-discount-val'))||{}).textContent = '-$'+discount.toFixed(2);
+    (document.getElementById(('cart-coupon-code-label'))||{}).textContent = appliedCoupon.code+' '+appliedCoupon.pct+'%';
   } else {
     subRow.style.display = 'none';
     discRow.style.display = 'none';
@@ -2763,7 +3066,7 @@ function updateCartUI() {
 
   const body = document.getElementById('cart-body');
   if(!cart.length){
-    body.innerHTML='<div class="cart-empty"><span>🛒</span>السلة فارغة حتى الآن</div>';
+    body.innerHTML='<div class="cart-empty"><span class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 001.89 1.61h9.72a2 2 0 001.89-1.32L23 6H6"/></svg></span>السلة فارغة حتى الآن</div>';
     appliedCoupon=null;
     document.getElementById('coupon-input').value='';
     document.getElementById('coupon-msg').style.display='none';
@@ -2785,7 +3088,7 @@ function checkout(){
   const total    = cart.reduce((s,x)=>s+x.price,0);
   const discount = calcDiscount();
   const finalTotal = Math.max(0, total - discount);
-  document.getElementById('co-total').textContent = '$'+finalTotal.toFixed(2);
+  (document.getElementById(('co-total'))||{}).textContent = '$'+finalTotal.toFixed(2);
   const summaryEl = document.getElementById('checkout-summary');
   summaryEl.innerHTML = `
     <div style="font-size:12px;color:var(--text3);margin-bottom:8px;font-weight:700;">🛍 ملخص الطلب</div>
@@ -2869,9 +3172,9 @@ function submitOrder(){
   ['co-name','co-phone','co-email','co-notes','co-website','captcha-answer'].forEach(id=>{
     const el=document.getElementById(id); if(el) el.value='';
   });
-  document.getElementById('co-email-icon').textContent='';
+  (document.getElementById(('co-email-icon'))||{}).textContent='';
   document.getElementById('co-email-msg').style.display='none';
-  document.getElementById('captcha-icon').textContent='';
+  (document.getElementById(('captcha-icon'))||{}).textContent='';
 
   // play success sound
   playSuccessSound();
@@ -2893,6 +3196,8 @@ function submitOrder(){
     product: orders[0].product,
     amount: orders[0].amount
   });
+  // admin notification bell
+  addAdminNotif('order', `🛍 طلب جديد — ${orders[0].customer}`, `${orders[0].product} — $${orders[0].amount}`);
   // trigger admin alert only if admin is logged in
   if(isAdminLoggedIn) showNewOrderAlert(orders[0]);
   // show track order modal to customer
@@ -2905,7 +3210,7 @@ function openTrackSearch() {
     showMyOrders();
   } else {
     document.getElementById('track-search-input').value = '';
-    document.getElementById('track-search-result').innerHTML = '';
+    (document.getElementById(('track-search-result'))||{}).innerHTML = '';
     document.getElementById('track-search-modal').classList.add('open');
     setTimeout(()=>document.getElementById('track-search-input').focus(), 300);
   }
@@ -2933,7 +3238,7 @@ function showMyOrders() {
 
   const adminWA = '970597789932';
 
-  document.getElementById('track-body').innerHTML = `
+  (document.getElementById(('track-body'))||{}).innerHTML = `
     <div style="margin-bottom:1rem;">
       <div style="font-size:13px;color:var(--text2);margin-bottom:1rem;">لديك <strong style="color:var(--silver2);">${myOrders.length}</strong> ${myOrders.length===1?'طلب':'طلبات'}</div>
       ${myOrders.length === 0 ? `<div style="text-align:center;padding:2rem;color:var(--text3);">لا توجد طلبات محفوظة</div>` :
@@ -2986,7 +3291,7 @@ function showMyOrders() {
             </div>
           </div>`;
         }).join('')}
-      <button onclick="document.getElementById('track-modal').classList.remove('open');document.getElementById('track-search-input').value='';document.getElementById('track-search-result').innerHTML='';document.getElementById('track-search-modal').classList.add('open');" style="
+      <button onclick="document.getElementById('track-modal').classList.remove('open');document.getElementById('track-search-input').value='';(document.getElementById(('track-search-result'))||{}).innerHTML='';document.getElementById('track-search-modal').classList.add('open');" style="
         width:100%;background:none;border:1px dashed var(--border2);color:var(--text3);
         padding:9px;border-radius:8px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:12px;margin-top:4px;transition:.2s;"
         onmouseover="this.style.color='var(--silver2)'" onmouseout="this.style.color='var(--text3)'">
@@ -3096,7 +3401,7 @@ function showTrackOrder(order) {
     `مرحباً، أريد الاستفسار عن طلبي\nرقم الطلب: ${order.id}\nالاسم: ${order.customer}`
   );
 
-  document.getElementById('track-body').innerHTML = `
+  (document.getElementById(('track-body'))||{}).innerHTML = `
     <div style="text-align:center;padding:1rem 0 1.5rem;">
       <div style="font-size:48px;margin-bottom:10px;">🎉</div>
       <div style="font-size:17px;font-weight:700;color:var(--silver2);margin-bottom:4px;">شكراً ${order.customer}!</div>
@@ -3191,6 +3496,128 @@ document.getElementById('job-modal').addEventListener('click',function(e){if(e.t
 document.getElementById('team-member-modal').addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
 document.getElementById('track-modal').addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
 
+// ====== ADMIN NOTIFICATION SYSTEM ======
+let adminNotifs = []; // [{id, type, title, body, time, read}]
+let notifPanelOpen = false;
+
+function addAdminNotif(type, title, body) {
+  if(!isAdminLoggedIn) return;
+  const notif = {
+    id: Date.now(),
+    type, // 'order' | 'chat' | 'job'
+    title,
+    body,
+    time: new Date().toISOString(),
+    read: false
+  };
+  adminNotifs.unshift(notif);
+  if(adminNotifs.length > 50) adminNotifs = adminNotifs.slice(0,50);
+  updateNotifBell();
+  renderNotifPanel();
+  // browser notification if permitted
+  if(Notification.permission === 'granted') {
+    new Notification(title, {body, icon: '🛒'});
+  }
+}
+
+function updateNotifBell() {
+  const unread = adminNotifs.filter(n=>!n.read).length;
+  const btn   = document.getElementById('notif-bell-btn');
+  const count = document.getElementById('notif-bell-count');
+  if(!btn) return;
+  if(isAdminLoggedIn) {
+    btn.style.display = 'flex';
+    if(unread > 0) {
+      count.style.display = 'flex';
+      count.textContent = unread > 99 ? '99+' : unread;
+      // pulse animation
+      btn.style.animation = 'bellRing .4s ease 3';
+    } else {
+      count.style.display = 'none';
+      btn.style.animation = '';
+    }
+  } else {
+    btn.style.display = 'none';
+  }
+}
+
+function renderNotifPanel() {
+  const list = document.getElementById('notif-panel-list');
+  if(!list) return;
+  if(!adminNotifs.length) {
+    list.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--text3);"><div style="font-size:36px;margin-bottom:8px;">🔔</div>لا توجد إشعارات بعد</div>';
+    return;
+  }
+  const icons = {order:'🛍', chat:'💬', job:'📨'};
+  const colors = {order:'rgba(40,120,60,.2)', chat:'rgba(50,80,160,.2)', job:'rgba(180,140,30,.2)'};
+  const borders = {order:'rgba(60,160,80,.3)', chat:'rgba(80,100,220,.3)', job:'rgba(200,160,40,.3)'};
+  list.innerHTML = adminNotifs.map(n=>`
+    <div onclick="openNotif('${n.id}')" style="
+      padding:12px 16px;border-bottom:1px solid var(--border);cursor:pointer;
+      background:${n.read?'transparent':'rgba(255,255,255,.02)'};
+      transition:.15s;display:flex;gap:10px;align-items:flex-start;"
+      onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background='${n.read?'transparent':'rgba(255,255,255,.02)'}'">
+      <div style="width:36px;height:36px;border-radius:10px;background:${colors[n.type]||colors.order};border:1px solid ${borders[n.type]||borders.order};display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">${icons[n.type]||'🔔'}</div>
+      <div style="flex:1;min-width:0;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+          <span style="font-size:13px;font-weight:${n.read?'400':'700'};color:${n.read?'var(--text2)':'var(--silver2)'};">${n.title}</span>
+          ${!n.read?'<span style="width:8px;height:8px;border-radius:50%;background:#ff3b30;flex-shrink:0;"></span>':''}
+        </div>
+        <div style="font-size:12px;color:var(--text3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${n.body}</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:3px;">${new Date(n.time).toLocaleString('ar',{hour:'2-digit',minute:'2-digit',day:'numeric',month:'short'})}</div>
+      </div>
+    </div>`).join('');
+}
+
+function openNotif(id) {
+  const n = adminNotifs.find(x=>x.id===parseInt(id)||x.id.toString()===id.toString());
+  if(!n) return;
+  n.read = true;
+  updateNotifBell();
+  renderNotifPanel();
+  toggleNotifPanel();
+  // navigate to relevant page
+  if(n.type==='order')  { showPage('admin'); showAdmin('orders',null); }
+  if(n.type==='chat')   { showPage('admin'); showAdmin('chat',null); }
+  if(n.type==='job')    { showPage('admin'); showAdmin('jobs',null); }
+}
+
+function toggleNotifPanel() {
+  notifPanelOpen = !notifPanelOpen;
+  const panel = document.getElementById('notif-panel');
+  panel.style.display = notifPanelOpen ? 'flex' : 'none';
+  if(notifPanelOpen) renderNotifPanel();
+}
+
+function markAllRead() {
+  adminNotifs.forEach(n=>n.read=true);
+  updateNotifBell();
+  renderNotifPanel();
+}
+
+function clearAllNotifs() {
+  adminNotifs = [];
+  updateNotifBell();
+  renderNotifPanel();
+}
+
+// Close panel when clicking outside
+document.addEventListener('click', function(e) {
+  const panel = document.getElementById('notif-panel');
+  const bell  = document.getElementById('notif-bell-btn');
+  if(notifPanelOpen && !panel?.contains(e.target) && !bell?.contains(e.target)) {
+    notifPanelOpen = false;
+    if(panel) panel.style.display = 'none';
+  }
+});
+
+// Request browser notification permission when admin logs in
+function requestNotifPermission() {
+  if('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+}
+
 // ====== NEW ORDER ALERT ======
 let alertOrderId = null;
 let alertSoundCtx = null;
@@ -3227,9 +3654,9 @@ function stopAlertSound() {
 function showNewOrderAlert(order) {
   alertOrderId = order.id;
   const el = document.getElementById('new-order-alert');
-  document.getElementById('noa-customer').textContent = order.customer;
-  document.getElementById('noa-product').textContent  = order.product;
-  document.getElementById('noa-amount').textContent   = '$' + order.amount;
+  (document.getElementById(('noa-customer'))||{}).textContent = order.customer;
+  (document.getElementById(('noa-product'))||{}).textContent  = order.product;
+  (document.getElementById(('noa-amount'))||{}).textContent   = '$' + order.amount;
   // show
   el.style.display = 'block';
   requestAnimationFrame(()=>{
@@ -3270,8 +3697,8 @@ function openOrderDetail(id) {
   if (!o) return;
   const statusMap  = {done:'✅ تم التسليم',pending:'🕐 تم الاستلام',canceled:'❌ ملغي',reviewing:'🔍 قيد المراجعة',inprogress:'⚙ جاري التنفيذ',sold:'💰 تم البيع'};
   const statusClass = {done:'s-done',pending:'s-pending',canceled:'s-canceled',reviewing:'s-done',inprogress:'s-pending'};
-  document.getElementById('od-title').textContent = `تفاصيل الطلب ${o.id}`;
-  document.getElementById('od-body').innerHTML = `
+  (document.getElementById(('od-title'))||{}).textContent = `تفاصيل الطلب ${o.id}`;
+  (document.getElementById(('od-body'))||{}).innerHTML = `
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.2rem;">
       <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:12px;">
         <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">👤 العميل</div>
@@ -3359,7 +3786,10 @@ function doLogin(){
     currentUser = {username:'admin', role:'admin', name:'المدير'};
     isAdminLoggedIn = true;
     applyRoleUI(); showPage('admin');
-    showNotif('أهلاً بك في لوحة التحكم 👋','success'); return;
+    showNotif('أهلاً بك في لوحة التحكم 👋','success');
+    updateNotifBell();
+    requestNotifPermission();
+    return;
   }
   const staff = staffList.find(s=>s.username===u && s.password===p && s.status==='active');
   if(staff){
@@ -3372,6 +3802,8 @@ function doLogin(){
     if(allowed.length && !allowed.includes('dashboard')) {
       setTimeout(()=>{ const el=document.querySelector(`.sb-item[onclick*="'${allowed[0]}'"]`); showAdmin(allowed[0], el); },100);
     }
+    updateNotifBell();
+    requestNotifPermission();
     showNotif(`أهلاً ${staff.name} 👋`,'success'); return;
   }
   const inactive = staffList.find(s=>s.username===u && s.password===p);
@@ -3495,19 +3927,21 @@ function showAdmin(p, el) {
   if(p==='contact'){renderContactAdmin();}
   if(p==='features'){renderFeaturesAdmin();}
   if(p==='jobs'){renderJobsAdmin();}
+  if(p==='reviews'){renderReviewsAdmin();}
   if(p==='products') renderAdminProds();
   if(p==='orders') renderOrders();
   if(p==='chat'){renderAdminChatList();}
   if(p==='coupons') renderCoupons();
   if(p==='categories') renderCatsAdmin();
-  if(p==='reports'){buildChart('report-chart',salesData);}
+  if(p==='customers') renderCustomers();
+  if(p==='reports')   renderReports();
   setTimeout(applyButtonPermissions, 150);
 }
 function updateAdminCounts(){
-  document.getElementById('a-prods-count').textContent = products.length;
-  document.getElementById('a-orders-count').textContent = orders.length;
-  document.getElementById('ap-count').textContent = products.length;
-  document.getElementById('s-prods').textContent = products.length+'+';
+  (document.getElementById(('a-prods-count'))||{}).textContent = products.length;
+  (document.getElementById(('a-orders-count'))||{}).textContent = orders.length;
+  (document.getElementById(('ap-count'))||{}).textContent = products.length;
+  (document.getElementById(('s-prods'))||{}).textContent = products.length+'+';
 }
 function renderAdminProds(){
   const q=(document.getElementById('ap-search')?.value||'').toLowerCase();
@@ -3522,17 +3956,17 @@ function renderAdminProds(){
   const sbAdd = document.querySelector('.sb-item[onclick*="openAddProduct"]');
   if(sbAdd) sbAdd.style.display = can('add_product') ? '' : 'none';
 
-  document.getElementById('ap-body').innerHTML=p.map(x=>`<tr>
+  (document.getElementById(('ap-body'))||{}).innerHTML=p.map(x=>`<tr>
     <td style="font-size:22px">${x.image ? `<img src="${x.image}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;border:1px solid var(--border3);">` : x.icon}</td>
     <td style="font-weight:600;color:var(--silver2)">${x.name}</td>
     <td>${x.cat || '—'}</td>
     <td style="font-weight:700;color:var(--silver2)">$${x.price}</td>
     <td><span class="s-badge ${x.status==='inactive'?'s-inactive':'s-active'}">${x.status==='inactive'?'غير نشط':'نشط'}</span></td>
     <td class="td-actions"><div class="td-actions-inner">
-      ${can('edit_product') ? `<button class="a-action a-action-edit" data-edit="${x.id}">✏ تعديل</button>` : ''}
-      ${can('delete_product') ? `<button class="a-action a-action-del" data-del="${x.id}">🗑 حذف</button>` : ''}
+      ${can('edit_product') ? `<button class="a-action a-action-edit" data-edit="${x.id}"><span class="ico" style="margin-left:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span> تعديل</button>` : ''}
+      ${can('delete_product') ? `<button class="a-action a-action-del" data-del="${x.id}"><span class="ico" style="margin-left:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg></span> حذف</button>` : ''}
     </div></td></tr>`).join('');
-  document.getElementById('ap-count').textContent = p.length;
+  (document.getElementById(('ap-count'))||{}).textContent = p.length;
 
   document.querySelectorAll('[data-del]').forEach(btn=>{
     btn.onclick = function(){
@@ -3565,9 +3999,9 @@ function openAddProduct() {
   if(!can('add_product')){ showNotif('ليس لديك صلاحية لإضافة منتجات','error'); return; }
   prodImageBase64 = '';
   document.getElementById('ep-id').value = '';
-  document.getElementById('prod-form-title').textContent = '➕ إضافة منتج جديد';
-  document.getElementById('prod-form-subtitle').textContent = 'معلومات المنتج';
-  document.getElementById('prod-save-btn').textContent = 'حفظ المنتج ←';
+  (document.getElementById(('prod-form-title'))||{}).textContent = '➕ إضافة منتج جديد';
+  (document.getElementById(('prod-form-subtitle'))||{}).textContent = 'معلومات المنتج';
+  (document.getElementById(('prod-save-btn'))||{}).textContent = 'حفظ المنتج ←';
   document.getElementById('np-name').value = '';
   document.getElementById('np-price').value = '';
   document.getElementById('np-oldprice').value = '';
@@ -3579,7 +4013,7 @@ function openAddProduct() {
   document.getElementById('ep-img-file').value = '';
   document.getElementById('ep-img-preview').style.display = 'none';
   document.getElementById('ep-img-emoji').style.display = 'flex';
-  document.getElementById('ep-img-emoji').textContent = '📦';
+  (document.getElementById(('ep-img-emoji'))||{}).textContent = '📦';
   document.getElementById('prod-clear-img-btn').style.display = 'none';
   showAdmin('addproduct', null);
 }
@@ -3590,9 +4024,9 @@ function openEditProduct(id) {
   if (!p) return;
   prodImageBase64 = p.image || '';
   document.getElementById('ep-id').value = id;
-  document.getElementById('prod-form-title').textContent = '✏ تعديل المنتج';
-  document.getElementById('prod-form-subtitle').textContent = 'تعديل معلومات: ' + p.name;
-  document.getElementById('prod-save-btn').textContent = 'حفظ التعديلات ←';
+  (document.getElementById(('prod-form-title'))||{}).textContent = '<span class="ico" style="margin-left:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span> تعديل المنتج';
+  (document.getElementById(('prod-form-subtitle'))||{}).textContent = 'تعديل معلومات: ' + p.name;
+  (document.getElementById(('prod-save-btn'))||{}).textContent = 'حفظ التعديلات ←';
   document.getElementById('np-name').value = p.name;
   document.getElementById('np-price').value = p.price;
   document.getElementById('np-oldprice').value = p.old || '';
@@ -3610,7 +4044,7 @@ function openEditProduct(id) {
   } else {
     document.getElementById('ep-img-preview').style.display = 'none';
     document.getElementById('ep-img-emoji').style.display = 'flex';
-    document.getElementById('ep-img-emoji').textContent = p.icon || '📦';
+    (document.getElementById(('ep-img-emoji'))||{}).textContent = p.icon || '📦';
     document.getElementById('prod-clear-img-btn').style.display = 'none';
   }
   showAdmin('addproduct', null);
@@ -3635,13 +4069,13 @@ function clearProdImage() {
   document.getElementById('ep-img-file').value = '';
   document.getElementById('ep-img-preview').style.display = 'none';
   document.getElementById('ep-img-emoji').style.display = 'flex';
-  document.getElementById('ep-img-emoji').textContent = document.getElementById('np-icon').value || '📦';
+  (document.getElementById(('ep-img-emoji'))||{}).textContent = document.getElementById('np-icon').value || '📦';
   document.getElementById('prod-clear-img-btn').style.display = 'none';
 }
 
 function updateProdEmoji(val) {
   if (!prodImageBase64) {
-    document.getElementById('ep-img-emoji').textContent = val || '📦';
+    (document.getElementById(('ep-img-emoji'))||{}).textContent = val || '📦';
   }
 }
 
@@ -3661,6 +4095,7 @@ function saveProduct(){
     badge: document.getElementById('np-badge').value,
     status: document.getElementById('np-status').value,
     image: prodImageBase64,
+    gallery: [...prodGalleryImages],
     features: ['كود نظيف','دعم فني','تحديثات مجانية','توثيق شامل','Responsive','جاهز للنشر']
   };
 
@@ -3674,11 +4109,14 @@ function saveProduct(){
   }
 
   prodImageBase64 = '';
+  prodGalleryImages = [];
+  renderGalleryPreview();
+  updateCatQuickBtns();
   updateAdminCounts();
   showAdmin('products', null);
 }
 function renderDashOrders(){
-  document.getElementById('dash-orders').innerHTML=orders.slice(0,5).map(o=>`<tr>
+  (document.getElementById(('dash-orders'))||{}).innerHTML=orders.slice(0,5).map(o=>`<tr>
     <td style="color:var(--silver3);font-family:monospace">${o.id}</td>
     <td>${o.customer}</td><td>${o.product}</td>
     <td style="font-weight:700;color:var(--silver2)">$${o.amount}</td>
@@ -3691,7 +4129,7 @@ function renderOrders(){
   const f = document.getElementById('order-status-filter')?.value||'';
   let o = [...orders];
   if(f) o = o.filter(x=>x.status===f);
-  document.getElementById('orders-body').innerHTML=o.map(x=>`<tr>
+  (document.getElementById(('orders-body'))||{}).innerHTML=o.map(x=>`<tr>
     <td style="color:var(--silver3);font-family:monospace">${x.id}</td>
     <td>${x.customer}</td><td>${x.product}</td>
     <td style="font-weight:700;color:var(--silver2)">$${x.amount}</td>
@@ -3700,7 +4138,7 @@ function renderOrders(){
     <td class="td-actions"><div class="td-actions-inner">
       <button class="a-action" style="color:#5588cc;background:rgba(50,80,160,.12);border:1px solid rgba(60,100,200,.25);border-radius:5px;" data-vieworder="${x.id}">🔍 تفاصيل</button>
       <button class="a-action" data-chorder="${x.id}">🔄 حالة</button>
-      <button class="a-action a-action-del" data-delorder="${x.id}">🗑 حذف</button>
+      <button class="a-action a-action-del" data-delorder="${x.id}"><span class="ico" style="margin-left:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg></span> حذف</button>
     </div></td></tr>`).join('');
   document.querySelectorAll('[data-vieworder]').forEach(btn=>{
     btn.onclick = function(){ openOrderDetail(this.getAttribute('data-vieworder')); };
@@ -3808,13 +4246,13 @@ function applyOrderStatus(id, status) {
   updateSalesDash();
 }
 function renderCoupons(){
-  document.getElementById('coupons-body').innerHTML=coupons.map((c,i)=>`<tr>
+  (document.getElementById(('coupons-body'))||{}).innerHTML=coupons.map((c,i)=>`<tr>
     <td style="font-family:monospace;font-weight:700;color:var(--silver2);letter-spacing:2px">${c.code}</td>
     <td style="color:var(--green);font-weight:700">${c.pct}%</td>
     <td style="color:var(--text3)">${c.exp}</td>
     <td>${c.uses}</td>
     <td><span class="s-badge s-active">نشط</span></td>
-    <td><button class="a-action a-action-del" data-delcoupon="${i}">🗑 حذف</button></td>
+    <td><button class="a-action a-action-del" data-delcoupon="${i}"><span class="ico" style="margin-left:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg></span> حذف</button></td>
   </tr>`).join('');
   document.querySelectorAll('[data-delcoupon]').forEach(btn=>{
     btn.onclick = function(){
@@ -3838,7 +4276,7 @@ function saveCoupon(){
 }
 function deleteCoupon(i){coupons.splice(i,1);renderCoupons();showNotif('تم حذف الكوبون','error'); saveAllData();}
 function renderCatsAdmin(){
-  document.getElementById('cats-body').innerHTML=cats.map(c=>`<tr>
+  (document.getElementById(('cats-body'))||{}).innerHTML=cats.map(c=>`<tr>
     <td style="font-size:22px">${c.icon}</td>
     <td style="font-weight:600;color:var(--silver2)">${c.name}</td>
     <td>${products.filter(p=>p.cat===c.id).length}</td>
@@ -3858,7 +4296,7 @@ function setCat(val) {
 }
 function showConfirmBox(msg, onConfirm) {
   const overlay = document.getElementById('confirm-overlay');
-  document.getElementById('confirm-msg').textContent = msg;
+  (document.getElementById(('confirm-msg'))||{}).textContent = msg;
   overlay.style.display = 'flex';
   document.getElementById('confirm-yes').onclick = function(){
     overlay.style.display = 'none';
@@ -3903,14 +4341,14 @@ function clearFeatImage() {
   featImgBase64 = '';
   document.getElementById('feat-img-file').value = '';
   const icon = document.getElementById('feat-icon').value || '⭐';
-  document.getElementById('feat-img-thumb').innerHTML = icon;
+  (document.getElementById(('feat-img-thumb'))||{}).innerHTML = icon;
   document.getElementById('feat-clear-img').style.display = 'none';
 }
 
 function renderFeaturesAdmin() {
-  document.getElementById('feat-count').textContent = featuresList.length;
+  (document.getElementById(('feat-count'))||{}).textContent = featuresList.length;
   document.getElementById('feat-section-title').value = featuresSectionTitle;
-  document.getElementById('feat-tbody').innerHTML = featuresList.map(f => `<tr>
+  (document.getElementById(('feat-tbody'))||{}).innerHTML = featuresList.map(f => `<tr>
     <td>
       ${f.image
         ? `<img src="${f.image}" style="width:40px;height:40px;object-fit:cover;border-radius:8px;border:1px solid var(--border3);">`
@@ -3923,8 +4361,8 @@ function renderFeaturesAdmin() {
       <button class="a-action" onclick="moveFeature(${f.id},1)">↓</button>
     </div></td>
     <td class="td-actions"><div class="td-actions-inner">
-      <button class="a-action a-action-edit" data-editfeat="${f.id}">✏ تعديل</button>
-      <button class="a-action a-action-del" data-delfeat="${f.id}">🗑 حذف</button>
+      <button class="a-action a-action-edit" data-editfeat="${f.id}"><span class="ico" style="margin-left:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span> تعديل</button>
+      <button class="a-action a-action-del" data-delfeat="${f.id}"><span class="ico" style="margin-left:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg></span> حذف</button>
     </div></td>
   </tr>`).join('');
 
@@ -4007,8 +4445,8 @@ function openEditFeature(id) {
     thumb.innerHTML = f.icon || '⭐';
     document.getElementById('feat-clear-img').style.display = 'none';
   }
-  document.getElementById('feat-form-title').textContent   = `✏ تعديل: ${f.title}`;
-  document.getElementById('feat-save-btn').textContent     = 'حفظ التعديلات ←';
+  (document.getElementById(('feat-form-title'))||{}).textContent   = `<span class="ico" style="margin-left:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span> تعديل: ${f.title}`;
+  (document.getElementById(('feat-save-btn'))||{}).textContent     = 'حفظ التعديلات ←';
   document.getElementById('feat-cancel-btn').style.display = 'inline-block';
   document.getElementById('apg-features').scrollIntoView({behavior:'smooth'});
 }
@@ -4020,10 +4458,10 @@ function resetFeatureForm() {
   document.getElementById('feat-title').value    = '';
   document.getElementById('feat-desc').value     = '';
   document.getElementById('feat-img-file').value = '';
-  document.getElementById('feat-img-thumb').innerHTML = '⭐';
+  (document.getElementById(('feat-img-thumb'))||{}).innerHTML = '⭐';
   document.getElementById('feat-clear-img').style.display = 'none';
-  document.getElementById('feat-form-title').textContent   = '➕ إضافة ميزة جديدة';
-  document.getElementById('feat-save-btn').textContent     = 'حفظ الميزة ←';
+  (document.getElementById(('feat-form-title'))||{}).textContent   = '➕ إضافة ميزة جديدة';
+  (document.getElementById(('feat-save-btn'))||{}).textContent     = 'حفظ الميزة ←';
   document.getElementById('feat-cancel-btn').style.display = 'none';
 }
 
@@ -4063,15 +4501,15 @@ function onContactTypeChange() {
   document.getElementById('ct-icon').value = meta.icon;
   document.getElementById('ct-title-field').placeholder = meta.label;
   document.getElementById('ct-value').placeholder = meta.hint;
-  document.getElementById('ct-val-label').textContent =
+  (document.getElementById(('ct-val-label'))||{}).textContent =
     type === 'email' ? 'عنوان الإيميل *' :
     type === 'whatsapp' ? 'رقم الهاتف *' :
     type === 'phone' ? 'رقم الهاتف *' : 'المعرف / الرابط *';
 }
 
 function renderContactAdmin() {
-  document.getElementById('ct-count').textContent = contactList.length;
-  document.getElementById('ct-tbody').innerHTML = contactList.map((c,i) => `<tr>
+  (document.getElementById(('ct-count'))||{}).textContent = contactList.length;
+  (document.getElementById(('ct-tbody'))||{}).innerHTML = contactList.map((c,i) => `<tr>
     <td style="font-size:22px;">${c.icon}</td>
     <td><span style="font-size:12px;background:var(--bg4);padding:3px 8px;border-radius:4px;color:var(--text2);">${contactTypeMeta[c.type]?.label||c.type}</span></td>
     <td style="font-weight:600;color:var(--silver2);">${c.title}</td>
@@ -4081,8 +4519,8 @@ function renderContactAdmin() {
       <button class="a-action" onclick="moveContact(${c.id},1)">↓</button>
     </div></td>
     <td class="td-actions"><div class="td-actions-inner">
-      <button class="a-action a-action-edit" data-editct="${c.id}">✏ تعديل</button>
-      <button class="a-action a-action-del" data-delct="${c.id}">🗑 حذف</button>
+      <button class="a-action a-action-edit" data-editct="${c.id}"><span class="ico" style="margin-left:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span> تعديل</button>
+      <button class="a-action a-action-del" data-delct="${c.id}"><span class="ico" style="margin-left:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg></span> حذف</button>
     </div></td>
   </tr>`).join('');
 
@@ -4210,8 +4648,8 @@ function openEditContact(id) {
   document.getElementById('ct-value').value      = c.value;
   document.getElementById('ct-icon').value       = c.icon;
   document.getElementById('ct-link').value       = c.link||'';
-  document.getElementById('ct-form-title').textContent   = `✏ تعديل: ${c.title}`;
-  document.getElementById('ct-save-btn').textContent     = 'حفظ التعديلات ←';
+  (document.getElementById(('ct-form-title'))||{}).textContent   = `<span class="ico" style="margin-left:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span> تعديل: ${c.title}`;
+  (document.getElementById(('ct-save-btn'))||{}).textContent     = 'حفظ التعديلات ←';
   document.getElementById('ct-cancel-btn').style.display = 'inline-block';
   onContactTypeChange();
   document.getElementById('apg-contact').scrollIntoView({behavior:'smooth'});
@@ -4224,8 +4662,8 @@ function resetContactForm() {
   document.getElementById('ct-value').value      = '';
   document.getElementById('ct-icon').value       = '💬';
   document.getElementById('ct-link').value       = '';
-  document.getElementById('ct-form-title').textContent   = '➕ إضافة وسيلة تواصل';
-  document.getElementById('ct-save-btn').textContent     = 'حفظ ←';
+  (document.getElementById(('ct-form-title'))||{}).textContent   = '➕ إضافة وسيلة تواصل';
+  (document.getElementById(('ct-save-btn'))||{}).textContent     = 'حفظ ←';
   document.getElementById('ct-cancel-btn').style.display = 'none';
   onContactTypeChange();
 }
@@ -4273,7 +4711,7 @@ function addLangFromInput(e) {
 }
 
 function renderLangTags() {
-  document.getElementById('lang-tags').innerHTML = selectedLangs.map(l=>
+  (document.getElementById(('lang-tags'))||{}).innerHTML = selectedLangs.map(l=>
     `<span class="lang-tag">${l}<button onclick="removeLang('${l}')">✕</button></span>`
   ).join('');
 }
@@ -4333,13 +4771,14 @@ function submitJobApplication() {
 
   // alert admin if logged in
   if(isAdminLoggedIn) showJobAlert(app);
+  addAdminNotif('job', `📨 تقديم جديد — ${app.name}`, `${app.field} — ${app.exp}`);
 }
 
 function showJobAlert(app) {
   const el = document.getElementById('new-order-alert');
-  document.getElementById('noa-customer').textContent = app.name;
-  document.getElementById('noa-product').textContent  = `${app.field} — ${app.exp}`;
-  document.getElementById('noa-amount').textContent   = '📨 طلب انضمام';
+  (document.getElementById(('noa-customer'))||{}).textContent = app.name;
+  (document.getElementById(('noa-product'))||{}).textContent  = `${app.field} — ${app.exp}`;
+  (document.getElementById(('noa-amount'))||{}).textContent   = '📨 طلب انضمام';
 
   // change color to blue for job alert
   el.style.background = 'linear-gradient(135deg,#0d1020,#1a1a3a)';
@@ -4376,8 +4815,8 @@ function renderJobsAdmin() {
     rejected:  {label:'❌ مرفوض',         color:'#e05555', bg:'rgba(180,40,40,.2)'},
   };
 
-  document.getElementById('jobs-count').textContent = jobApplications.length;
-  document.getElementById('jobs-tbody').innerHTML = apps.length === 0
+  (document.getElementById(('jobs-count'))||{}).textContent = jobApplications.length;
+  (document.getElementById(('jobs-tbody'))||{}).innerHTML = apps.length === 0
     ? `<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text3);">لا توجد طلبات بعد</td></tr>`
     : apps.map(a => {
         const st = statusMap[a.status]||statusMap.new;
@@ -4389,7 +4828,7 @@ function renderJobsAdmin() {
           <td><span style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:5px;background:${st.bg};color:${st.color};">${st.label}</span></td>
           <td class="td-actions"><div class="td-actions-inner">
             <button class="a-action" style="color:#5588cc;background:rgba(50,80,160,.1);border:1px solid rgba(60,100,200,.2);border-radius:5px;" data-viewjob="${a.id}">🔍 تفاصيل</button>
-            <button class="a-action a-action-del" data-deljob="${a.id}">🗑 حذف</button>
+            <button class="a-action a-action-del" data-deljob="${a.id}"><span class="ico" style="margin-left:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg></span> حذف</button>
           </div></td>
         </tr>`;
       }).join('');
@@ -4481,20 +4920,206 @@ function changeJobStatus(id, status) {
   showNotif('✓ تم تحديث حالة الطلب','success');
 }
 
+// ====== ZOOMABLE IMAGE CROP SYSTEM ======
+function setupImageCrop(imgEl, wrapEl, zoomInput) {
+  let scale = 1, tx = 0, ty = 0;
+  let dragging = false, startX, startY, startTx, startTy;
+
+  // make wrap relative so img absolute works
+  wrapEl.style.position = 'relative';
+  imgEl.style.position  = 'absolute';
+  imgEl.style.top = '0'; imgEl.style.left = '0';
+  imgEl.style.transformOrigin = '0 0';
+  imgEl.style.willChange = 'transform';
+  imgEl.style.cursor = 'grab';
+
+  function clamp() {
+    // keep image filling the circle
+    const ww = wrapEl.offsetWidth, wh = wrapEl.offsetHeight;
+    const iw = imgEl.naturalWidth * scale, ih = imgEl.naturalHeight * scale;
+    const maxX = 0, minX = ww - iw;
+    const maxY = 0, minY = wh - ih;
+    tx = Math.min(maxX, Math.max(minX, tx));
+    ty = Math.min(maxY, Math.max(minY, ty));
+  }
+
+  function apply() {
+    imgEl.style.transform = `translate(${tx}px,${ty}px) scale(${scale})`;
+  }
+
+  function fitImage() {
+    const ww = wrapEl.offsetWidth, wh = wrapEl.offsetHeight;
+    scale = Math.max(ww / imgEl.naturalWidth, wh / imgEl.naturalHeight);
+    if(zoomInput) zoomInput.value = Math.round(scale * 100);
+    // center
+    tx = (ww - imgEl.naturalWidth * scale) / 2;
+    ty = (wh - imgEl.naturalHeight * scale) / 2;
+    // reset transform-origin to 0 0 so translate+scale works predictably
+    apply();
+  }
+
+  imgEl.onload = fitImage;
+  if(imgEl.complete && imgEl.naturalWidth) fitImage();
+
+  // wheel zoom
+  wrapEl.addEventListener('wheel', e => {
+    e.preventDefault();
+    const ww = wrapEl.offsetWidth, wh = wrapEl.offsetHeight;
+    const prevScale = scale;
+    const minScale = Math.max(ww / imgEl.naturalWidth, wh / imgEl.naturalHeight);
+    scale = Math.min(5, Math.max(minScale, scale * (e.deltaY < 0 ? 1.1 : 0.9)));
+    // zoom toward center of wrap
+    const cx = ww / 2, cy = wh / 2;
+    tx = cx - (cx - tx) * (scale / prevScale);
+    ty = cy - (cy - ty) * (scale / prevScale);
+    clamp();
+    if(zoomInput) zoomInput.value = Math.round(scale * 100);
+    apply();
+  }, {passive: false});
+
+  // mouse drag
+  wrapEl.addEventListener('mousedown', e => {
+    e.preventDefault();
+    dragging = true;
+    imgEl.style.cursor = 'grabbing';
+    startX = e.clientX; startY = e.clientY;
+    startTx = tx; startTy = ty;
+  });
+  document.addEventListener('mousemove', e => {
+    if(!dragging) return;
+    tx = startTx + (e.clientX - startX);
+    ty = startTy + (e.clientY - startY);
+    clamp(); apply();
+  });
+  document.addEventListener('mouseup', () => {
+    dragging = false;
+    imgEl.style.cursor = 'grab';
+  });
+
+  // touch drag
+  wrapEl.addEventListener('touchstart', e => {
+    startX = e.touches[0].clientX; startY = e.touches[0].clientY;
+    startTx = tx; startTy = ty; dragging = true;
+  }, {passive: true});
+  wrapEl.addEventListener('touchmove', e => {
+    if(!dragging) return;
+    e.preventDefault();
+    tx = startTx + (e.touches[0].clientX - startX);
+    ty = startTy + (e.touches[0].clientY - startY);
+    clamp(); apply();
+  }, {passive: false});
+  wrapEl.addEventListener('touchend', () => { dragging = false; });
+
+  return {
+    setScale(pct) {
+      const ww = wrapEl.offsetWidth, wh = wrapEl.offsetHeight;
+      const minScale = Math.max(ww / imgEl.naturalWidth, wh / imgEl.naturalHeight);
+      const newScale = Math.max(minScale, pct);
+      const cx = ww/2, cy = wh/2;
+      tx = cx - (cx - tx) * (newScale / scale);
+      ty = cy - (cy - ty) * (newScale / scale);
+      scale = newScale;
+      clamp(); apply();
+    },
+    reset() {
+      fitImage();
+    },
+    getCropped() {
+      try {
+        const ww = wrapEl.offsetWidth, wh = wrapEl.offsetHeight;
+        const size = 300;
+        const canvas = document.createElement('canvas');
+        canvas.width = canvas.height = size;
+        const ctx = canvas.getContext('2d');
+        ctx.beginPath();
+        ctx.arc(size/2, size/2, size/2, 0, Math.PI*2);
+        ctx.clip();
+        const ratio = size / ww;
+        ctx.drawImage(imgEl,
+          tx * ratio, ty * ratio,
+          imgEl.naturalWidth * scale * ratio,
+          imgEl.naturalHeight * scale * ratio
+        );
+        return canvas.toDataURL('image/jpeg', 0.92);
+      } catch(e) { return imgEl.src; }
+    }
+  };
+}
+
+// ---- Team crop ----
+let teamCrop = null;
+
+function previewTeamImg(input) {
+  const file = input.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    teamImgBase64 = e.target.result;
+    const img  = document.getElementById('tm-img-preview');
+    const wrap = document.getElementById('tm-crop-wrap');
+    const zoom = document.getElementById('tm-zoom');
+    wrap.style.position = 'relative';
+    img.src = teamImgBase64;
+    teamCrop = setupImageCrop(img, wrap, zoom);
+    document.getElementById('tm-img-preview-wrap').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+function applyTeamZoom() {
+  const pct = parseFloat(document.getElementById('tm-zoom').value) / 100;
+  if(teamCrop) teamCrop.setScale(pct);
+}
+function resetTeamZoom() { if(teamCrop) teamCrop.reset(); }
+function clearTeamImg() {
+  teamImgBase64 = '';
+  document.getElementById('tm-img-file').value = '';
+  document.getElementById('tm-img-preview-wrap').style.display = 'none';
+  teamCrop = null;
+}
+function getTeamImgBase64() {
+  return teamCrop ? teamCrop.getCropped() : teamImgBase64;
+}
+
+// ---- Staff crop ----
+let staffImgBase64 = '';
+let staffCrop = null;
+
+function previewStaffImg(input) {
+  const file = input.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    staffImgBase64 = e.target.result;
+    const img  = document.getElementById('sf-img-preview');
+    const wrap = document.getElementById('sf-crop-wrap');
+    const zoom = document.getElementById('sf-zoom');
+    wrap.style.position = 'relative';
+    img.src = staffImgBase64;
+    staffCrop = setupImageCrop(img, wrap, zoom);
+    document.getElementById('sf-img-preview-wrap').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+function applyStaffZoom() {
+  const pct = parseFloat(document.getElementById('sf-zoom').value) / 100;
+  if(staffCrop) staffCrop.setScale(pct);
+}
+function resetStaffZoom() { if(staffCrop) staffCrop.reset(); }
+function clearStaffImg() {
+  staffImgBase64 = '';
+  document.getElementById('sf-img-file').value = '';
+  document.getElementById('sf-img-preview-wrap').style.display = 'none';
+  staffCrop = null;
+}
+function getStaffImgBase64() {
+  return staffCrop ? staffCrop.getCropped() : staffImgBase64;
+}
+
 // ====== TEAM MANAGEMENT ======
-let teamList = [
-  {id:1, name:'عمر الخطيب',  role:'المؤسس والمدير التنفيذي', avatar:'👨‍💼', image:'', bio:''},
-  {id:2, name:'كريم السيد',   role:'مطور Full Stack',          avatar:'👨‍💻', image:'', bio:''},
-  {id:3, name:'رنا مصطفى',   role:'مطورة موبايل',             avatar:'👩‍💻', image:'', bio:''},
-  {id:4, name:'باسل عوض',    role:'مصمم UI/UX',               avatar:'👨‍🎨', image:'', bio:''},
-  {id:5, name:'دانا يوسف',   role:'مدير دعم العملاء',          avatar:'👩‍🎧', image:'', bio:''},
-  {id:6, name:'فارس نور',    role:'مطور AI & Automation',      avatar:'👨‍🔬', image:'', bio:''},
-];
+let teamList = [];
 let teamImgBase64 = '';
 
 function renderTeamAdmin() {
-  document.getElementById('team-count').textContent = teamList.length;
-  document.getElementById('team-tbody').innerHTML = teamList.map((m,i) => `<tr>
+  (document.getElementById(('team-count'))||{}).textContent = teamList.length;
+  (document.getElementById(('team-tbody'))||{}).innerHTML = teamList.map((m,i) => `<tr>
     <td>
       ${m.image
         ? `<img src="${m.image}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;border:1px solid var(--border3);">`
@@ -4509,8 +5134,8 @@ function renderTeamAdmin() {
       <button class="a-action" onclick="moveTeam(${m.id},1)">↓</button>
     </div></td>
     <td class="td-actions"><div class="td-actions-inner">
-      <button class="a-action a-action-edit" data-editteam="${m.id}">✏ تعديل</button>
-      <button class="a-action a-action-del" data-delteam="${m.id}">🗑 حذف</button>
+      <button class="a-action a-action-edit" data-editteam="${m.id}"><span class="ico" style="margin-left:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span> تعديل</button>
+      <button class="a-action a-action-del" data-delteam="${m.id}"><span class="ico" style="margin-left:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg></span> حذف</button>
     </div></td>
   </tr>`).join('');
 
@@ -4555,9 +5180,9 @@ function renderTeamDisplay() {
 function openTeamModal(id) {
   const m = teamList.find(x=>x.id===id);
   if(!m) return;
-  document.getElementById('tm-modal-title').textContent = m.name;
+  (document.getElementById(('tm-modal-title'))||{}).textContent = m.name;
   const skillsList = m.skills ? m.skills.split(',').map(s=>s.trim()).filter(Boolean) : [];
-  document.getElementById('tm-modal-body').innerHTML = `
+  (document.getElementById(('tm-modal-body'))||{}).innerHTML = `
     <div style="display:flex;align-items:center;gap:1.2rem;margin-bottom:1.4rem;flex-wrap:wrap;">
       <div style="width:80px;height:80px;border-radius:50%;background:var(--bg3);border:2px solid var(--border3);display:flex;align-items:center;justify-content:center;font-size:38px;overflow:hidden;flex-shrink:0;">
         ${m.image ? `<img src="${m.image}" style="width:100%;height:100%;object-fit:cover;">` : m.avatar}
@@ -4622,7 +5247,7 @@ function saveTeamMember() {
   const email    = document.getElementById('tm-email').value.trim();
   if(!name){ showNotif('أدخل اسم العضو','error'); return; }
   if(!role){ showNotif('أدخل المسمى الوظيفي','error'); return; }
-  const data = { name, role, avatar, bio, idnum, exp, skills, whatsapp, instagram, email, image: teamImgBase64 };
+  const data = { name, role, avatar, bio, idnum, exp, skills, whatsapp, instagram, email, image: getTeamImgBase64() };
   if(editId){
     const idx = teamList.findIndex(x=>x.id===parseInt(editId));
     teamList[idx] = {...teamList[idx], ...data};
@@ -4650,8 +5275,8 @@ function openEditTeam(id) {
   document.getElementById('tm-instagram').value = m.instagram||'';
   document.getElementById('tm-email').value     = m.email||'';
   document.getElementById('tm-img-file').value  = '';
-  document.getElementById('tm-form-title').textContent   = `✏ تعديل: ${m.name}`;
-  document.getElementById('tm-save-btn').textContent     = 'حفظ التعديلات ←';
+  (document.getElementById(('tm-form-title'))||{}).textContent   = `<span class="ico" style="margin-left:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span> تعديل: ${m.name}`;
+  (document.getElementById(('tm-save-btn'))||{}).textContent     = 'حفظ التعديلات ←';
   document.getElementById('tm-cancel-btn').style.display = 'inline-block';
   if(m.image){
     document.getElementById('tm-img-preview').src = m.image;
@@ -4669,8 +5294,8 @@ function resetTeamForm() {
   });
   document.getElementById('tm-avatar').value   = '👨‍💻';
   document.getElementById('tm-img-preview-wrap').style.display = 'none';
-  document.getElementById('team-form-title').textContent       = '➕ إضافة عضو جديد';
-  document.getElementById('tm-save-btn').textContent           = 'حفظ العضو ←';
+  (document.getElementById(('team-form-title'))||{}).textContent       = '➕ إضافة عضو جديد';
+  (document.getElementById(('tm-save-btn'))||{}).textContent           = 'حفظ العضو ←';
   document.getElementById('tm-cancel-btn').style.display       = 'none';
 }
 
@@ -4701,10 +5326,7 @@ function moveTeam(id, dir) {
 }
 
 // ====== STAFF MANAGEMENT ======
-let staffList = [
-  {id:1, name:'سارة الموظفة', username:'sara', password:'sara123', role:'editor',   email:'sara@corecode.store',  status:'active'},
-  {id:2, name:'خالد الدعم',   username:'khalid', password:'khalid456', role:'support', email:'khalid@corecode.store', status:'active'},
-];
+let staffList = [];
 let currentUser = {username:'admin', role:'admin', name:'المدير'};
 let isAdminLoggedIn = false;
 
@@ -4716,8 +5338,8 @@ const roleLabels = {
 };
 
 function renderStaff() {
-  document.getElementById('staff-count').textContent = staffList.length;
-  document.getElementById('staff-tbody').innerHTML = staffList.map(s => {
+  (document.getElementById(('staff-count'))||{}).textContent = staffList.length;
+  (document.getElementById(('staff-tbody'))||{}).innerHTML = staffList.map(s => {
     const r = roleLabels[s.role] || roleLabels.support;
     return `<tr>
       <td style="font-weight:600;color:var(--silver2);">${s.name}</td>
@@ -4732,8 +5354,8 @@ function renderStaff() {
         </label>
       </td>
       <td class="td-actions"><div class="td-actions-inner">
-        <button class="a-action a-action-edit" data-editstaff="${s.id}">✏ تعديل</button>
-        <button class="a-action a-action-del" data-delstaff="${s.id}">🗑 حذف</button>
+        <button class="a-action a-action-edit" data-editstaff="${s.id}"><span class="ico" style="margin-left:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span> تعديل</button>
+        <button class="a-action a-action-del" data-delstaff="${s.id}"><span class="ico" style="margin-left:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg></span> حذف</button>
       </div></td>
     </tr>`;
   }).join('');
@@ -4775,11 +5397,12 @@ function saveStaff() {
     const idx = staffList.findIndex(x=>x.id===parseInt(editId));
     staffList[idx] = {
       ...staffList[idx], name, username, role, email, status, idnum,
+      image: getStaffImgBase64(),
       ...(password ? {password} : {})
     };
     showNotif('✓ تم تحديث بيانات الموظف','success'); saveAllData();
   } else {
-    staffList.push({id: Date.now(), name, username, password, role, email, status, idnum});
+    staffList.push({id: Date.now(), name, username, password, role, email, status, idnum, image: getStaffImgBase64()});
     showNotif('✓ تم إضافة الموظف بنجاح','success'); saveAllData();
   }
   resetStaffForm();
@@ -4797,8 +5420,8 @@ function openEditStaff(id) {
   document.getElementById('sf-email').value     = s.email||'';
   document.getElementById('sf-status').value    = s.status;
   document.getElementById('sf-idnum').value     = s.idnum||'';
-  document.getElementById('staff-form-title').textContent = `✏ تعديل: ${s.name}`;
-  document.getElementById('sf-save-btn').textContent = 'حفظ التعديلات ←';
+  (document.getElementById(('staff-form-title'))||{}).textContent = `<span class="ico" style="margin-left:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span> تعديل: ${s.name}`;
+  (document.getElementById(('sf-save-btn'))||{}).textContent = 'حفظ التعديلات ←';
   document.getElementById('sf-cancel-btn').style.display = 'inline-block';
   document.getElementById('sf-pass').placeholder = 'اتركها فارغة للإبقاء على كلمة المرور';
   document.getElementById('apg-staff').scrollIntoView({behavior:'smooth'});
@@ -4813,8 +5436,8 @@ function resetStaffForm() {
   document.getElementById('sf-email').value     = '';
   document.getElementById('sf-status').value    = 'active';
   document.getElementById('sf-idnum').value     = '';
-  document.getElementById('staff-form-title').textContent = '➕ إضافة موظف جديد';
-  document.getElementById('sf-save-btn').textContent = 'حفظ الموظف ←';
+  (document.getElementById(('staff-form-title'))||{}).textContent = '➕ إضافة موظف جديد';
+  (document.getElementById(('sf-save-btn'))||{}).textContent = 'حفظ الموظف ←';
   document.getElementById('sf-cancel-btn').style.display = 'none';
   document.getElementById('sf-pass').placeholder = 'كلمة مرور قوية';
 }
@@ -4840,8 +5463,8 @@ let adminPassword = '1234';
 function previewBranding() {
   const name = document.getElementById('set-site-name').value || 'Core Code';
   const sub  = document.getElementById('set-site-sub').value  || 'S T O R E';
-  document.getElementById('set-name-preview').textContent = name;
-  document.getElementById('set-sub-preview').textContent  = sub;
+  (document.getElementById(('set-name-preview'))||{}).textContent = name;
+  (document.getElementById(('set-sub-preview'))||{}).textContent  = sub;
 }
 
 function previewLogoUpload(input) {
@@ -4864,11 +5487,11 @@ function saveBranding() {
   const sub  = document.getElementById('set-site-sub').value.trim()  || 'S T O R E';
 
   // Update navbar text
-  document.getElementById('site-name-nav').textContent = name;
-  document.getElementById('site-sub-nav').textContent  = sub;
+  (document.getElementById(('site-name-nav'))||{}).textContent = name;
+  (document.getElementById(('site-sub-nav'))||{}).textContent  = sub;
 
   // Update browser tab title
-  document.getElementById('page-title').textContent = name + ' ' + sub;
+  (document.getElementById(('page-title'))||{}).textContent = name + ' ' + sub;
   document.title = name + ' ' + sub;
 
   // Update logo in navbar
@@ -4942,8 +5565,8 @@ function changePassword() {
 // ====== ADS MANAGEMENT ======
 function renderAdsAdmin() {
   const active = adsData.filter(a=>a.active);
-  document.getElementById('ads-count').textContent = active.length;
-  document.getElementById('ads-tbody').innerHTML = adsData.map((a,i)=>`
+  (document.getElementById(('ads-count'))||{}).textContent = active.length;
+  (document.getElementById(('ads-tbody'))||{}).innerHTML = adsData.map((a,i)=>`
     <tr>
       <td style="color:var(--text3);font-weight:700">${i+1}</td>
       <td>
@@ -4964,10 +5587,10 @@ function renderAdsAdmin() {
         </label>
       </td>
       <td class="td-actions"><div class="td-actions-inner">
-        <button class="a-action a-action-edit" onclick="openEditAdModal(${a.id})">✏ تعديل</button>
+        <button class="a-action a-action-edit" onclick="openEditAdModal(${a.id})"><span class="ico" style="margin-left:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span> تعديل</button>
         <button class="a-action" onclick="moveAd(${a.id},-1)">↑</button>
         <button class="a-action" onclick="moveAd(${a.id},1)">↓</button>
-        <button class="a-action a-action-del" data-delad="${a.id}">🗑 حذف</button>
+        <button class="a-action a-action-del" data-delad="${a.id}"><span class="ico" style="margin-left:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg></span> حذف</button>
       </div></td>
     </tr>`).join('');
   renderMiniPreview();
@@ -5074,7 +5697,7 @@ function moveAd(id, dir) {
 function openAddAdModal() {
   adEditId = null;
   adImageBase64 = '';
-  document.getElementById('ad-modal-title').textContent = 'إضافة إعلان جديد';
+  (document.getElementById(('ad-modal-title'))||{}).textContent = 'إضافة إعلان جديد';
   document.getElementById('ad-edit-id').value = '';
   document.getElementById('ad-f-title').value = '';
   document.getElementById('ad-f-highlight').value = '';
@@ -5097,7 +5720,7 @@ function openEditAdModal(id) {
   if(!a) return;
   adEditId = id;
   adImageBase64 = a.image || '';
-  document.getElementById('ad-modal-title').textContent = 'تعديل الإعلان';
+  (document.getElementById(('ad-modal-title'))||{}).textContent = 'تعديل الإعلان';
   document.getElementById('ad-edit-id').value = id;
   document.getElementById('ad-f-title').value = a.title;
   document.getElementById('ad-f-highlight').value = a.highlight;
@@ -5175,6 +5798,63 @@ function saveAdSettings() {
   showNotif('✓ تم حفظ إعدادات السلايدر','success'); saveAllData();
 }
 
+function renderCustomers() {
+  // Build customer list from real orders
+  const map = {};
+  orders.forEach(o => {
+    if(!map[o.customer]) map[o.customer] = {name:o.customer, email:o.email||'—', phone:o.phone||'—', count:0, total:0};
+    map[o.customer].count++;
+    map[o.customer].total += parseFloat(o.amount||0);
+  });
+  const customers = Object.values(map).sort((a,b)=>b.total-a.total);
+  const tbody = document.getElementById('customers-body');
+  if(!tbody) return;
+  tbody.innerHTML = customers.length
+    ? customers.map(c=>`<tr>
+        <td style="font-weight:600;color:var(--silver2);">${c.name}</td>
+        <td style="color:var(--text2);font-size:12px;">${c.email}</td>
+        <td style="color:var(--text2);font-size:12px;">${c.phone}</td>
+        <td style="text-align:center;color:var(--silver2);font-weight:700;">${c.count}</td>
+        <td style="font-weight:700;color:var(--green);">$${c.total.toFixed(2)}</td>
+      </tr>`).join('')
+    : '<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--text3);">لا يوجد عملاء بعد — ستظهر هنا بعد أول طلب</td></tr>';
+}
+
+function renderReports() {
+  buildChart('report-chart', salesData);
+  const totalSales = sales.reduce((s,x)=>s+parseFloat(x.amount||0),0);
+  const avgRating  = siteRatings.length ? (siteRatings.reduce((s,x)=>s+x.stars,0)/siteRatings.length).toFixed(1) : '—';
+  const unique     = [...new Set(orders.map(o=>o.customer))].length;
+  const el = id => document.getElementById(id);
+  if(el('rep-orders'))    el('rep-orders').textContent    = orders.length;
+  if(el('rep-sales'))     el('rep-sales').textContent     = '$'+totalSales.toFixed(2);
+  if(el('rep-rating'))    el('rep-rating').textContent    = avgRating + (siteRatings.length?' ⭐':'');
+  if(el('rep-customers')) el('rep-customers').textContent = unique;
+}
+
+function renderSbRatingsMini() {
+  const list  = document.getElementById('sb-ratings-list');
+  const empty = document.getElementById('sb-ratings-empty');
+  if(!list) return;
+  const all = [...siteRatings, ...staffRatings.map(r=>({...r, name:r.staffName?`تقييم ${r.staffName}`:r.name||'مجهول'}))];
+  all.sort((a,b)=>b.id-a.id);
+  const recent = all.slice(0,4);
+  if(!recent.length) {
+    list.innerHTML = '';
+    if(empty) empty.style.display = 'block';
+    return;
+  }
+  if(empty) empty.style.display = 'none';
+  list.innerHTML = recent.map(r=>`
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);">
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:11px;font-weight:600;color:var(--silver2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${r.name||'مجهول'}</div>
+        <div style="font-size:10px;color:var(--text3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${r.comment||'—'}</div>
+      </div>
+      <div style="display:flex;margin-right:6px;flex-shrink:0;">${Array.from({length:5},(_,i)=>`<svg width="10" height="10" viewBox="0 0 24 24" fill="${i<r.stars?'#f5c518':'none'}" stroke="#f5c518" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>`).join('')}</div>
+    </div>`).join('');
+}
+
 // ====== RATINGS ======
 let siteRatings = [];
 let staffRatings = [];
@@ -5201,24 +5881,35 @@ function selectStar(val, type) {
   unhoverStar(type);
 }
 
+// SVG stars renderer
+function svgStars(count, total=5) {
+  const star = (filled) => `<svg width="14" height="14" viewBox="0 0 24 24" fill="${filled?'#f5c518':'none'}" stroke="#f5c518" stroke-width="1.5" style="display:inline-block;vertical-align:middle;">
+    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
+  </svg>`;
+  return Array.from({length:total},(_,i)=>star(i<count)).join('');
+}
+
 function submitSiteRating() {
   if(!selectedSiteStar){ showNotif('اختر عدد النجوم','error'); return; }
   const r = {
     id: Date.now(),
-    name: document.getElementById('rating-name').value.trim() || 'مجهول',
-    stars: selectedSiteStar,
+    name:    document.getElementById('rating-name').value.trim() || 'مجهول',
+    email:   document.getElementById('rating-email')?.value.trim() || '',
+    stars:   selectedSiteStar,
     comment: document.getElementById('rating-comment').value.trim(),
-    date: new Date().toISOString().slice(0,10)
+    date:    new Date().toISOString().slice(0,10)
   };
   siteRatings.unshift(r);
   saveAllData();
   document.getElementById('rating-modal').classList.remove('open');
   selectedSiteStar = 0;
-  document.getElementById('rating-name').value = '';
+  document.getElementById('rating-name').value    = '';
+  if(document.getElementById('rating-email')) document.getElementById('rating-email').value = '';
   document.getElementById('rating-comment').value = '';
   unhoverStar('site');
   showNotif(`✅ شكراً على تقييمك ${r.stars} ${'★'.repeat(r.stars)}`,'success');
   renderReviews();
+  renderSbRatingsMini();
 }
 
 function openStaffRatingModal(memberId) {
@@ -5228,7 +5919,7 @@ function openStaffRatingModal(memberId) {
   selectedStaffStar = 0;
   unhoverStar('staff');
   document.getElementById('staff-rating-comment').value = '';
-  document.getElementById('staff-rating-info').innerHTML = `
+  (document.getElementById(('staff-rating-info'))||{}).innerHTML = `
     <div style="width:42px;height:42px;border-radius:50%;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:22px;overflow:hidden;flex-shrink:0;">
       ${m.image?`<img src="${m.image}" style="width:100%;height:100%;object-fit:cover;">`:m.avatar}
     </div>
@@ -5255,12 +5946,67 @@ function submitStaffRating() {
   showNotif(`✅ شكراً! تقييمك لـ ${r.staffName} تم بنجاح`,'success');
 }
 
+function renderReviewsAdmin() {
+  const avg = siteRatings.length
+    ? (siteRatings.reduce((s,x)=>s+x.stars,0)/siteRatings.length).toFixed(1)
+    : '—';
+  const countEl = document.getElementById('site-ratings-count');
+  const avgEl   = document.getElementById('site-ratings-avg');
+  const tbody   = document.getElementById('site-ratings-body');
+  if(countEl) countEl.textContent = siteRatings.length;
+  if(avgEl)   avgEl.innerHTML = siteRatings.length
+    ? `متوسط: ${svgStars(Math.round(avg))} ${avg}/5`
+    : '';
+  if(tbody) {
+    tbody.innerHTML = siteRatings.length
+      ? siteRatings.map(r=>`<tr>
+          <td>
+            <div style="font-weight:600;color:var(--silver2);">${r.name}</div>
+          </td>
+          <td style="color:var(--text3);font-size:12px;">${r.email||'—'}</td>
+          <td>${svgStars(r.stars)} <span style="font-size:11px;color:var(--text3);margin-right:4px;">${r.stars}/5</span></td>
+          <td style="color:var(--text2);font-size:12px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${r.comment||'—'}</td>
+          <td style="color:var(--text3);font-size:12px;">${r.date}</td>
+          <td><button class="a-action a-action-del" onclick="deleteSiteRating(${r.id})"><span class="ico" style="margin-left:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg></span> حذف</button></td>
+        </tr>`).join('')
+      : '<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text3);">لا توجد تقييمات بعد</td></tr>';
+  }
+
+  const sCount = document.getElementById('staff-ratings-count');
+  const sTbody = document.getElementById('staff-ratings-body');
+  if(sCount) sCount.textContent = staffRatings.length;
+  if(sTbody) {
+    sTbody.innerHTML = staffRatings.length
+      ? staffRatings.map(r=>`<tr>
+          <td style="color:var(--text2);">مجهول</td>
+          <td style="font-weight:600;color:var(--silver2);">${r.staffName||'—'}</td>
+          <td>${svgStars(r.stars)} <span style="font-size:11px;color:var(--text3);margin-right:4px;">${r.stars}/5</span></td>
+          <td style="color:var(--text2);font-size:12px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${r.comment||'—'}</td>
+          <td style="color:var(--text3);font-size:12px;">${r.date}</td>
+          <td><button class="a-action a-action-del" onclick="deleteStaffRating(${r.id})"><span class="ico" style="margin-left:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg></span> حذف</button></td>
+        </tr>`).join('')
+      : '<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text3);">لا توجد تقييمات بعد</td></tr>';
+  }
+}
+
+function deleteSiteRating(id) {
+  showConfirmBox('هل تريد حذف هذا التقييم؟', ()=>{
+    siteRatings = siteRatings.filter(x=>x.id!==id);
+    saveAllData(); renderReviewsAdmin(); renderReviews(); renderSbRatingsMini();
+    showNotif('🗑 تم حذف التقييم','error');
+  });
+}
+
+function deleteStaffRating(id) {
+  showConfirmBox('هل تريد حذف هذا التقييم؟', ()=>{
+    staffRatings = staffRatings.filter(x=>x.id!==id);
+    saveAllData(); renderReviewsAdmin(); renderSbRatingsMini();
+    showNotif('🗑 تم حذف التقييم','error');
+  });
+}
+
 function renderReviews() {
   const allReviews = [
-    // default reviews always shown
-    {name:'أحمد العلي',   stars:5, comment:'منتج رائع جداً، الكود نظيف ومنظم ويعمل بشكل مثالي. الدعم الفني كان سريعاً جداً في الرد على استفساراتي.', date:'2025-05-20'},
-    {name:'سارة محمود',   stars:5, comment:'اشتريت بوت التيليغرام وكان يفوق التوقعات! التوثيق ممتاز وسهل التركيب. بالتأكيد سأشتري منتجات أخرى.', date:'2025-05-18'},
-    {name:'محمد خالد',    stars:4, comment:'جودة عالية وتسليم سريع. الموقع سهل الاستخدام وعملية الشراء بسيطة. أنصح بشدة لكل مطور.', date:'2025-05-15'},
     ...siteRatings.map(r=>({name:r.name||'مجهول', stars:r.stars, comment:r.comment||'تقييم ممتاز!', date:r.date}))
   ];
 
@@ -5272,10 +6018,12 @@ function renderReviews() {
     realEl.style.display = 'grid';
     realEl.innerHTML = siteRatings.slice(0,6).map(r=>`
       <div class="review-card">
-        <div class="review-stars" style="color:#f5c518;">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div>
+        <div class="review-stars" style="color:#f5c518;">${svgStars(r.stars)}</div>
         <div class="review-text">${r.comment||'تقييم رائع!'}</div>
         <div class="review-author">
-          <div class="review-avatar">👤</div>
+          <div class="review-avatar">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="var(--text3)"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
           <div><div class="review-name">${r.name}</div><div class="review-date">${r.date}</div></div>
         </div>
       </div>`).join('');
@@ -5288,7 +6036,7 @@ function renderReviews() {
   const tickerHtml = allReviews.map(r=>`
     <div class="ticker-item">
       <div>
-        <div class="ticker-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div>
+        <div class="ticker-stars">${svgStars(r.stars)}</div>
         <div class="ticker-name">${r.name}</div>
       </div>
       <div class="ticker-text">${r.comment}</div>
@@ -5313,7 +6061,9 @@ function updateSalesDash() {
   if(el('dash-total-sales')) el('dash-total-sales').textContent = '$'+total.toFixed(2);
   if(el('dash-sales-count')) el('dash-sales-count').textContent = sales.length;
   if(el('dash-sales-today')) el('dash-sales-today').textContent = 'اليوم: $'+todayTotal.toFixed(2);
-  if(el('dash-avg-rating')) el('dash-avg-rating').textContent = avgRating + (siteRatings.length?' ⭐':'');
+  if(el('dash-avg-rating')) el('dash-avg-rating').innerHTML = avgRating !== '—'
+    ? `${svgStars(Math.round(avgRating))} ${avgRating}`
+    : '—';
   if(el('dash-sales')) {
     el('dash-sales').innerHTML = sales.slice(0,5).map(s=>`<tr>
       <td style="font-family:monospace;font-size:11px;color:var(--silver3);">${s.id.slice(-6)}</td>
@@ -5553,7 +6303,7 @@ function renderVisitorChat() {
     }
   }).join('');
   msgs.scrollTop = msgs.scrollHeight;
-  document.getElementById('chat-agent-name').textContent = conv.agentName;
+  (document.getElementById(('chat-agent-name'))||{}).textContent = conv.agentName;
 }
 
 function switchVisitorConv(convId) {
@@ -5567,12 +6317,12 @@ function newChatConversation() {
   chatVisitorName = '';
   document.getElementById('chat-visitor-name').value = '';
   document.getElementById('chat-msgs').style.display = 'none';
-  document.getElementById('chat-msgs').innerHTML = '';
+  (document.getElementById(('chat-msgs'))||{}).innerHTML = '';
   document.getElementById('chat-quick').style.display = 'none';
   document.getElementById('chat-input-area').style.display = 'none';
   document.getElementById('chat-wa-btn').style.display = 'none';
   document.getElementById('chat-name-step').style.display = 'flex';
-  document.getElementById('chat-agent-name').textContent = 'دعم Core Code';
+  (document.getElementById(('chat-agent-name'))||{}).textContent = 'دعم Core Code';
   setTimeout(()=>document.getElementById('chat-visitor-name').focus(), 200);
 }
 
@@ -5588,6 +6338,7 @@ function notifyAdminNewChat(conv) {
     renderAdminChatList();
     showNotif(`💬 محادثة جديدة من ${conv.visitorName}`,'success');
     playCartSound();
+    addAdminNotif('chat', `💬 محادثة جديدة — ${conv.visitorName}`, 'اضغط لعرض المحادثة والرد');
   }
 }
 
@@ -5645,7 +6396,7 @@ function openAdminChat(convId) {
   updateChatBadge();
   renderAdminChatList();
   const isLocked = conv.status==='closed';
-  document.getElementById('admin-chat-header').innerHTML = `
+  (document.getElementById(('admin-chat-header'))||{}).innerHTML = `
     <div style="display:flex;align-items:center;gap:10px;">
       <div style="width:36px;height:36px;border-radius:50%;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:18px;">👤</div>
       <div>
@@ -5658,7 +6409,7 @@ function openAdminChat(convId) {
         ${isLocked?'🔓 فتح':'🔒 تسكير'}
       </button>
       <button onclick="deleteChatConv('${convId}')" style="background:rgba(180,40,40,.1);border:1px solid rgba(200,60,60,.25);color:#e07070;padding:5px 12px;border-radius:7px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:11px;font-weight:600;transition:.2s;">
-        🗑 حذف
+        <span class="ico" style="margin-left:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg></span> حذف
       </button>
     </div>`;
   renderAdminChat(convId);
@@ -5696,12 +6447,12 @@ function deleteChatConv(convId) {
       } else {
         // no conversations left — reset to name step
         document.getElementById('chat-msgs').style.display = 'none';
-        document.getElementById('chat-msgs').innerHTML = '';
+        (document.getElementById(('chat-msgs'))||{}).innerHTML = '';
         document.getElementById('chat-quick').style.display = 'none';
         document.getElementById('chat-input-area').style.display = 'none';
         document.getElementById('chat-wa-btn').style.display = 'none';
         document.getElementById('chat-name-step').style.display = 'flex';
-        document.getElementById('chat-agent-name').textContent = 'دعم Core Code';
+        (document.getElementById(('chat-agent-name'))||{}).textContent = 'دعم Core Code';
         document.getElementById('chat-visitor-name').value = '';
       }
     }
@@ -5709,8 +6460,8 @@ function deleteChatConv(convId) {
     // reset admin panel
     if(adminActiveChatId===convId) {
       adminActiveChatId=null;
-      document.getElementById('admin-chat-msgs').innerHTML='<div style="text-align:center;padding:3rem;color:var(--text3);"><div style="font-size:48px;margin-bottom:12px;">💬</div>اختر محادثة من اليمين للرد</div>';
-      document.getElementById('admin-chat-header').innerHTML='<span style="font-size:14px;font-weight:700;color:var(--silver2);">اختر محادثة</span>';
+      (document.getElementById(('admin-chat-msgs'))||{}).innerHTML='<div style="text-align:center;padding:3rem;color:var(--text3);"><div style="font-size:48px;margin-bottom:12px;">💬</div>اختر محادثة من اليمين للرد</div>';
+      (document.getElementById(('admin-chat-header'))||{}).innerHTML='<span style="font-size:14px;font-weight:700;color:var(--silver2);">اختر محادثة</span>';
       document.getElementById('admin-chat-reply-area').style.display='none';
     }
 
@@ -5769,8 +6520,8 @@ function closeAdminChat(convId) {
   const conv = chatConversations.find(c=>c.id===convId);
   if(conv) conv.status='closed';
   adminActiveChatId=null;
-  document.getElementById('admin-chat-msgs').innerHTML='<div style="text-align:center;padding:3rem;color:var(--text3);"><div style="font-size:48px;margin-bottom:12px;">💬</div>اختر محادثة من اليمين للرد</div>';
-  document.getElementById('admin-chat-header').innerHTML='<span style="font-size:14px;font-weight:700;color:var(--silver2);">اختر محادثة</span>';
+  (document.getElementById(('admin-chat-msgs'))||{}).innerHTML='<div style="text-align:center;padding:3rem;color:var(--text3);"><div style="font-size:48px;margin-bottom:12px;">💬</div>اختر محادثة من اليمين للرد</div>';
+  (document.getElementById(('admin-chat-header'))||{}).innerHTML='<span style="font-size:14px;font-weight:700;color:var(--silver2);">اختر محادثة</span>';
   document.getElementById('admin-chat-reply-area').style.display='none';
   renderAdminChatList();
   saveAllData();
@@ -5808,12 +6559,7 @@ renderHomeCats();
 renderFeatured();
 renderTeamDisplay();
 
-// ====== LOCAL STORAGE — حفظ البيانات ======
 // ====== FIREBASE REALTIME STORAGE ======
-const STORE_KEY  = 'ccs_data_v2';
-const BACKUP_KEY = 'ccs_backup_v2';
-const SALT = 'CoreCode$Store#2025!';
-const FB_PATH = 'ccs_store'; // Firebase path
 
 // XOR obfuscation for localStorage backup
 function obfuscate(str) {
@@ -5841,19 +6587,26 @@ function buildPayload() {
 // ── Save: Firebase PRIMARY + localStorage BACKUP ──
 function saveAllData() {
   const payload = buildPayload();
-  // Save to Firebase (real-time sync)
+  // Firebase — المصدر الأساسي (مع الصور)
   if(firebaseReady && db) {
     try { db.ref(FB_PATH).set(payload); } catch(e){ console.warn('Firebase save error:', e); }
   }
-  // Save to localStorage as backup
+  // localStorage — احتياطي بدون صور (لتوفير المساحة)
   try {
-    const encoded = obfuscate(JSON.stringify(payload));
+    const lean = JSON.parse(JSON.stringify(payload)); // deep clone
+    lean.products  = (lean.products||[]).map(p=>({...p, image:'', gallery:[]}));
+    lean.teamList  = (lean.teamList||[]).map(m=>({...m, image:''}));
+    lean.staffList = (lean.staffList||[]).map(s=>({...s, image:''}));
+    lean.adsData   = (lean.adsData||[]).map(a=>({...a, image:''}));
+    const encoded = obfuscate(JSON.stringify(lean));
+    localStorage.removeItem(BACKUP_KEY); // لا نحتاج backup إضافي
     localStorage.setItem(STORE_KEY, encoded);
-    const backups = JSON.parse(localStorage.getItem(BACKUP_KEY)||'[]');
-    backups.unshift({ts: Date.now(), data: encoded});
-    localStorage.setItem(BACKUP_KEY, JSON.stringify(backups.slice(0,3)));
-  } catch(e){ console.warn('localStorage backup error:', e); }
-  // refresh visitor-facing sections
+  } catch(e) {
+    // ممتلئ — امسح القديم وحاول مرة ثانية
+    try { localStorage.clear(); } catch(_) {}
+    console.warn('localStorage full — relying on Firebase only');
+  }
+  // تحديث الواجهة
   renderContactDisplay();
   renderFeaturesDisplay();
   renderTeamDisplay();
@@ -6082,6 +6835,8 @@ window.saveTeamMember = saveTeamMember;
 window.openEditTeam = openEditTeam;
 window.resetTeamForm = resetTeamForm;
 window.previewTeamImg = previewTeamImg;
+window.applyTeamZoom = applyTeamZoom;
+window.resetTeamZoom = resetTeamZoom;
 window.clearTeamImg = clearTeamImg;
 window.moveTeam = moveTeam;
 window.renderStaff = renderStaff;
@@ -6089,6 +6844,10 @@ window.saveStaff = saveStaff;
 window.openEditStaff = openEditStaff;
 window.resetStaffForm = resetStaffForm;
 window.toggleStaffStatus = toggleStaffStatus;
+window.previewStaffImg = previewStaffImg;
+window.applyStaffZoom = applyStaffZoom;
+window.resetStaffZoom = resetStaffZoom;
+window.clearStaffImg = clearStaffImg;
 window.togglePassVis = togglePassVis;
 window.startFirebaseListener = startFirebaseListener;
 window.notifyAdminFirebase = notifyAdminFirebase;
@@ -6113,6 +6872,32 @@ if(firebaseReady && db) db.ref('ccs_notifications').orderByChild('ts').startAt(D
   }
 });
 
+window.renderCustomers = renderCustomers;
+window.renderReports = renderReports;
+// ── Clear all data (run clearAllSiteData() from browser console) ──
+function clearAllSiteData() {
+  localStorage.removeItem('ccs_data_v2');
+  localStorage.removeItem('ccs_backup_v2');
+  localStorage.removeItem('ccs_my_orders');
+  localStorage.removeItem('ccs_visitor_id');
+  siteRatings = []; staffRatings = []; orders = []; sales = [];
+  jobApplications = []; chatConversations = []; coupons = [];
+  renderReviews(); renderSbRatingsMini(); renderReviewsAdmin?.();
+  showNotif('✓ تم مسح جميع البيانات — الصفحة ستعاد تحميلها','success');
+  setTimeout(()=>location.reload(), 1500);
+}
+window.clearAllSiteData = clearAllSiteData;
+window.svgStars = svgStars;
+window.renderReviewsAdmin = renderReviewsAdmin;
+window.deleteSiteRating = deleteSiteRating;
+window.deleteStaffRating = deleteStaffRating;
+window.addAdminNotif = addAdminNotif;
+window.updateNotifBell = updateNotifBell;
+window.toggleNotifPanel = toggleNotifPanel;
+window.markAllRead = markAllRead;
+window.clearAllNotifs = clearAllNotifs;
+window.openNotif = openNotif;
+window.requestNotifPermission = requestNotifPermission;
 window.exportBackup = exportBackup;
 window.importBackup = importBackup;
 window.updateSalesDash = updateSalesDash;
@@ -6157,6 +6942,13 @@ window.changeOrderStatus = changeOrderStatus;
 window.renderCoupons = renderCoupons;
 window.saveCoupon = saveCoupon;
 window.deleteCoupon = deleteCoupon;
+window.addGalleryImages = addGalleryImages;
+window.removeGalleryImg = removeGalleryImg;
+window.openGalleryImg = openGalleryImg;
+window.saveCat = saveCat;
+window.openEditCat = openEditCat;
+window.resetCatForm = resetCatForm;
+window.updateCatQuickBtns = updateCatQuickBtns;
 window.renderCatsAdmin = renderCatsAdmin;
 window.buildChart = buildChart;
 window.showConfirmBox = showConfirmBox;
