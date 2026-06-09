@@ -527,16 +527,21 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
 </style>
 <!-- ====== CROP MODAL ====== -->
 <div id="crop-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);align-items:center;justify-content:center;">
-  <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:16px;padding:24px;width:min(480px,95vw);display:flex;flex-direction:column;gap:16px;">
+  <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:16px;padding:24px;width:min(520px,96vw);display:flex;flex-direction:column;gap:16px;">
     <div style="display:flex;align-items:center;justify-content:space-between;">
-      <span style="font-size:15px;font-weight:700;color:var(--silver2);">✂ تعديل الصورة</span>
+      <div>
+        <span style="font-size:15px;font-weight:700;color:var(--silver2);">✂ تعديل الصورة</span>
+        <div id="modal-crop-hint" style="font-size:11px;color:var(--text3);margin-top:2px;"></div>
+      </div>
       <button onclick="closeCropModal(false)" style="background:none;border:none;color:var(--text3);font-size:26px;cursor:pointer;line-height:1;">×</button>
     </div>
-    <div style="display:flex;justify-content:center;">
-      <div id="modal-crop-wrap" style="width:260px;height:260px;border-radius:50%;overflow:hidden;border:3px solid var(--silver4);position:relative;cursor:move;background:var(--bg4);">
+    <!-- crop area — shape controlled by JS -->
+    <div style="display:flex;justify-content:center;align-items:center;min-height:200px;">
+      <div id="modal-crop-wrap" style="overflow:hidden;border:2px solid var(--silver4);position:relative;cursor:move;background:var(--bg4);background-image:repeating-conic-gradient(rgba(255,255,255,.04) 0% 25%,transparent 0% 50%);background-size:16px 16px;">
         <img id="modal-crop-img" style="position:absolute;transform-origin:0 0;user-select:none;-webkit-user-drag:none;" draggable="false">
       </div>
     </div>
+    <!-- zoom slider -->
     <div style="display:flex;flex-direction:column;gap:6px;">
       <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text3);">
         <span>تكبير / تصغير</span>
@@ -549,6 +554,14 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
       <button onclick="closeCropModal(false)" style="background:none;border:1px solid var(--border3);color:var(--text2);padding:8px 16px;border-radius:8px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:13px;">إلغاء</button>
       <button onclick="closeCropModal(true)" style="background:var(--grad);border:1px solid var(--silver3);color:var(--silver2);padding:8px 20px;border-radius:8px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:13px;font-weight:700;">✓ تطبيق</button>
     </div>
+  </div>
+</div>
+
+<!-- ====== ADV PACKAGE MODAL ====== -->
+<div id="adv-pkg-modal" style="display:none;position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.9);align-items:center;justify-content:center;padding:1rem;">
+  <div id="adv-pkg-modal-inner" style="background:var(--bg2);border-radius:20px;width:min(700px,98vw);max-height:90vh;overflow-y:auto;position:relative;">
+    <button onclick="closeAdvPkgModal()" style="position:absolute;top:16px;left:16px;z-index:2;background:rgba(255,255,255,.08);border:none;color:var(--text2);width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;">×</button>
+    <div id="adv-pkg-modal-content"></div>
   </div>
 </div>
 
@@ -1345,43 +1358,31 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
   </div>
 
   <!-- PAYMENT METHODS BANNER -->
-  <div style="background:var(--bg2);border-bottom:1px solid var(--border2);padding:12px 2rem;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;direction:ltr;">
-    <span style="font-size:11px;color:var(--text3);margin-left:10px;font-family:'Cairo',sans-serif;direction:rtl;">:طرق الدفع المقبولة</span>
+  <div style="background:var(--bg2);border-bottom:1px solid var(--border2);padding:10px 2rem;">
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:nowrap;">
+      <span style="font-size:11px;color:var(--text3);font-family:'Cairo',sans-serif;white-space:nowrap;margin-left:8px;">طرق الدفع</span>
+      <div style="width:1px;height:18px;background:var(--border2);"></div>
 
-    <!-- Visa -->
-    <div style="background:#1a1f71;border-radius:7px;padding:6px 16px;height:36px;display:flex;align-items:center;justify-content:center;">
-      <svg width="52" height="17" viewBox="0 0 52 17">
-        <text x="0" y="14" font-size="16" font-weight="900" fill="white" font-family="Arial,sans-serif" letter-spacing="2">VISA</text>
-      </svg>
-    </div>
+      <!-- Visa -->
+      <div style="height:34px;padding:0 14px;border-radius:7px;background:#1a1f71;display:inline-flex;align-items:center;">
+        <span style="font-size:16px;font-weight:900;color:#fff;font-family:Arial,sans-serif;letter-spacing:2px;font-style:italic;">VISA</span>
+      </div>
 
-    <!-- PayPal -->
-    <div style="background:#003087;border-radius:7px;padding:6px 14px;height:36px;display:flex;align-items:center;gap:5px;">
-      <svg width="18" height="20" viewBox="0 0 24 24" fill="none">
-        <path d="M7.076 21.337H4.272a.641.641 0 01-.633-.74L5.498.911A.791.791 0 016.268.25h6.396c2.652 0 4.477.597 5.427 1.776.938 1.157.938 2.79.384 4.806-.574 2.102-1.606 3.735-3.068 4.853-1.302.993-2.96 1.497-4.926 1.497H8.547a.641.641 0 00-.634.548l-.837 7.607z" fill="#009cde"/>
-        <path d="M19.958 7.453c-.57 3.738-3.426 6.185-8.1 6.185H9.693a.641.641 0 00-.633.548l-1.22 7.743a.449.449 0 00.444.52h3.119a.641.641 0 00.633-.548l.506-3.207a.791.791 0 01.77-.64h1.476c3.88 0 6.568-2.088 7.37-5.85.317-1.494.162-2.75-.2-3.751z" fill="#012169"/>
-      </svg>
-      <span style="font-size:13px;font-weight:900;color:#fff;font-family:Arial;letter-spacing:-.3px;">Pay<span style="color:#009cde;">Pal</span></span>
-    </div>
+      <!-- PayPal -->
+      <div style="height:34px;padding:0 12px;border-radius:7px;background:#003087;display:inline-flex;align-items:center;gap:5px;">
+        <svg width="15" height="18" viewBox="0 0 24 24" fill="none"><path d="M7.076 21.337H4.272a.641.641 0 01-.633-.74L5.498.911A.791.791 0 016.268.25h6.396c2.652 0 4.477.597 5.427 1.776.938 1.157.938 2.79.384 4.806-.574 2.102-1.606 3.735-3.068 4.853-1.302.993-2.96 1.497-4.926 1.497H8.547a.641.641 0 00-.634.548l-.837 7.607z" fill="#009cde"/><path d="M19.958 7.453c-.57 3.738-3.426 6.185-8.1 6.185H9.693a.641.641 0 00-.633.548l-1.22 7.743a.449.449 0 00.444.52h3.119a.641.641 0 00.633-.548l.506-3.207a.791.791 0 01.77-.64h1.476c3.88 0 6.568-2.088 7.37-5.85.317-1.494.162-2.75-.2-3.751z" fill="#012169"/></svg>
+        <span style="font-size:12px;font-weight:900;color:#fff;font-family:Arial;">Pay<span style="color:#009cde;">Pal</span></span>
+      </div>
 
-    <!-- Apple Pay -->
-    <div style="background:#000;border-radius:7px;padding:6px 14px;height:36px;display:flex;align-items:center;gap:6px;">
-      <svg width="16" height="19" viewBox="0 0 24 24" fill="white">
-        <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.7 9.05 7.4c1.37.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.39-1.32 2.76-2.53 3.99zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
-      </svg>
-      <span style="font-size:12px;font-weight:700;color:#fff;font-family:Arial;letter-spacing:.3px;">Apple Pay</span>
-    </div>
+      <!-- Apple Pay -->
+      <div style="height:34px;padding:0 12px;border-radius:7px;background:#000;display:inline-flex;align-items:center;gap:6px;">
+        <svg width="14" height="17" viewBox="0 0 24 24" fill="white"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.7 9.05 7.4c1.37.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.39-1.32 2.76-2.53 3.99zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+        <span style="font-size:11px;font-weight:700;color:#fff;font-family:Arial;">Apple Pay</span>
+      </div>
 
-    <!-- Dukan Tab (دكان تب) -->
-    <div style="background:linear-gradient(135deg,#1b4f8a,#2563ae);border-radius:7px;padding:6px 14px;height:36px;display:flex;align-items:center;gap:7px;">
-      <!-- Custom D icon for Dukan Tab -->
-      <svg width="20" height="20" viewBox="0 0 40 40" fill="none">
-        <rect width="40" height="40" rx="8" fill="white" opacity=".15"/>
-        <text x="6" y="28" font-size="22" font-weight="900" fill="white" font-family="Arial,sans-serif">D</text>
-      </svg>
-      <div style="display:flex;flex-direction:column;line-height:1.2;">
-        <span style="font-size:11px;font-weight:900;color:#fff;font-family:'Cairo',sans-serif;letter-spacing:.5px;">دُكان</span>
-        <span style="font-size:9px;font-weight:600;color:rgba(255,255,255,.7);font-family:'Cairo',sans-serif;letter-spacing:1px;">تاب</span>
+      <!-- Kirtaz -->
+      <div style="height:34px;padding:0 12px;border-radius:7px;background:#111;display:inline-flex;align-items:center;justify-content:center;min-width:88px;">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAAWCAYAAACVIF9YAAABCGlDQ1BJQ0MgUHJvZmlsZQAAeJxjYGA8wQAELAYMDLl5JUVB7k4KEZFRCuwPGBiBEAwSk4sLGHADoKpv1yBqL+viUYcLcKakFicD6Q9ArFIEtBxopAiQLZIOYWuA2EkQtg2IXV5SUAJkB4DYRSFBzkB2CpCtkY7ETkJiJxcUgdT3ANk2uTmlyQh3M/Ck5oUGA2kOIJZhKGYIYnBncAL5H6IkfxEDg8VXBgbmCQixpJkMDNtbGRgkbiHEVBYwMPC3MDBsO48QQ4RJQWJRIliIBYiZ0tIYGD4tZ2DgjWRgEL7AwMAVDQsIHG5TALvNnSEfCNMZchhSgSKeDHkMyQx6QJYRgwGDIYMZAKbWPz9HbOBQAAAFY0lEQVR4nO2Xf0wTZxjHn3uvlBZa0PHbIriCRTtFBSk/BM86RSJuZpLDZCRgNJNN3TIlw0yNBeePTSBBcZuwyRLihl5dTJhmiGbIGAIVHBYtiIACRaAFpaWl/Gj77g9wIxnbKJLwx/j8c+/d+973ue/dk+d5D2COOf4XEDOggQAA0TRNysbGxAzpTptXCi6TAfo3LWKGrE1XBmGMMRAA66h19nYGg/0oj2d0d3dHYrHYDACQnp5unSwewzDIzc2NkEql5okT8+wcA8WBS4x+wWL3SsUjXXOdov2d8HCHq5WVvQAwmdaUeJX35AgARoqiOEN6vQhxON06nW5QpVIZAABomiZpmob4+HjLn8EIAjDGAADC1UsDnV1HB1X3jUbSyYok722LyWnpanWLoSiPn68XD3su8qnLKyk98Kxde4emaVIul1v+4Tlm1CBBUZQ9abGIEpOS9j5sevhNRkZ2TVZWFjclJcWUSNMCxGZ7sB2hKy/v+66X9+Tm5rJEIhGWSqVo354Dn76fnLhLUVVeuTP5w+0Jm2P2cKwvMjcHS7higT+gvk7cr2uztBpNrLKGnnuDPgFvFxQUdOKxrMW2GkT/veQvcwAAoNWyEMB8RKJNJGa5+vv7u6WkpJj8fXzEIeHhZzdGb7zp57u0ateOHdvOZGVJAQAnJyePSqVSc3bm6cLTp0+mNbc+7e7Xac6GhdFcg6Z39zYqguvlBuZusw7/2FiPO9AIy5UkYHvkmqC+jqexb4aEuMTTNIJpZJwtBrFMJiPKVCoDi83W6vt1TyLWrq1ZI5GIrl8ruugt9HEruVVy9VFzU+ely4VHRIv9j0okkp8AYOGF8+cvHDt69ODoiLnMYh01tT1pe3Qg9bMKgA7w8Vtied7viIctr+PMwuu5GSVVsRduK5Mu3WuVZxYV5fZ2a0u5VqtJLpdbYRpfkGXL4rS0NKzX67l379zhxr61ZXW1QvFFz/Pn5yIj1ySoOxMe9vT0cA6mpi5X1j94TSDwviYQLDjs6emJJKESV71ev3P/J6lCxCPe2PvB/t3V5dXqWxU/ZEcFRT7tMPkHtbR42RkMHn4vtNXFXXzPxfwVEZbOwRYFHnysvdbQMAjTrBe2GCTi4+PRg9pa74bWVgOLJAeGTSbuLzdvLjQNDY9sid1yUqfrB6VSafn81Klsq9U6olar87u7u9va1Wpz9KZNkP9tXithh6Hit3IYMA61azSgKa9sIleKVmE7B3fr8qhda5euCq8N8BKs9HK1R32rg+HKjcKt0NZWRNM0mk6hmapBQiaTESrVbe6ywMCI/IKC3Bc6HdTU1BrqlcqLLc3Nhvzv8g/x+Tx1cXHx6L49H60gCBzX2PR44IqcUYRFhId8+VVOBpvNLuawWHbncr7uvVdfXwsA4MC1V3Rqft863wURXhyh/TwPYRDXaRSUTb9CQ/PdDrGvuKIUSonxFLUZm1L02TOz7+boVe1aTU/1x8dPXI6LiyPVnWqnQ4cOM9U1NTcAwCgUCp05Dg4Dzk6OCTwnfiCJiMGcM2eOpB07fuKlTmhoqEdUVJSXp6enRi6XnwxYFFS7jMe5Uqeq4QUIQ+B+Y5ViHn++fV1jdcbV0uY+GKsV0+6FU4EAAFgfFiYYP+cBAPABXACAtTs42C5m/Xrxhg0RC2iaJicTwBgjhmFIhmFImqbZEonEaeK8t7f3suCVaxOj1717cPwSO0lGcWA2tmsIIZDJZAgAgCT/7gdjTCCEgGEYEmNMMgwzqelxCBmMaVEUxQIAIIAAYob2ajY3ehgr1ROPMMl44topQflSnCH+kDPHJaavrCx9YjGxuTXMMYvM6u/RHHPMAn8A9S4tkuhrYBIAAAAASUVORK5CYII=" style="height:22px;width:auto;" alt="كريتزر">
       </div>
     </div>
   </div>
@@ -1434,7 +1435,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
       <span class="footer-copy">© 2025 Core Code Store — جميع الحقوق محفوظة</span>
       <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
         <button onclick="document.getElementById('rating-modal').classList.add('open')" style="background:none;border:1px solid var(--border2);color:var(--text3);padding:5px 14px;border-radius:6px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:12px;transition:.2s;" onmouseover="this.style.color='var(--silver2)';this.style.borderColor='var(--silver4)'" onmouseout="this.style.color='var(--text3)';this.style.borderColor='var(--border2)'">⭐ قيّم الموقع</button>
-        <span class="footer-copy">💳 Visa • PayPal • Apple Pay • Dukan Tab</span>
+        <span class="footer-copy">💳 Visa • PayPal • Apple Pay • كريتزر</span>
       </div>
     </div>
   </footer>
@@ -1509,8 +1510,8 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
     <!-- Join Team Banner -->
     <div id="join-banner" style="margin-top:2rem;border-radius:14px;overflow:hidden;position:relative;">
       <!-- background image layer -->
-      <div id="join-banner-bg" style="position:absolute;inset:0;background:linear-gradient(135deg,#0f1a0f,#1a2a1a);border:1px solid rgba(60,160,80,.2);border-radius:14px;"></div>
-      <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(60,160,80,.05),transparent);pointer-events:none;border-radius:14px;"></div>
+      <div id="join-banner-bg" style="position:absolute;inset:0;background:linear-gradient(135deg,#111,#1a1a1a);border:1px solid var(--border2);border-radius:14px;"></div>
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(80,80,100,.06),transparent);pointer-events:none;border-radius:14px;"></div>
       <!-- content -->
       <div style="position:relative;z-index:1;padding:2rem;text-align:center;">
         <div id="join-banner-icon" style="font-size:36px;margin-bottom:10px;">🚀</div>
@@ -1600,6 +1601,11 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
   <footer style="background:var(--bg2);border-top:1px solid var(--border2);padding:1.5rem 2rem;text-align:center;">
     <span class="footer-copy">© 2025 Core Code Store</span>
   </footer>
+</div>
+
+<!-- ================================================ ADVERTISE PAGE ================================================ -->
+<div class="page" id="page-advertise">
+  <div id="adv-page-content"><!-- rendered by JS --></div>
 </div>
 
 <!-- ================================================ LOGIN PAGE ================================================ -->
@@ -2463,9 +2469,49 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
             <label class="form-label">وصف العرض</label>
             <input type="text" class="form-input" id="set-promo-desc" placeholder="على جميع القوالب والإضافات — ينتهي العرض قريبًا">
           </div>
-          <div class="form-group" style="margin-bottom:14px;">
+          <div class="form-group" style="margin-bottom:12px;">
             <label class="form-label">نص الزر</label>
             <input type="text" class="form-input" id="set-promo-btn" placeholder="احصل على الخصم">
+          </div>
+          <!-- Text Colors -->
+          <div style="font-size:12px;font-weight:700;color:var(--silver3);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border2);">ألوان النصوص</div>
+          <div class="form-grid" style="margin-bottom:12px;grid-template-columns:repeat(3,1fr);">
+            <div class="form-group">
+              <label class="form-label" style="font-size:11px;">لون العنوان</label>
+              <input type="color" class="form-input" id="set-promo-title-color" value="#e0e0e0" style="height:38px;cursor:pointer;">
+            </div>
+            <div class="form-group">
+              <label class="form-label" style="font-size:11px;">لون الوصف</label>
+              <input type="color" class="form-input" id="set-promo-desc-color" value="#999999" style="height:38px;cursor:pointer;">
+            </div>
+            <div class="form-group">
+              <label class="form-label" style="font-size:11px;">لون الكود</label>
+              <input type="color" class="form-input" id="set-promo-code-color" value="#c8b8ff" style="height:38px;cursor:pointer;">
+            </div>
+          </div>
+          <!-- Colors -->
+          <div class="form-grid" style="margin-bottom:12px;">
+            <div class="form-group">
+              <label class="form-label">لون الخلفية الرئيسي</label>
+              <input type="color" class="form-input" id="set-promo-bg1" value="#111111" style="height:42px;cursor:pointer;" oninput="previewPromoBg()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">لون الخلفية الثانوي</label>
+              <input type="color" class="form-input" id="set-promo-bg2" value="#1a1030" style="height:42px;cursor:pointer;" oninput="previewPromoBg()">
+            </div>
+          </div>
+          <!-- Background image -->
+          <div class="form-group" style="margin-bottom:12px;">
+            <label class="form-label">صورة خلفية (اختياري — تعلو فوق اللون)</label>
+            <input type="file" class="form-input" id="set-promo-img" accept="image/*" style="cursor:pointer;margin-bottom:8px;" onchange="previewPromoBannerImg(this)">
+            <div id="set-promo-img-preview" style="display:none;flex-direction:column;gap:6px;">
+              <img id="set-promo-img-thumb" style="width:100%;height:80px;object-fit:cover;border-radius:8px;border:1px solid var(--border3);">
+              <button type="button" onclick="clearPromoBannerImg()" style="background:none;border:1px solid rgba(200,60,60,.3);color:var(--red);padding:4px 10px;border-radius:6px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:11px;width:fit-content;">✕ إزالة الصورة</button>
+            </div>
+          </div>
+          <!-- live preview -->
+          <div id="promo-bg-preview" style="height:44px;border-radius:8px;margin-bottom:14px;transition:.3s;background:linear-gradient(135deg,#111111,#1a1030);border:1px solid var(--border3);display:flex;align-items:center;justify-content:center;">
+            <span style="font-size:11px;color:rgba(255,255,255,.4);">معاينة الألوان</span>
           </div>
           <div class="form-actions">
             <button class="btn-silver" onclick="savePromoSettings()">حفظ وتحديث العرض ←</button>
@@ -2476,8 +2522,11 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
         <div class="form-card" style="max-width:100%;margin-bottom:1.5rem;">
           <div class="form-card-title">🚀 مربع "انضم إلى فريقنا"</div>
           <div class="form-group" style="margin-bottom:12px;">
-            <label class="form-label">الأيقونة (emoji)</label>
-            <input type="text" class="form-input" id="set-join-icon" placeholder="🚀" maxlength="4">
+            <label class="form-label">الأيقونة (emoji) — اتركها فارغة لإخفائها</label>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <input type="text" class="form-input" id="set-join-icon" placeholder="مثال: 🚀 — فارغ = بدون أيقونة" maxlength="4" style="flex:1;">
+              <button type="button" onclick="document.getElementById('set-join-icon').value='';saveJoinBanner();" style="background:none;border:1px solid rgba(200,60,60,.3);color:var(--red);padding:8px 12px;border-radius:8px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:12px;white-space:nowrap;">✕ حذف</button>
+            </div>
           </div>
           <div class="form-group" style="margin-bottom:12px;">
             <label class="form-label">العنوان</label>
@@ -2501,6 +2550,102 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
           </div>
           <div class="form-actions">
             <button class="btn-silver" onclick="saveJoinBanner()">حفظ وتحديث ←</button>
+          </div>
+        </div>
+
+        <!-- SITE CUSTOMIZATION -->
+        <div class="form-card" style="max-width:100%;margin-bottom:1.5rem;">
+          <div class="form-card-title">🎨 تخصيص ألوان وخطوط الموقع</div>
+
+          <!-- Colors -->
+          <div style="font-size:12px;font-weight:700;color:var(--silver3);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border2);">الألوان الأساسية</div>
+          <div class="form-grid" style="margin-bottom:14px;grid-template-columns:repeat(3,1fr);">
+            <div class="form-group">
+              <label class="form-label" style="font-size:11px;">لون الخلفية الرئيسي</label>
+              <input type="color" class="form-input" id="cust-bg" value="#080808" style="height:38px;cursor:pointer;" oninput="applySiteCustom()">
+            </div>
+            <div class="form-group">
+              <label class="form-label" style="font-size:11px;">لون الخلفية الثانوي</label>
+              <input type="color" class="form-input" id="cust-bg2" value="#0f0f0f" style="height:38px;cursor:pointer;" oninput="applySiteCustom()">
+            </div>
+            <div class="form-group">
+              <label class="form-label" style="font-size:11px;">لون البطاقات</label>
+              <input type="color" class="form-input" id="cust-bg3" value="#161616" style="height:38px;cursor:pointer;" oninput="applySiteCustom()">
+            </div>
+          </div>
+
+          <div class="form-grid" style="margin-bottom:14px;grid-template-columns:repeat(3,1fr);">
+            <div class="form-group">
+              <label class="form-label" style="font-size:11px;">لون النص الرئيسي</label>
+              <input type="color" class="form-input" id="cust-text" value="#d5d5d5" style="height:38px;cursor:pointer;" oninput="applySiteCustom()">
+            </div>
+            <div class="form-group">
+              <label class="form-label" style="font-size:11px;">لون النص الثانوي</label>
+              <input type="color" class="form-input" id="cust-text2" value="#999999" style="height:38px;cursor:pointer;" oninput="applySiteCustom()">
+            </div>
+            <div class="form-group">
+              <label class="form-label" style="font-size:11px;">لون النص الخافت</label>
+              <input type="color" class="form-input" id="cust-text3" value="#555555" style="height:38px;cursor:pointer;" oninput="applySiteCustom()">
+            </div>
+          </div>
+
+          <div class="form-grid" style="margin-bottom:14px;grid-template-columns:repeat(3,1fr);">
+            <div class="form-group">
+              <label class="form-label" style="font-size:11px;">اللون الفضي (العناوين)</label>
+              <input type="color" class="form-input" id="cust-silver" value="#c0c0c0" style="height:38px;cursor:pointer;" oninput="applySiteCustom()">
+            </div>
+            <div class="form-group">
+              <label class="form-label" style="font-size:11px;">اللون الفضي المضيء</label>
+              <input type="color" class="form-input" id="cust-silver2" value="#e0e0e0" style="height:38px;cursor:pointer;" oninput="applySiteCustom()">
+            </div>
+            <div class="form-group">
+              <label class="form-label" style="font-size:11px;">لون لوحة التحكم Gradient</label>
+              <input type="color" class="form-input" id="cust-grad" value="#1a1a1a" style="height:38px;cursor:pointer;" oninput="applySiteCustom()">
+            </div>
+          </div>
+
+          <!-- Font -->
+          <div style="font-size:12px;font-weight:700;color:var(--silver3);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border2);">الخط</div>
+          <div class="form-group" style="margin-bottom:14px;">
+            <label class="form-label">خط الموقع</label>
+            <select class="form-input" id="cust-font" onchange="applySiteCustom()">
+              <option value="'Cairo', sans-serif">Cairo (افتراضي)</option>
+              <option value="'Tajawal', sans-serif">Tajawal</option>
+              <option value="'Almarai', sans-serif">Almarai</option>
+              <option value="'Noto Kufi Arabic', sans-serif">Noto Kufi Arabic</option>
+              <option value="'IBM Plex Sans Arabic', sans-serif">IBM Plex Sans Arabic</option>
+            </select>
+          </div>
+          <div class="form-grid" style="margin-bottom:14px;grid-template-columns:1fr 1fr 1fr;">
+            <div class="form-group">
+              <label class="form-label" style="font-size:11px;">حجم النص الأساسي</label>
+              <select class="form-input" id="cust-fontsize" onchange="applySiteCustom()">
+                <option value="13px">صغير (13px)</option>
+                <option value="14px" selected>متوسط (14px)</option>
+                <option value="15px">كبير (15px)</option>
+                <option value="16px">كبير جداً (16px)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" style="font-size:11px;">وزن الخط</label>
+              <select class="form-input" id="cust-fontweight" onchange="applySiteCustom()">
+                <option value="400">عادي (400)</option>
+                <option value="500" selected>متوسط (500)</option>
+                <option value="600">ثقيل (600)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" style="font-size:11px;">اتجاه النص</label>
+              <select class="form-input" id="cust-dir" onchange="applySiteCustom()">
+                <option value="rtl" selected>يمين لشمال (RTL)</option>
+                <option value="ltr">شمال ليمين (LTR)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-actions" style="gap:8px;">
+            <button class="btn-silver" onclick="saveSiteCustom()">حفظ التخصيص ←</button>
+            <button class="btn-outline" onclick="resetSiteCustom()">↺ استعادة الافتراضي</button>
           </div>
         </div>
 
@@ -2933,6 +3078,7 @@ function showPage(p) {
   if(p==='home'){renderHomeCats();renderFeatured();}
   if(p==='shop') renderShop();
   if(p==='wishlist') renderWishlist();
+  if(p==='advertise') renderAdvPage();
   if(p==='admin'){renderAdminProds();renderDashOrders();renderOrders();renderCoupons();renderCatsAdmin();buildChart('sales-chart',salesData);buildChart('report-chart',salesData);updateAdminCounts();updateSalesDash();renderSbRatingsMini();}
 }
 
@@ -3116,7 +3262,7 @@ function previewCatImg(input) {
     catImgBase64 = cropped;
     const img = document.getElementById('cat-img-preview'); if(img) img.src = cropped;
     const wrap = document.getElementById('cat-img-preview-wrap'); if(wrap) wrap.style.display='flex';
-  });
+  }, CROP_CONFIGS.category);
 }
 function clearCatImg() {
   catImgBase64 = '';
@@ -4271,7 +4417,7 @@ function showAdmin(p, el) {
   document.querySelectorAll('.sb-item').forEach(x=>x.classList.remove('active'));
   if(el) el.classList.add('active');
   if(p==='dashboard'){renderDashOrders();updateSalesDash();buildChart('sales-chart',salesData);}
-  if(p==='settings'){renderSalesList();loadPromoSettings();loadStoreInfo();loadJoinBannerSettings();}
+  if(p==='settings'){renderSalesList();loadPromoSettings();loadStoreInfo();loadJoinBannerSettings();loadSiteCustomFields();}
   if(p==='ads'){renderAdsAdmin();}
   if(p==='staff'){renderStaff();}
   if(p==='team'){renderTeamAdmin();}
@@ -4286,6 +4432,7 @@ function showAdmin(p, el) {
   if(p==='categories') renderCatsAdmin();
   if(p==='customers') renderCustomers();
   if(p==='contactmsgs') renderContactMsgsAdmin();
+  if(p==='advertise') renderAdvAdmin();
   if(p==='reports')   renderReports();
   setTimeout(applyButtonPermissions, 150);
 }
@@ -4409,7 +4556,7 @@ function previewProdImage(input) {
     document.getElementById('ep-img-preview').style.display = 'block';
     document.getElementById('ep-img-emoji').style.display = 'none';
     document.getElementById('prod-clear-img-btn').style.display = 'inline-block';
-  });
+  }, CROP_CONFIGS.product);
 }
 
 function clearProdImage() {
@@ -4670,7 +4817,7 @@ function previewFeatImage(input) {
     const thumb = document.getElementById('feat-img-thumb');
     if(thumb) thumb.innerHTML = `<img src="${cropped}" style="width:100%;height:100%;object-fit:cover;">`;
     document.getElementById('feat-clear-img').style.display = 'inline-block';
-  });
+  }, CROP_CONFIGS.feature);
 }
 
 function clearFeatImage() {
@@ -5116,7 +5263,7 @@ function previewContactImg(input) {
     contactIconBase64 = cropped;
     const thumb = document.getElementById('ct-icon-img-thumb'); if(thumb) thumb.src=cropped;
     const prev  = document.getElementById('ct-icon-img-preview'); if(prev) prev.style.display='flex';
-  });
+  }, CROP_CONFIGS.contact);
 }
 function clearContactImg() {
   contactIconBase64 = '';
@@ -5391,7 +5538,7 @@ function changeJobStatus(id, status) {
 }
 
 // ====== ZOOMABLE IMAGE CROP SYSTEM ======
-function setupImageCrop(imgEl, wrapEl, zoomInput) {
+function setupImageCrop(imgEl, wrapEl, zoomInput, outputSize) {
   let scale = 1, tx = 0, ty = 0;
   let dragging = false, startX, startY, startTx, startTy;
 
@@ -5500,19 +5647,20 @@ function setupImageCrop(imgEl, wrapEl, zoomInput) {
     getCropped() {
       try {
         const ww = wrapEl.offsetWidth, wh = wrapEl.offsetHeight;
-        const size = 300;
+        const outW = outputSize || ww;
+        const outH = outputSize ? Math.round(outputSize * wh / ww) : wh;
         const canvas = document.createElement('canvas');
-        canvas.width = canvas.height = size;
+        canvas.width = outW; canvas.height = outH;
         const ctx = canvas.getContext('2d');
-        ctx.beginPath();
-        ctx.arc(size/2, size/2, size/2, 0, Math.PI*2);
-        ctx.clip();
-        const ratio = size / ww;
-        ctx.drawImage(imgEl,
-          tx * ratio, ty * ratio,
-          imgEl.naturalWidth * scale * ratio,
-          imgEl.naturalHeight * scale * ratio
-        );
+        // clip if circle
+        const isCircle = wrapEl.style.borderRadius === '50%';
+        if(isCircle) {
+          ctx.beginPath();
+          ctx.arc(outW/2, outH/2, Math.min(outW,outH)/2, 0, Math.PI*2);
+          ctx.clip();
+        }
+        const ratioX = outW / ww, ratioY = outH / wh;
+        ctx.drawImage(imgEl, tx*ratioX, ty*ratioY, imgEl.naturalWidth*scale*ratioX, imgEl.naturalHeight*scale*ratioY);
         return canvas.toDataURL('image/jpeg', 0.92);
       } catch(e) { return imgEl.src; }
     }
@@ -5528,7 +5676,7 @@ function previewTeamImg(input) {
     const img = document.getElementById('tm-img-preview');
     if(img) img.src = cropped;
     document.getElementById('tm-img-preview-wrap').style.display = 'block';
-  });
+  }, CROP_CONFIGS.team);
 }
 function applyTeamZoom() {
   const pct = parseFloat(document.getElementById('tm-zoom').value) / 100;
@@ -5555,7 +5703,7 @@ function previewStaffImg(input) {
     const img = document.getElementById('sf-img-preview');
     if(img) img.src = cropped;
     document.getElementById('sf-img-preview-wrap').style.display = 'block';
-  });
+  }, CROP_CONFIGS.staff);
 }
 function applyStaffZoom() {
   const pct = parseFloat(document.getElementById('sf-zoom').value) / 100;
@@ -6243,7 +6391,7 @@ function previewAdImage(input) {
     adImageBase64 = cropped;
     document.getElementById('ad-img-preview').style.display = 'block';
     document.getElementById('ad-img-preview-img').src = cropped;
-  });
+  }, CROP_CONFIGS.ad);
 }
 
 function clearAdImage() {
@@ -7035,7 +7183,9 @@ let promoBanner = {
   title: '🔥 عرض محدود — خصم 30%',
   desc: 'على جميع القوالب والإضافات — ينتهي العرض قريبًا',
   code: 'CORE30',
-  btn: 'احصل على الخصم ←'
+  btn: 'احصل على الخصم ←',
+  bg1: '#111111', bg2: '#1a1030', image: '',
+  titleColor: '#e0e0e0', descColor: '#999999', codeColor: '#c8b8ff'
 };
 
 function renderPromoBanner() {
@@ -7044,18 +7194,26 @@ function renderPromoBanner() {
   if(!promoBanner.active) { banner.style.display='none'; return; }
   banner.style.display='block';
   const el = id => document.getElementById(id);
-  if(el('promo-title'))        el('promo-title').innerHTML   = promoBanner.title;
-  if(el('promo-desc'))         el('promo-desc').textContent  = promoBanner.desc;
-  if(el('promo-code-display')) {
-    el('promo-code-display').childNodes[el('promo-code-display').childNodes.length-1].textContent = '\n          ' + promoBanner.code;
-    // simpler: update just the text node
-    const spans = el('promo-code-display');
-    // replace inner text keeping the SVG icon
-    const svgEl = spans.querySelector('svg');
-    spans.textContent = promoBanner.code;
-    if(svgEl) spans.insertBefore(svgEl, spans.firstChild);
+  if(el('promo-title'))  { el('promo-title').innerHTML = promoBanner.title; el('promo-title').style.color = promoBanner.titleColor||''; }
+  if(el('promo-desc'))   { el('promo-desc').textContent = promoBanner.desc; el('promo-desc').style.color = promoBanner.descColor||''; }
+  if(el('promo-btn'))      el('promo-btn').textContent   = promoBanner.btn || 'احصل على الخصم ←';
+  // code
+  const codeEl = el('promo-code-display');
+  if(codeEl) {
+    const svgEl = codeEl.querySelector('svg');
+    codeEl.textContent = promoBanner.code;
+    if(svgEl) codeEl.insertBefore(svgEl, codeEl.firstChild);
+    codeEl.style.color = promoBanner.codeColor || '#c8b8ff';
+    codeEl.style.borderColor = (promoBanner.codeColor||'#c8b8ff') + '66';
   }
-  if(el('promo-btn')) el('promo-btn').textContent = promoBanner.btn || 'احصل على الخصم ←';
+  // background
+  const bg1 = promoBanner.bg1 || '#111111';
+  const bg2 = promoBanner.bg2 || '#1a1030';
+  if(promoBanner.image) {
+    banner.style.background = `linear-gradient(135deg,${bg1}dd,${bg2}dd),url('${promoBanner.image}') center/cover`;
+  } else {
+    banner.style.background = `linear-gradient(135deg,${bg1},${bg2})`;
+  }
 }
 
 function loadPromoSettings() {
@@ -7065,6 +7223,39 @@ function loadPromoSettings() {
   if(el('set-promo-desc'))  el('set-promo-desc').value    = promoBanner.desc;
   if(el('set-promo-code'))  el('set-promo-code').value    = promoBanner.code;
   if(el('set-promo-btn'))   el('set-promo-btn').value     = promoBanner.btn;
+  if(el('set-promo-bg1'))          el('set-promo-bg1').value          = promoBanner.bg1 || '#111111';
+  if(el('set-promo-bg2'))          el('set-promo-bg2').value          = promoBanner.bg2 || '#1a1030';
+  if(el('set-promo-title-color'))  el('set-promo-title-color').value  = promoBanner.titleColor || '#e0e0e0';
+  if(el('set-promo-desc-color'))   el('set-promo-desc-color').value   = promoBanner.descColor  || '#999999';
+  if(el('set-promo-code-color'))   el('set-promo-code-color').value   = promoBanner.codeColor  || '#c8b8ff';
+  if(promoBanner.image) {
+    const thumb = el('set-promo-img-thumb'); if(thumb) thumb.src = promoBanner.image;
+    const prev  = el('set-promo-img-preview'); if(prev) prev.style.display = 'flex';
+  }
+  previewPromoBg();
+}
+
+function previewPromoBg() {
+  const c1 = document.getElementById('set-promo-bg1')?.value || '#111111';
+  const c2 = document.getElementById('set-promo-bg2')?.value || '#1a1030';
+  const prev = document.getElementById('promo-bg-preview');
+  if(prev) prev.style.background = `linear-gradient(135deg,${c1},${c2})`;
+}
+
+let promoBannerImgBase64 = '';
+
+function previewPromoBannerImg(input) {
+  universalImgInput(input, (cropped) => {
+    promoBannerImgBase64 = cropped;
+    const thumb = document.getElementById('set-promo-img-thumb'); if(thumb) thumb.src = cropped;
+    const prev  = document.getElementById('set-promo-img-preview'); if(prev) prev.style.display = 'flex';
+  }, CROP_CONFIGS.join);
+}
+
+function clearPromoBannerImg() {
+  promoBannerImgBase64 = '__CLEARED__';
+  const f = document.getElementById('set-promo-img'); if(f) f.value = '';
+  const p = document.getElementById('set-promo-img-preview'); if(p) p.style.display = 'none';
 }
 
 function savePromoSettings() {
@@ -7073,24 +7264,41 @@ function savePromoSettings() {
     active: el('promo-active')?.checked || false,
     title:  el('set-promo-title')?.value.trim() || promoBanner.title,
     desc:   el('set-promo-desc')?.value.trim()  || promoBanner.desc,
-    code:   (el('set-promo-code')?.value.trim()  || promoBanner.code).toUpperCase(),
+    code:   (el('set-promo-code')?.value.trim() || promoBanner.code).toUpperCase(),
     btn:    el('set-promo-btn')?.value.trim()   || promoBanner.btn,
+    bg1:        el('set-promo-bg1')?.value         || '#111111',
+    bg2:        el('set-promo-bg2')?.value         || '#1a1030',
+    image:      promoBannerImgBase64 === '__CLEARED__' ? '' : (promoBannerImgBase64 || promoBanner.image || ''),
+    titleColor: el('set-promo-title-color')?.value || '#e0e0e0',
+    descColor:  el('set-promo-desc-color')?.value  || '#999999',
+    codeColor:  el('set-promo-code-color')?.value  || '#c8b8ff',
   };
   saveAllData();
+  promoBannerImgBase64 = '';
   renderPromoBanner();
   showNotif('✓ تم تحديث مربع العرض','success');
 }
 
 // ====== UNIVERSAL CROP MODAL ======
 let modalCrop = null;
-let _cropCallback = null; // function(croppedBase64)
-let _cropSrc = '';
+let _cropCallback = null;
+
+// Crop configs per use case
+const CROP_CONFIGS = {
+  team:     { w:260, h:260, radius:'50%',     hint:'صورة شخصية دائرية — اسحب لتحديد الوجه', out:300 },
+  staff:    { w:260, h:260, radius:'50%',     hint:'صورة شخصية دائرية — اسحب لتحديد الوجه', out:300 },
+  product:  { w:320, h:260, radius:'10px',    hint:'صورة منتج (4:3) — اسحب لتعديل الإطار', out:400 },
+  category: { w:260, h:180, radius:'10px',    hint:'صورة تصنيف (أفقية) — اسحب لتعديل الإطار', out:400 },
+  feature:  { w:120, h:120, radius:'12px',    hint:'أيقونة ميزة (مربعة)', out:200 },
+  contact:  { w:120, h:120, radius:'50%',     hint:'أيقونة تواصل دائرية', out:200 },
+  ad:       { w:340, h:200, radius:'10px',    hint:'صورة إعلان (16:9) — اسحب لتحديد المنطقة', out:480 },
+  join:     { w:400, h:180, radius:'10px',    hint:'صورة خلفية المربع (بانر عريض)', out:600 },
+};
 
 function openCropModal(target) {
-  // called from team/staff buttons
   const src = target === 'team' ? teamImgBase64 : staffImgBase64;
   if(!src) return;
-  openCropWith(src, (cropped) => {
+  openCropWith(src, CROP_CONFIGS[target]||CROP_CONFIGS.team, (cropped) => {
     if(target === 'team') {
       teamImgBase64 = cropped;
       const prev = document.getElementById('tm-img-preview');
@@ -7103,18 +7311,27 @@ function openCropModal(target) {
   });
 }
 
-function openCropWith(src, callback) {
+function openCropWith(src, cfg, callback) {
+  if(!cfg) cfg = CROP_CONFIGS.product;
   _cropCallback = callback;
-  _cropSrc = src;
   const modal = document.getElementById('crop-modal');
-  const img   = document.getElementById('modal-crop-img');
   const wrap  = document.getElementById('modal-crop-wrap');
+  const img   = document.getElementById('modal-crop-img');
   const zoom  = document.getElementById('modal-zoom');
+  const hint  = document.getElementById('modal-crop-hint');
+
+  // apply shape/size
+  wrap.style.width        = cfg.w + 'px';
+  wrap.style.height       = cfg.h + 'px';
+  wrap.style.borderRadius = cfg.radius;
+  if(hint) hint.textContent = cfg.hint || '';
+
   modal.style.display = 'flex';
   modalCrop = null;
   zoom.value = 100;
   document.getElementById('modal-zoom-label').textContent = '100%';
-  img.onload = () => { modalCrop = setupImageCrop(img, wrap, zoom); };
+
+  img.onload = () => { modalCrop = setupImageCrop(img, wrap, zoom, cfg.out||400); };
   img.src = src;
 }
 
@@ -7129,23 +7346,16 @@ function resetModalZoom() {
   document.getElementById('modal-zoom-label').textContent = '100%';
 }
 function closeCropModal(apply) {
-  if(apply && modalCrop && _cropCallback) {
-    _cropCallback(modalCrop.getCropped());
-  }
+  if(apply && modalCrop && _cropCallback) _cropCallback(modalCrop.getCropped());
   document.getElementById('crop-modal').style.display = 'none';
   modalCrop = null; _cropCallback = null;
 }
 
-// Universal file input handler — wraps any image input to go through crop modal
-function universalImgInput(input, onCropped, opts={}) {
+// Universal file input handler
+function universalImgInput(input, onCropped, cfg) {
   const file = input.files[0]; if(!file) return;
   const reader = new FileReader();
-  reader.onload = e => {
-    const src = e.target.result;
-    openCropWith(src, (cropped) => {
-      onCropped(cropped);
-    });
-  };
+  reader.onload = e => openCropWith(e.target.result, cfg || CROP_CONFIGS.product, onCropped);
   reader.readAsDataURL(file);
 }
 
@@ -7161,16 +7371,20 @@ let joinImgBase64 = '';
 
 function renderJoinBanner() {
   const el = id => document.getElementById(id);
-  if(el('join-banner-icon'))  el('join-banner-icon').textContent = joinBanner.icon;
+  const iconEl = el('join-banner-icon');
+  if(iconEl) {
+    iconEl.textContent = joinBanner.icon || '';
+    iconEl.style.display = joinBanner.icon ? 'block' : 'none';
+  }
   if(el('join-banner-title')) el('join-banner-title').textContent = joinBanner.title;
   if(el('join-banner-desc'))  el('join-banner-desc').textContent = joinBanner.desc;
   if(el('join-banner-btn'))   el('join-banner-btn').textContent  = joinBanner.btn;
   const bg = el('join-banner-bg');
   if(bg) {
     if(joinBanner.image) {
-      bg.style.background = `linear-gradient(135deg,rgba(15,26,15,.85),rgba(26,42,26,.85)),url('${joinBanner.image}') center/cover`;
+      bg.style.background = `linear-gradient(135deg,rgba(10,10,10,.85),rgba(20,20,20,.85)),url('${joinBanner.image}') center/cover`;
     } else {
-      bg.style.background = 'linear-gradient(135deg,#0f1a0f,#1a2a1a)';
+      bg.style.background = 'linear-gradient(135deg,#111,#1a1a1a)';
     }
   }
 }
@@ -7195,7 +7409,7 @@ function previewJoinImg(input) {
     joinImgBase64 = cropped;
     const thumb = document.getElementById('set-join-img-thumb'); if(thumb) thumb.src=cropped;
     const prev = document.getElementById('set-join-img-preview'); if(prev) prev.style.display='flex';
-  });
+  }, CROP_CONFIGS.join);
 }
 
 function clearJoinImg() {
@@ -7207,7 +7421,7 @@ function clearJoinImg() {
 function saveJoinBanner() {
   const el = id => document.getElementById(id);
   joinBanner = {
-    icon:  el('set-join-icon')?.value.trim()  || joinBanner.icon,
+    icon:  el('set-join-icon')?.value.trim() ?? joinBanner.icon,
     title: el('set-join-title')?.value.trim() || joinBanner.title,
     desc:  el('set-join-desc')?.value.trim()  || joinBanner.desc,
     btn:   el('set-join-btn')?.value.trim()   || joinBanner.btn,
@@ -7216,6 +7430,574 @@ function saveJoinBanner() {
   saveAllData();
   renderJoinBanner();
   showNotif('✓ تم تحديث مربع الانضمام','success');
+}
+
+// ====== ADVERTISE PAGE ======
+let advPage = {
+  heroTitle: 'أوصل منتجك لآلاف المطورين والعملاء',
+  heroSub: 'اعلن عن منتجك أو خدمتك على Core Code Store وانتشر بين أكبر مجتمع برمجي في المنطقة — نتائج حقيقية وجمهور مستهدف',
+  heroColor: '#ffffff', heroBg: '#0a0a14', heroMedia: '',
+  packages: [
+    {
+      id:1, icon:'🥉', name:'باقة برونز', price:'29$', duration:'7 أيام', color:'#cd7f32',
+      features:['بانر إعلاني في الصفحة الرئيسية','ظهور في قسم الإعلانات','اسم المتجر مع رابط مباشر','دعم فني خلال ساعات']
+    },
+    {
+      id:2, icon:'🥈', name:'باقة فضية', price:'59$', duration:'15 يوم', color:'#b0b0b0',
+      features:['كل مميزات البرونز','إعلان متحرك GIF','ظهور في نتائج البحث','إشعار للمشتركين','تقرير أداء أسبوعي']
+    },
+    {
+      id:3, icon:'🥇', name:'باقة ذهبية', price:'99$', duration:'30 يوم', color:'#f5c518',
+      features:['كل مميزات الفضية','أولوية الظهور #1','إعلان فيديو كامل','صفحة منتج مخصصة','دعم مخصص 24/7','تقرير إحصائي تفصيلي']
+    },
+  ],
+  features: [
+    { icon:'🎯', title:'جمهور مستهدف 100%', desc:'زبائننا مطورون ومهتمون بالتقنية — اعلانك يصل لمن يريد المنتج فعلاً' },
+    { icon:'⚡', title:'ظهور فوري', desc:'إعلانك ينشر خلال ساعة من الموافقة عليه' },
+    { icon:'📊', title:'إحصائيات لحظية', desc:'تابع عدد المشاهدات والنقرات بشكل مباشر ولحظي' },
+    { icon:'🛡', title:'ضمان الجودة', desc:'نراجع كل إعلان ونضمن جودته قبل نشره' },
+    { icon:'💬', title:'دعم كامل', desc:'فريقنا يساعدك في تصميم الإعلان المناسب لمنتجك' },
+    { icon:'🔁', title:'تجديد سهل', desc:'جدد إعلانك بضغطة زر واحتفظ بنفس الإعدادات' },
+  ],
+  ctaTitle: 'ابدأ حملتك الإعلانية اليوم',
+  ctaDesc: 'تواصل معنا الآن وسيرد عليك فريقنا خلال 24 ساعة — نساعدك في اختيار الباقة المناسبة وتصميم إعلانك',
+  ctaBtn: 'تواصل معنا ←',
+  ctaWa: '',
+  gallery: []
+};
+
+// ─── Render visitor page ───
+function renderAdvPage() {
+  const el = document.getElementById('adv-page-content');
+  if(!el) return;
+  const p = advPage;
+
+  // inject CSS animations
+  if(!document.getElementById('adv-css')) {
+    const style = document.createElement('style');
+    style.id = 'adv-css';
+    style.textContent = `
+      @keyframes advFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+      @keyframes advPulse { 0%,100%{opacity:.6;transform:scale(1)} 50%{opacity:1;transform:scale(1.08)} }
+      @keyframes advSlideIn { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+      @keyframes advGlow { 0%,100%{box-shadow:0 0 20px rgba(180,120,255,.2)} 50%{box-shadow:0 0 40px rgba(180,120,255,.5)} }
+      @keyframes advSpin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+      @keyframes advBounce { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
+      @keyframes advTypewriter { from{width:0} to{width:100%} }
+      @keyframes advFadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+      .adv-card-hover { transition:.3s; }
+      .adv-card-hover:hover { transform:translateY(-6px) !important; box-shadow:0 20px 40px rgba(0,0,0,.4) !important; }
+      .adv-pkg-hover { transition:.3s; }
+      .adv-pkg-hover:hover { transform:translateY(-8px) scale(1.02) !important; }
+      .adv-feat-hover { transition:.3s; }
+      .adv-feat-hover:hover { border-color:rgba(180,120,255,.4) !important; background:rgba(180,120,255,.06) !important; }
+    `;
+    document.head.appendChild(style);
+  }
+
+  el.innerHTML = `
+  <!-- ═══ HERO ═══ -->
+  <div style="min-height:420px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:5rem 2rem;position:relative;overflow:hidden;background:${p.heroBg};">
+    <!-- animated bg particles -->
+    <div style="position:absolute;inset:0;overflow:hidden;pointer-events:none;">
+      <div style="position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(180,80,255,.15),transparent 70%);top:-80px;right:-80px;animation:advPulse 4s ease infinite;"></div>
+      <div style="position:absolute;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(80,120,255,.12),transparent 70%);bottom:-40px;left:-40px;animation:advPulse 5s ease infinite .8s;"></div>
+      <div style="position:absolute;width:2px;height:60%;background:linear-gradient(to bottom,transparent,rgba(180,120,255,.15),transparent);left:20%;animation:advFloat 6s ease infinite;"></div>
+      <div style="position:absolute;width:2px;height:40%;background:linear-gradient(to bottom,transparent,rgba(100,160,255,.1),transparent);left:75%;animation:advFloat 8s ease infinite 2s;"></div>
+    </div>
+    ${p.heroMedia ? `<div style="position:absolute;inset:0;z-index:0;"><img src="${p.heroMedia}" style="width:100%;height:100%;object-fit:cover;opacity:.25;"></div><div style="position:absolute;inset:0;background:${p.heroBg}99;"></div>` : ''}
+
+    <div style="position:relative;z-index:1;max-width:640px;animation:advSlideIn .8s ease both;">
+      <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(180,120,255,.12);border:1px solid rgba(180,120,255,.35);border-radius:20px;padding:5px 18px;font-size:12px;color:rgba(210,170,255,.9);margin-bottom:1.4rem;animation:advGlow 3s ease infinite;">
+        <span style="width:7px;height:7px;border-radius:50%;background:rgba(180,120,255,.9);animation:advPulse 1.5s ease infinite;display:inline-block;"></span>
+        إعلانات Core Code Store
+      </div>
+      <h1 style="font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;color:${p.heroColor};line-height:1.25;margin-bottom:1.2rem;">${p.heroTitle}</h1>
+      <p style="font-size:15px;color:rgba(255,255,255,.55);line-height:1.9;margin-bottom:2.5rem;">${p.heroSub}</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <button onclick="document.getElementById('adv-pkgs').scrollIntoView({behavior:'smooth'})" class="btn-silver" style="font-size:15px;padding:13px 28px;">عرض الباقات ←</button>
+        <button onclick="document.getElementById('adv-preview-sec').scrollIntoView({behavior:'smooth'})" style="background:rgba(180,120,255,.12);border:1px solid rgba(180,120,255,.35);color:rgba(210,170,255,.9);padding:13px 28px;border-radius:10px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:15px;font-weight:700;transition:.2s;" onmouseover="this.style.background='rgba(180,120,255,.22)'" onmouseout="this.style.background='rgba(180,120,255,.12)'">🎬 شوف كيف يبدو إعلانك</button>
+      </div>
+    </div>
+
+    <!-- Floating stats -->
+    <div style="position:relative;z-index:1;display:flex;gap:2rem;margin-top:3rem;flex-wrap:wrap;justify-content:center;animation:advFadeUp 1s ease .4s both;">
+      <div style="text-align:center;"><div style="font-size:1.6rem;font-weight:900;color:rgba(210,170,255,.9);">5K+</div><div style="font-size:11px;color:rgba(255,255,255,.4);">زائر شهرياً</div></div>
+      <div style="width:1px;background:rgba(255,255,255,.1);"></div>
+      <div style="text-align:center;"><div style="font-size:1.6rem;font-weight:900;color:rgba(210,170,255,.9);">200+</div><div style="font-size:11px;color:rgba(255,255,255,.4);">عميل راضٍ</div></div>
+      <div style="width:1px;background:rgba(255,255,255,.1);"></div>
+      <div style="text-align:center;"><div style="font-size:1.6rem;font-weight:900;color:rgba(210,170,255,.9);">24h</div><div style="font-size:11px;color:rgba(255,255,255,.4);">وقت النشر</div></div>
+    </div>
+  </div>
+
+  <!-- ═══ AD PREVIEW SECTION ═══ -->
+  <div id="adv-preview-sec" style="padding:4rem 2rem;background:var(--bg2);overflow:hidden;">
+    <div style="text-align:center;margin-bottom:3rem;">
+      <div style="font-size:12px;color:rgba(180,120,255,.8);letter-spacing:2px;margin-bottom:8px;text-transform:uppercase;">معاينة حية</div>
+      <h2 style="font-size:1.6rem;font-weight:800;color:var(--silver2);">كيف سيبدو إعلانك؟</h2>
+      <p style="font-size:13px;color:var(--text2);margin-top:8px;">شوف مثال حقيقي لكيف يظهر إعلانك أمام آلاف الزوار</p>
+    </div>
+
+    <!-- mock phone + ad preview -->
+    <div style="max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;">
+
+      <!-- Banner Ad Preview -->
+      <div style="animation:advFadeUp .8s ease both;">
+        <div style="font-size:12px;color:var(--text3);margin-bottom:10px;text-align:center;">📌 بانر الصفحة الرئيسية</div>
+        <div style="border-radius:14px;overflow:hidden;border:1px solid rgba(180,120,255,.25);animation:advGlow 3s ease infinite;">
+          <div style="background:linear-gradient(135deg,#1a0a2e,#0a1a2e);padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+            <div>
+              <div style="font-size:10px;color:rgba(180,120,255,.7);letter-spacing:2px;margin-bottom:4px;">✦ إعلان مميز</div>
+              <div style="font-size:15px;font-weight:800;color:#fff;margin-bottom:4px;">اسم متجرك هنا 🚀</div>
+              <div style="font-size:12px;color:rgba(255,255,255,.5);">وصف قصير جذاب لمنتجك أو خدمتك</div>
+            </div>
+            <button style="background:linear-gradient(135deg,#7c3aed,#4f46e5);border:none;color:#fff;padding:8px 18px;border-radius:8px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:12px;font-weight:700;animation:advBounce 2s ease infinite;white-space:nowrap;">تسوق الآن</button>
+          </div>
+        </div>
+
+        <!-- Floating notification -->
+        <div style="font-size:12px;color:var(--text3);margin:16px 0 8px;text-align:center;">🔔 إشعار للزبائن</div>
+        <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px;animation:advSlideIn 1s ease .3s both;">
+          <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#7c3aed,#4f46e5);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:20px;">🛍</div>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--silver2);">عرض جديد من [متجرك]</div>
+            <div style="font-size:11px;color:var(--text2);">خصم 30% — لفترة محدودة!</div>
+          </div>
+          <div style="margin-right:auto;font-size:10px;color:var(--text3);">الآن</div>
+        </div>
+      </div>
+
+      <!-- Product Card Preview -->
+      <div style="animation:advFadeUp .8s ease .2s both;">
+        <div style="font-size:12px;color:var(--text3);margin-bottom:10px;text-align:center;">🃏 بطاقة منتج مميزة</div>
+        <div class="adv-card-hover" style="background:var(--bg3);border:1px solid rgba(180,120,255,.2);border-radius:14px;overflow:hidden;position:relative;">
+          <div style="position:absolute;top:10px;right:10px;background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;z-index:1;">⭐ مميز</div>
+          <div style="height:130px;background:linear-gradient(135deg,#1a0a2e 0%,#0a1a3e 50%,#0a2a1a 100%);display:flex;align-items:center;justify-content:center;font-size:48px;animation:advFloat 4s ease infinite;">💎</div>
+          <div style="padding:14px;">
+            <div style="font-size:14px;font-weight:700;color:var(--silver2);margin-bottom:4px;">اسم منتجك / خدمتك</div>
+            <div style="font-size:12px;color:var(--text2);margin-bottom:10px;">وصف مختصر جذاب يشجع على الشراء</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div style="font-size:16px;font-weight:900;color:rgba(180,120,255,.9);">$XX</div>
+              <button style="background:linear-gradient(135deg,#7c3aed,#4f46e5);border:none;color:#fff;padding:7px 14px;border-radius:8px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:11px;font-weight:700;">اشتري الآن</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ticker preview -->
+        <div style="font-size:12px;color:var(--text3);margin:16px 0 8px;text-align:center;">📢 شريط الإعلانات المتحرك</div>
+        <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:10px 16px;overflow:hidden;white-space:nowrap;">
+          <span style="font-size:12px;color:rgba(210,170,255,.8);display:inline-block;animation:advTypewriter 4s steps(40) infinite alternate;">✦ إعلانك هنا يظهر للجميع بشكل متحرك ولافت ✦</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ FEATURES ═══ -->
+  ${p.features.length ? `
+  <div style="padding:4rem 2rem;">
+    <div style="text-align:center;margin-bottom:2.5rem;">
+      <div style="font-size:12px;color:rgba(180,120,255,.8);letter-spacing:2px;margin-bottom:8px;">لماذا نحن</div>
+      <h2 style="font-size:1.6rem;font-weight:800;color:var(--silver2);">مميزات الإعلان معنا</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1rem;max-width:900px;margin:0 auto;">
+      ${p.features.map((f,i)=>`
+        <div class="adv-feat-hover" style="background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:1.6rem;text-align:center;animation:advFadeUp .6s ease ${i*.1}s both;">
+          <div style="font-size:36px;margin-bottom:10px;animation:advFloat ${4+i*.5}s ease infinite;">${f.icon}</div>
+          <div style="font-weight:700;color:var(--silver2);margin-bottom:6px;">${f.title}</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.6;">${f.desc}</div>
+        </div>`).join('')}
+    </div>
+  </div>` : ''}
+
+  <!-- ═══ PACKAGES ═══ -->
+  ${p.packages.length ? `
+  <div id="adv-pkgs" style="padding:4rem 2rem;background:var(--bg2);">
+    <div style="text-align:center;margin-bottom:2.5rem;">
+      <div style="font-size:12px;color:rgba(180,120,255,.8);letter-spacing:2px;margin-bottom:8px;">الأسعار</div>
+      <h2 style="font-size:1.6rem;font-weight:800;color:var(--silver2);">اختر الباقة المناسبة</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.4rem;max-width:900px;margin:0 auto;">
+      ${p.packages.map((pkg,i)=>`
+        <div class="adv-pkg-hover" style="background:var(--bg);border:1px solid ${pkg.color}55;border-radius:16px;padding:2rem;text-align:center;position:relative;overflow:hidden;${i===1?`box-shadow:0 0 30px ${pkg.color}33;`:``}">
+          <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,${pkg.color},transparent);"></div>
+          ${i===1?`<div style="position:absolute;top:14px;left:50%;transform:translateX(-50%);background:${pkg.color};color:#000;font-size:9px;font-weight:900;padding:2px 12px;border-radius:20px;white-space:nowrap;">الأكثر طلباً</div>`:''}
+          <div style="font-size:42px;margin-bottom:12px;animation:advBounce ${3+i}s ease infinite;">${pkg.icon}</div>
+          <div style="font-size:16px;font-weight:800;color:${pkg.color};margin-bottom:8px;">${pkg.name}</div>
+          <div style="display:flex;align-items:baseline;justify-content:center;gap:4px;margin:14px 0;">
+            <span style="font-size:36px;font-weight:900;color:var(--silver2);">${pkg.price}</span>
+          </div>
+          <div style="font-size:12px;color:var(--text3);margin-bottom:18px;padding:4px 12px;background:${pkg.color}22;border-radius:20px;display:inline-block;">${pkg.duration}</div>
+          <div style="text-align:right;margin-bottom:18px;">
+            ${pkg.features.map(f=>`<div style="font-size:12px;color:var(--text2);padding:5px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="${pkg.color}" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>${f}
+            </div>`).join('')}
+          </div>
+          <button onclick="openAdvPkgModal(${i})" style="width:100%;background:${pkg.color}22;border:1px solid ${pkg.color}55;color:${pkg.color};padding:10px;border-radius:10px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:13px;font-weight:700;transition:.2s;" onmouseover="this.style.background='${pkg.color}44'" onmouseout="this.style.background='${pkg.color}22'">اختر هذه الباقة ←</button>
+        </div>`).join('')}
+    </div>
+  </div>` : ''}
+
+  <!-- ═══ GALLERY ═══ -->
+  ${p.gallery.length ? `
+  <div style="padding:3rem 2rem;">
+    <h2 style="font-size:1.4rem;font-weight:800;color:var(--silver2);margin-bottom:1.5rem;text-align:center;">🎬 معرض الأعمال</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;max-width:960px;margin:0 auto;">
+      ${p.gallery.map(g=> g.type==='video'
+        ? `<div style="border-radius:14px;overflow:hidden;aspect-ratio:16/9;border:1px solid var(--border2);"><iframe src="${g.src}" style="width:100%;height:100%;border:none;" allowfullscreen></iframe></div>`
+        : `<div class="adv-card-hover" style="border-radius:14px;overflow:hidden;border:1px solid var(--border2);"><img src="${g.src}" style="width:100%;height:200px;object-fit:cover;display:block;"></div>`
+      ).join('')}
+    </div>
+  </div>` : ''}
+
+  <!-- ═══ CTA ═══ -->
+  <div id="adv-cta-sec" style="padding:5rem 2rem;text-align:center;position:relative;overflow:hidden;background:linear-gradient(135deg,#0a0a14,#14082a);">
+    <div style="position:absolute;inset:0;pointer-events:none;">
+      <div style="position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(120,60,200,.12),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);animation:advPulse 5s ease infinite;"></div>
+    </div>
+    <div style="position:relative;z-index:1;max-width:560px;margin:0 auto;">
+      <div style="font-size:36px;margin-bottom:1rem;animation:advFloat 3s ease infinite;">📢</div>
+      <h2 style="font-size:1.8rem;font-weight:900;color:#fff;margin-bottom:1rem;">${p.ctaTitle}</h2>
+      <p style="font-size:14px;color:rgba(255,255,255,.55);margin-bottom:2rem;line-height:1.9;">${p.ctaDesc}</p>
+      <button onclick="showPage('contact')" style="background:linear-gradient(135deg,#7c3aed,#4f46e5);border:none;color:#fff;font-size:16px;padding:15px 40px;border-radius:12px;cursor:pointer;font-family:'Cairo',sans-serif;font-weight:700;transition:.2s;animation:advGlow 2.5s ease infinite;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform=''">${p.ctaBtn}</button>
+    </div>
+  </div>
+
+  <footer style="background:var(--bg2);border-top:1px solid var(--border2);padding:1.5rem 2rem;text-align:center;">
+    <span class="footer-copy">© 2025 Core Code Store</span>
+  </footer>`;
+}
+
+function openAdvContact() {
+  showPage('contact');
+}
+
+// ─── Package Detail Modal ───
+function openAdvPkgModal(pkgIndex) {
+  const pkg = advPage.packages[pkgIndex];
+  if(!pkg) return;
+  const modal   = document.getElementById('adv-pkg-modal');
+  const content = document.getElementById('adv-pkg-modal-content');
+  modal.style.display = 'flex';
+
+  // Create animated ad preview
+  content.innerHTML = `
+  <!-- Hero banner of package -->
+  <div style="background:linear-gradient(135deg,#0a0014,#0a0a1e,#140028);padding:2.5rem 2rem;text-align:center;border-radius:20px 20px 0 0;position:relative;overflow:hidden;">
+    <!-- animated bg -->
+    <div style="position:absolute;inset:0;pointer-events:none;">
+      <div style="position:absolute;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,${pkg.color}22,transparent 70%);top:-80px;right:-60px;animation:advPulse 4s ease infinite;"></div>
+      <div style="position:absolute;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,${pkg.color}15,transparent 70%);bottom:-40px;left:-40px;animation:advPulse 5s ease infinite 1s;"></div>
+      <!-- floating dots -->
+      <div style="position:absolute;width:4px;height:4px;border-radius:50%;background:${pkg.color};top:20%;left:15%;animation:advFloat 3s ease infinite;opacity:.6;"></div>
+      <div style="position:absolute;width:3px;height:3px;border-radius:50%;background:${pkg.color};top:60%;left:80%;animation:advFloat 4s ease infinite 1s;opacity:.4;"></div>
+      <div style="position:absolute;width:5px;height:5px;border-radius:50%;background:${pkg.color};top:40%;left:50%;animation:advFloat 5s ease infinite .5s;opacity:.3;"></div>
+    </div>
+    <div style="font-size:56px;margin-bottom:12px;animation:advBounce 2s ease infinite;position:relative;z-index:1;">${pkg.icon}</div>
+    <div style="font-size:11px;letter-spacing:3px;color:${pkg.color};margin-bottom:6px;position:relative;z-index:1;">باقة إعلانية</div>
+    <h2 style="font-size:1.8rem;font-weight:900;color:#fff;margin-bottom:8px;position:relative;z-index:1;">${pkg.name}</h2>
+    <div style="display:inline-block;background:${pkg.color}22;border:1px solid ${pkg.color}55;border-radius:20px;padding:4px 18px;font-size:12px;color:${pkg.color};position:relative;z-index:1;">${pkg.duration}</div>
+    <div style="font-size:42px;font-weight:900;color:#fff;margin-top:16px;position:relative;z-index:1;">${pkg.price}</div>
+  </div>
+
+  <!-- Animated Ad Preview -->
+  <div style="padding:1.6rem 2rem;background:var(--bg3);border-bottom:1px solid var(--border2);">
+    <div style="font-size:12px;color:var(--text3);letter-spacing:1px;margin-bottom:14px;text-align:center;">✦ معاينة كيف سيظهر إعلانك</div>
+
+    <!-- Animated banner mock -->
+    <div style="border-radius:12px;overflow:hidden;border:1px solid ${pkg.color}44;margin-bottom:14px;animation:advGlow 3s ease infinite;">
+      <div style="background:linear-gradient(135deg,#120820,#0a1230);padding:18px 20px;display:flex;align-items:center;gap:14px;">
+        <div style="width:48px;height:48px;border-radius:10px;background:${pkg.color}33;border:1px solid ${pkg.color}55;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;animation:advBounce 3s ease infinite;">${pkg.icon}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:9px;color:${pkg.color};letter-spacing:2px;margin-bottom:3px;">✦ إعلان ${pkg.name}</div>
+          <div style="font-size:14px;font-weight:800;color:#fff;margin-bottom:3px;">اسم متجرك / خدمتك هنا</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.45);">وصف جذاب لمنتجك في سطر واحد</div>
+        </div>
+        <button style="background:linear-gradient(135deg,${pkg.color},${pkg.color}aa);border:none;color:#fff;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700;white-space:nowrap;animation:advPulse 2s ease infinite;">اكتشف الآن</button>
+      </div>
+    </div>
+
+    <!-- Ticker mock -->
+    <div style="background:var(--bg4);border:1px solid var(--border3);border-radius:8px;padding:8px 14px;overflow:hidden;white-space:nowrap;margin-bottom:14px;">
+      <span style="font-size:11px;color:${pkg.color};display:inline-block;animation:advTypewriter 5s steps(50) infinite alternate;">✦ ${pkg.name} — اسم متجرك يظهر للجميع بشكل مميز ومتحرك ✦ انقر للاكتشاف</span>
+    </div>
+
+    <!-- Notification mock -->
+    <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:10px;animation:advSlideIn .8s ease both;">
+      <div style="width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,${pkg.color}44,${pkg.color}22);border:1px solid ${pkg.color}55;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:18px;">${pkg.icon}</div>
+      <div>
+        <div style="font-size:12px;font-weight:700;color:var(--silver2);">إشعار جديد من إعلانك</div>
+        <div style="font-size:11px;color:var(--text2);">عرض ${pkg.name} — لا تفوّت الفرصة!</div>
+      </div>
+      <div style="margin-right:auto;font-size:10px;color:var(--text3);background:${pkg.color}22;padding:2px 8px;border-radius:10px;">الآن</div>
+    </div>
+  </div>
+
+  <!-- Features list -->
+  <div style="padding:1.6rem 2rem;">
+    <div style="font-size:13px;font-weight:700;color:var(--silver2);margin-bottom:12px;">ماذا تشمل الباقة:</div>
+    ${pkg.features.map(f=>`
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);">
+        <div style="width:22px;height:22px;border-radius:50%;background:${pkg.color}22;border:1px solid ${pkg.color}55;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="${pkg.color}" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <span style="font-size:13px;color:var(--text2);">${f}</span>
+      </div>`).join('')}
+  </div>
+
+  <!-- Add to cart -->
+  <div style="padding:1.4rem 2rem 2rem;display:flex;gap:10px;flex-wrap:wrap;">
+    <button onclick="addAdvPkgToCart(${pkgIndex});closeAdvPkgModal();" style="flex:1;background:linear-gradient(135deg,${pkg.color},${pkg.color}bb);border:none;color:#fff;padding:14px;border-radius:12px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:15px;font-weight:800;transition:.2s;min-width:160px;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+      🛒 أضف للسلة — ${pkg.price}
+    </button>
+    <button onclick="closeAdvPkgModal();showPage('contact');" style="background:none;border:1px solid var(--border3);color:var(--text2);padding:14px 20px;border-radius:12px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:14px;transition:.2s;" onmouseover="this.style.borderColor='var(--silver4)'" onmouseout="this.style.borderColor='var(--border3)'">
+      💬 تواصل أولاً
+    </button>
+  </div>`;
+}
+
+function closeAdvPkgModal() {
+  document.getElementById('adv-pkg-modal').style.display = 'none';
+}
+
+function addAdvPkgToCart(pkgIndex) {
+  const pkg = advPage.packages[pkgIndex];
+  if(!pkg) return;
+  // parse price number
+  const priceNum = parseFloat(pkg.price.replace(/[^0-9.]/g,'')) || 0;
+  const fakeProduct = {
+    id: 'adv_' + pkg.id,
+    name: `إعلان — ${pkg.name}`,
+    price: priceNum,
+    image: '',
+    emoji: pkg.icon,
+    uid: Date.now()
+  };
+  cart.push(fakeProduct);
+  updateCartUI();
+  playCartSound?.();
+  showNotif(`✓ أُضيفت "${pkg.name}" للسلة 🛒`, 'success');
+  // open cart
+  setTimeout(() => {
+    document.getElementById('cart-side').classList.add('open');
+    document.getElementById('cart-bg').classList.add('open');
+  }, 300);
+}
+
+// ─── Admin: render editor ───
+function renderAdvAdmin() {
+  const p = advPage;
+  const el = id => document.getElementById(id);
+  if(el('adv-hero-title'))  el('adv-hero-title').value  = p.heroTitle;
+  if(el('adv-hero-sub'))    el('adv-hero-sub').value    = p.heroSub;
+  if(el('adv-hero-color'))  el('adv-hero-color').value  = p.heroColor;
+  if(el('adv-hero-bg'))     el('adv-hero-bg').value     = p.heroBg;
+  if(el('adv-hero-media'))  el('adv-hero-media').value  = p.heroMedia;
+  if(el('adv-cta-title'))   el('adv-cta-title').value   = p.ctaTitle;
+  if(el('adv-cta-desc'))    el('adv-cta-desc').value    = p.ctaDesc;
+  if(el('adv-cta-btn'))     el('adv-cta-btn').value     = p.ctaBtn;
+  if(el('adv-cta-wa'))      el('adv-cta-wa').value      = p.ctaWa;
+  renderAdvPackages(); renderAdvFeatures(); renderAdvGallery();
+}
+
+function renderAdvPackages() {
+  const el = document.getElementById('adv-packages-list'); if(!el) return;
+  el.innerHTML = advPage.packages.map((pkg,i)=>`
+    <div style="background:var(--bg3);border:1px solid ${pkg.color}44;border-radius:10px;padding:14px;margin-bottom:10px;">
+      <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+        <input type="text" value="${pkg.icon}" placeholder="🥇" style="width:50px;background:var(--bg4);border:1px solid var(--border3);color:var(--text);padding:6px;border-radius:6px;font-size:18px;text-align:center;" onchange="updAdvPkg(${i},'icon',this.value)">
+        <input type="text" value="${pkg.name}" placeholder="اسم الباقة" class="form-input" style="flex:1;min-width:120px;" onchange="updAdvPkg(${i},'name',this.value)">
+        <input type="text" value="${pkg.price}" placeholder="السعر" class="form-input" style="width:80px;" onchange="updAdvPkg(${i},'price',this.value)">
+        <input type="text" value="${pkg.duration}" placeholder="المدة" class="form-input" style="width:100px;" onchange="updAdvPkg(${i},'duration',this.value)">
+        <input type="color" value="${pkg.color}" style="height:38px;width:44px;cursor:pointer;border-radius:6px;border:1px solid var(--border3);" onchange="updAdvPkg(${i},'color',this.value)">
+        <button onclick="delAdvPkg(${i})" style="background:none;border:1px solid rgba(200,60,60,.3);color:var(--red);padding:6px 10px;border-radius:6px;cursor:pointer;font-size:12px;">✕</button>
+      </div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:6px;">المميزات (سطر لكل ميزة)</div>
+      <textarea style="width:100%;background:var(--bg4);border:1px solid var(--border3);color:var(--text);padding:8px;border-radius:6px;font-family:'Cairo',sans-serif;font-size:12px;min-height:70px;" onchange="updAdvPkg(${i},'features',this.value.split('\\n').filter(x=>x.trim()))">${pkg.features.join('\n')}</textarea>
+    </div>`).join('');
+}
+
+function renderAdvFeatures() {
+  const el = document.getElementById('adv-features-list'); if(!el) return;
+  el.innerHTML = advPage.features.map((f,i)=>`
+    <div style="display:flex;gap:8px;margin-bottom:8px;align-items:center;flex-wrap:wrap;">
+      <input type="text" value="${f.icon}" placeholder="✨" style="width:46px;background:var(--bg4);border:1px solid var(--border3);color:var(--text);padding:6px;border-radius:6px;font-size:18px;text-align:center;" onchange="updAdvFeat(${i},'icon',this.value)">
+      <input type="text" value="${f.title}" placeholder="عنوان الميزة" class="form-input" style="flex:1;min-width:120px;" onchange="updAdvFeat(${i},'title',this.value)">
+      <input type="text" value="${f.desc}" placeholder="الوصف" class="form-input" style="flex:2;min-width:160px;" onchange="updAdvFeat(${i},'desc',this.value)">
+      <button onclick="delAdvFeat(${i})" style="background:none;border:1px solid rgba(200,60,60,.3);color:var(--red);padding:6px 10px;border-radius:6px;cursor:pointer;font-size:12px;">✕</button>
+    </div>`).join('');
+}
+
+function renderAdvGallery() {
+  const el = document.getElementById('adv-gallery-list'); if(!el) return;
+  el.innerHTML = advPage.gallery.map((g,i)=>`
+    <div style="position:relative;width:100px;">
+      ${g.type==='video'
+        ? `<div style="width:100px;height:65px;background:var(--bg4);border-radius:8px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border3);"><svg width="24" height="24" viewBox="0 0 24 24" fill="var(--silver3)"><polygon points="5,3 19,12 5,21"/></svg></div>`
+        : `<img src="${g.src}" style="width:100px;height:65px;object-fit:cover;border-radius:8px;border:1px solid var(--border3);">`}
+      <button onclick="delAdvGallery(${i})" style="position:absolute;top:-6px;right:-6px;background:var(--red);border:none;color:#fff;width:18px;height:18px;border-radius:50%;cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;padding:0;">✕</button>
+    </div>`).join('');
+}
+
+function addAdvPackage() {
+  advPage.packages.push({id:Date.now(),icon:'📦',name:'باقة جديدة',price:'0$',duration:'7 أيام',color:'#888888',features:['ميزة 1']});
+  renderAdvPackages();
+}
+function delAdvPkg(i) { advPage.packages.splice(i,1); renderAdvPackages(); }
+function updAdvPkg(i,k,v) { advPage.packages[i][k]=v; }
+
+function addAdvFeature() {
+  advPage.features.push({icon:'⭐',title:'ميزة جديدة',desc:'وصف الميزة'});
+  renderAdvFeatures();
+}
+function delAdvFeat(i) { advPage.features.splice(i,1); renderAdvFeatures(); }
+function updAdvFeat(i,k,v) { advPage.features[i][k]=v; }
+
+function addAdvVideo() {
+  const url = document.getElementById('adv-video-url').value.trim();
+  if(!url) return;
+  advPage.gallery.push({type:'video', src:url});
+  document.getElementById('adv-video-url').value='';
+  renderAdvGallery();
+}
+function addAdvGalleryImg(input) {
+  universalImgInput(input, (cropped) => {
+    advPage.gallery.push({type:'img', src:cropped});
+    renderAdvGallery();
+  }, CROP_CONFIGS.ad);
+}
+function delAdvGallery(i) { advPage.gallery.splice(i,1); renderAdvGallery(); }
+
+function uploadAdvMedia(type, input) {
+  universalImgInput(input, (cropped) => {
+    if(type==='hero') {
+      advPage.heroMedia = cropped;
+      document.getElementById('adv-hero-media').value='[uploaded]';
+    }
+  }, CROP_CONFIGS.join);
+}
+
+function saveAdvPage() {
+  const el = id => document.getElementById(id);
+  advPage.heroTitle  = el('adv-hero-title')?.value.trim()  || advPage.heroTitle;
+  advPage.heroSub    = el('adv-hero-sub')?.value.trim()    || advPage.heroSub;
+  advPage.heroColor  = el('adv-hero-color')?.value         || advPage.heroColor;
+  advPage.heroBg     = el('adv-hero-bg')?.value            || advPage.heroBg;
+  advPage.heroMedia  = el('adv-hero-media')?.value !== '[uploaded]'
+    ? (el('adv-hero-media')?.value.trim() || advPage.heroMedia)
+    : advPage.heroMedia;
+  advPage.ctaTitle   = el('adv-cta-title')?.value.trim()  || advPage.ctaTitle;
+  advPage.ctaDesc    = el('adv-cta-desc')?.value.trim()   || advPage.ctaDesc;
+  advPage.ctaBtn     = el('adv-cta-btn')?.value.trim()    || advPage.ctaBtn;
+  advPage.ctaWa      = el('adv-cta-wa')?.value.trim()     || advPage.ctaWa;
+  saveAllData();
+  renderAdvPage();
+  showNotif('✓ تم حفظ صفحة الإعلانات ونشرها','success');
+}
+
+// ====== SITE CUSTOMIZATION ======
+const DEFAULT_CUSTOM = {
+  bg:'#080808', bg2:'#0f0f0f', bg3:'#161616',
+  text:'#d5d5d5', text2:'#999999', text3:'#555555',
+  silver:'#c0c0c0', silver2:'#e0e0e0', grad:'#1a1a1a',
+  font:"'Cairo', sans-serif", fontsize:'14px', fontweight:'500', dir:'rtl'
+};
+let siteCustom = {...DEFAULT_CUSTOM};
+
+function applySiteCustom(save) {
+  const el = id => document.getElementById(id);
+  const c = {
+    bg:         el('cust-bg')?.value         || siteCustom.bg,
+    bg2:        el('cust-bg2')?.value        || siteCustom.bg2,
+    bg3:        el('cust-bg3')?.value        || siteCustom.bg3,
+    text:       el('cust-text')?.value       || siteCustom.text,
+    text2:      el('cust-text2')?.value      || siteCustom.text2,
+    text3:      el('cust-text3')?.value      || siteCustom.text3,
+    silver:     el('cust-silver')?.value     || siteCustom.silver,
+    silver2:    el('cust-silver2')?.value    || siteCustom.silver2,
+    grad:       el('cust-grad')?.value       || siteCustom.grad,
+    font:       el('cust-font')?.value       || siteCustom.font,
+    fontsize:   el('cust-fontsize')?.value   || siteCustom.fontsize,
+    fontweight: el('cust-fontweight')?.value || siteCustom.fontweight,
+    dir:        el('cust-dir')?.value        || siteCustom.dir,
+  };
+  const root = document.documentElement;
+  root.style.setProperty('--bg',      c.bg);
+  root.style.setProperty('--bg2',     c.bg2);
+  root.style.setProperty('--bg3',     c.bg3);
+  root.style.setProperty('--bg4',     adjustBrightness(c.bg3, 8));
+  root.style.setProperty('--bg5',     adjustBrightness(c.bg3, 15));
+  root.style.setProperty('--text',    c.text);
+  root.style.setProperty('--text2',   c.text2);
+  root.style.setProperty('--text3',   c.text3);
+  root.style.setProperty('--silver',  c.silver);
+  root.style.setProperty('--silver2', c.silver2);
+  root.style.setProperty('--grad',    `linear-gradient(135deg,${c.grad} 0%,${adjustBrightness(c.grad,-6)} 100%)`);
+  document.body.style.fontFamily  = c.font;
+  document.body.style.fontSize    = c.fontsize;
+  document.body.style.fontWeight  = c.fontweight;
+  document.documentElement.dir    = c.dir;
+  document.body.dir               = c.dir;
+  // load Google Fonts if needed
+  if(c.font.includes('Tajawal'))   loadGFont('Tajawal');
+  if(c.font.includes('Almarai'))   loadGFont('Almarai');
+  if(c.font.includes('Noto Kufi')) loadGFont('Noto+Kufi+Arabic');
+  if(c.font.includes('IBM Plex'))  loadGFont('IBM+Plex+Sans+Arabic');
+  if(save) { siteCustom = c; }
+}
+
+function loadGFont(name) {
+  const id = 'gf-' + name;
+  if(document.getElementById(id)) return;
+  const link = document.createElement('link');
+  link.id = id; link.rel = 'stylesheet';
+  link.href = `https://fonts.googleapis.com/css2?family=${name}:wght@400;600;700;900&display=swap`;
+  document.head.appendChild(link);
+}
+
+function adjustBrightness(hex, amount) {
+  try {
+    let r=parseInt(hex.slice(1,3),16), g=parseInt(hex.slice(3,5),16), b=parseInt(hex.slice(5,7),16);
+    r=Math.max(0,Math.min(255,r+amount)); g=Math.max(0,Math.min(255,g+amount)); b=Math.max(0,Math.min(255,b+amount));
+    return '#'+[r,g,b].map(x=>x.toString(16).padStart(2,'0')).join('');
+  } catch(e) { return hex; }
+}
+
+function saveSiteCustom() {
+  applySiteCustom(true);
+  saveAllData();
+  showNotif('✓ تم حفظ تخصيص الموقع','success');
+}
+
+function resetSiteCustom() {
+  siteCustom = {...DEFAULT_CUSTOM};
+  loadSiteCustomFields();
+  const root = document.documentElement;
+  // reset all CSS vars
+  ['--bg','--bg2','--bg3','--bg4','--bg5','--text','--text2','--text3','--silver','--silver2','--grad'].forEach(v=>root.style.removeProperty(v));
+  document.body.style.fontFamily = "'Cairo', sans-serif";
+  document.body.style.fontSize   = '';
+  document.body.style.fontWeight = '';
+  document.documentElement.dir = 'rtl';
+  document.body.dir = 'rtl';
+  saveAllData();
+  showNotif('✓ تم استعادة الإعدادات الافتراضية','success');
+}
+
+function loadSiteCustomFields() {
+  const el = id => document.getElementById(id);
+  if(el('cust-bg'))         el('cust-bg').value         = siteCustom.bg;
+  if(el('cust-bg2'))        el('cust-bg2').value        = siteCustom.bg2;
+  if(el('cust-bg3'))        el('cust-bg3').value        = siteCustom.bg3;
+  if(el('cust-text'))       el('cust-text').value       = siteCustom.text;
+  if(el('cust-text2'))      el('cust-text2').value      = siteCustom.text2;
+  if(el('cust-text3'))      el('cust-text3').value      = siteCustom.text3;
+  if(el('cust-silver'))     el('cust-silver').value     = siteCustom.silver;
+  if(el('cust-silver2'))    el('cust-silver2').value    = siteCustom.silver2;
+  if(el('cust-grad'))       el('cust-grad').value       = siteCustom.grad;
+  if(el('cust-font'))       el('cust-font').value       = siteCustom.font;
+  if(el('cust-fontsize'))   el('cust-fontsize').value   = siteCustom.fontsize;
+  if(el('cust-fontweight')) el('cust-fontweight').value = siteCustom.fontweight;
+  if(el('cust-dir'))        el('cust-dir').value        = siteCustom.dir;
 }
 
 // ====== MOBILE NAV ======
@@ -7346,7 +8128,7 @@ function buildPayload() {
     products, orders, coupons, adsData, teamList, staffList,
     contactList, featuresList, featuresSectionTitle,
     jobApplications, siteRatings, staffRatings,
-    chatConversations, sales, contactMessages, promoBanner, heroBadgeText, joinBanner, adminPassword,
+    chatConversations, sales, contactMessages, promoBanner, heroBadgeText, joinBanner, siteCustom, advPage, adminPassword,
     _ts: Date.now(), _v: '2.0'
   };
 }
@@ -7439,6 +8221,8 @@ function applyLoadedData(d) {
   if(d.promoBanner)             promoBanner          = {...promoBanner, ...d.promoBanner};
   if(d.heroBadgeText)           { heroBadgeText = d.heroBadgeText; const el=document.getElementById('hero-badge-text'); if(el) el.textContent=d.heroBadgeText; }
   if(d.joinBanner)              joinBanner           = {...joinBanner, ...d.joinBanner};
+  if(d.siteCustom)              { siteCustom = {...DEFAULT_CUSTOM, ...d.siteCustom}; applySiteCustom(false); }
+  if(d.advPage)                 advPage = {...advPage, ...d.advPage, packages:d.advPage.packages||advPage.packages, features:d.advPage.features||advPage.features, gallery:d.advPage.gallery||[]};
   if(d.sales)                   sales                = d.sales;
   if(d.adminPassword)           adminPassword        = d.adminPassword;
 }
@@ -7691,6 +8475,29 @@ window.previewJoinImg = previewJoinImg;
 window.clearJoinImg = clearJoinImg;
 window.loadJoinBannerSettings = loadJoinBannerSettings;
 window.renderJoinBanner = renderJoinBanner;
+window.applySiteCustom = applySiteCustom;
+window.openAdvContact = openAdvContact;
+window.openAdvPkgModal = openAdvPkgModal;
+window.closeAdvPkgModal = closeAdvPkgModal;
+window.addAdvPkgToCart = addAdvPkgToCart;
+window.saveAdvPage = saveAdvPage;
+window.addAdvPackage = addAdvPackage;
+window.delAdvPkg = delAdvPkg;
+window.updAdvPkg = updAdvPkg;
+window.addAdvFeature = addAdvFeature;
+window.delAdvFeat = delAdvFeat;
+window.updAdvFeat = updAdvFeat;
+window.addAdvVideo = addAdvVideo;
+window.addAdvGalleryImg = addAdvGalleryImg;
+window.delAdvGallery = delAdvGallery;
+window.uploadAdvMedia = uploadAdvMedia;
+window.openAdvContact = openAdvContact;
+window.saveSiteCustom = saveSiteCustom;
+window.resetSiteCustom = resetSiteCustom;
+window.loadSiteCustomFields = loadSiteCustomFields;
+window.previewPromoBg = previewPromoBg;
+window.previewPromoBannerImg = previewPromoBannerImg;
+window.clearPromoBannerImg = clearPromoBannerImg;
 window.savePromoSettings = savePromoSettings;
 window.renderPromoBanner = renderPromoBanner;
 window.loadPromoSettings = loadPromoSettings;
