@@ -41,8 +41,8 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-h
 .mobile-nav{display:none;}
 .nav-links{display:flex;gap:4px;}
 .nav-link{background:none;border:1px solid transparent;color:var(--text2);padding:7px 16px;border-radius:20px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:13px;font-weight:600;transition:.2s;text-decoration:none;display:inline-flex;align-items:center;gap:5px;}
-.nav-link:hover{color:var(--silver2);background:rgba(255,255,255,.06);border-color:var(--border3);}
-.nav-link.active{color:var(--silver2);background:rgba(255,255,255,.08);border-color:rgba(200,200,200,.2);}.nav-link:hover,.nav-link.active{background:var(--bg3);color:var(--silver2);}
+.nav-link:hover{color:var(--silver2);background:rgba(255,255,255,.06);border-color:var(--border3);box-shadow:0 0 12px rgba(180,180,200,.08);}
+.nav-link.active{color:var(--silver2);background:rgba(255,255,255,.08);border-color:rgba(200,200,200,.2);box-shadow:0 0 10px rgba(180,180,200,.1);}.nav-link:hover,.nav-link.active{background:var(--bg3);color:var(--silver2);}
 .topbar-right{display:flex;align-items:center;gap:8px;}
 .icon-btn{background:var(--bg3);border:1px solid var(--border2);color:var(--silver);width:36px;height:36px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:.2s;position:relative;}
 .icon-btn:hover{border-color:var(--silver3);color:var(--silver2);}
@@ -66,9 +66,9 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-h
 .hero-sub{color:var(--text2);font-size:15px;margin-top:1rem;line-height:1.8;max-width:500px;margin-left:auto;margin-right:auto;}
 .hero-btns{display:flex;gap:12px;justify-content:center;margin-top:2rem;flex-wrap:wrap;}
 .btn-silver{background:var(--grad);border:1px solid var(--silver3);color:var(--silver2);padding:12px 28px;border-radius:10px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;transition:.2s;}
-.btn-silver:hover{border-color:var(--silver2);background:#222;}
+.btn-silver:hover{border-color:var(--silver2);background:#222;box-shadow:0 0 18px rgba(200,200,200,.18),0 4px 16px rgba(0,0,0,.3);}
 .btn-outline{background:none;border:1px solid var(--border3);color:var(--text2);padding:12px 28px;border-radius:10px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:14px;transition:.2s;}
-.btn-outline:hover{color:var(--silver2);border-color:var(--silver4);}
+.btn-outline:hover{color:var(--silver2);border-color:var(--silver4);box-shadow:0 0 12px rgba(180,180,180,.1);}
 
 /* ===== STATS BAR ===== */
 .stats-bar{display:grid;grid-template-columns:repeat(4,1fr);margin:0 2rem 3rem;background:var(--bg2);border:1px solid var(--border2);border-radius:12px;overflow:hidden;}
@@ -88,7 +88,7 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-h
 /* ===== CATEGORY CARDS ===== */
 .cats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;}
 .cat-card{background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:1.2rem 1rem;text-align:center;cursor:pointer;transition:.2s;}
-.cat-card:hover{border-color:var(--silver4);background:var(--bg3);transform:translateY(-2px);}
+.cat-card:hover{border-color:rgba(180,180,200,.5);background:var(--bg3);transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,.25),0 0 20px rgba(160,140,255,.12);}
 .cat-card.selected{border-color:var(--silver3);background:var(--bg3);}
 .cat-emoji{font-size:30px;margin-bottom:8px;}
 .cat-name{font-size:13px;color:var(--text2);font-weight:600;}
@@ -97,6 +97,7 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-h
 /* ===== PRODUCT CARDS ===== */
 .prods-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;}
 .prod-card{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;overflow:hidden;transition:.25s;cursor:pointer;}
+.prod-card:hover{border-color:rgba(180,160,255,.35);transform:translateY(-5px);box-shadow:0 12px 32px rgba(0,0,0,.3),0 0 24px rgba(140,100,255,.1);}
 .prod-card:hover{border-color:var(--silver4);transform:translateY(-3px);}
 .prod-thumb{height:130px;display:flex;align-items:center;justify-content:center;font-size:52px;background:var(--bg3);border-bottom:1px solid var(--border);}
 .prod-body{padding:1rem;}
@@ -112,7 +113,7 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-h
 .prod-price sub{font-size:10px;color:var(--text3);font-weight:400;}
 .prod-old{font-size:11px;color:var(--red);text-decoration:line-through;margin-right:4px;}
 .add-btn{background:var(--bg4);border:1px solid var(--border3);color:var(--silver);padding:6px 12px;border-radius:7px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:12px;font-weight:600;transition:.2s;}
-.add-btn:hover{background:var(--silver2);color:#000;border-color:var(--silver2);}
+.add-btn:hover{background:var(--silver2);color:#000;border-color:var(--silver2);box-shadow:0 0 14px rgba(200,200,200,.25);}
 .wishlist-btn{background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;transition:.2s;padding:4px;}
 .wishlist-btn:hover,.wishlist-btn.active{color:#e05555;}
 
@@ -233,6 +234,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
 .about-hero p{font-size:14px;color:var(--text2);margin-top:8px;line-height:1.8;max-width:560px;margin-left:auto;margin-right:auto;}
 .team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;}
 .team-card{background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:1.6rem 1.2rem 1.2rem;text-align:center;cursor:pointer;transition:.25s;position:relative;overflow:hidden;}
+.team-card:hover{border-color:rgba(160,140,255,.3);transform:translateY(-4px);box-shadow:0 10px 28px rgba(0,0,0,.25),0 0 20px rgba(140,100,255,.1);}
 .team-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(200,200,200,.02),transparent);opacity:0;transition:.25s;}
 .team-card:hover{border-color:var(--silver4);transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,.4);}
 .team-card:hover::before{opacity:1;}
@@ -254,8 +256,8 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
 .sidebar{width:230px;background:var(--bg2);border-left:1px solid var(--border2);flex-shrink:0;padding:1rem 0;position:sticky;top:62px;height:calc(100vh - 62px);overflow-y:auto;}
 .sb-group{padding:6px 12px;font-size:10px;color:var(--text3);font-weight:700;letter-spacing:2px;margin-top:8px;}
 .sb-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;color:var(--text2);font-size:13px;font-weight:600;transition:.15s;border-right:2px solid transparent;}
-.sb-item:hover{background:var(--bg3);color:var(--text);}
-.sb-item.active{background:var(--bg3);color:var(--silver2);border-right-color:var(--silver);}
+.sb-item:hover{background:var(--bg3);color:var(--text);box-shadow:inset 2px 0 0 rgba(180,180,200,.3);}
+.sb-item.active{background:var(--bg3);color:var(--silver2);border-right-color:var(--silver);box-shadow:inset 3px 0 0 rgba(200,200,220,.5);}
 .sb-item span{font-size:17px;}
 .admin-main{flex:1;padding:1.5rem;overflow-y:auto;}
 .admin-pg{display:none;}
@@ -532,6 +534,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
       <div>
         <span style="font-size:15px;font-weight:700;color:var(--silver2);">✂ تعديل الصورة</span>
         <div id="modal-crop-hint" style="font-size:11px;color:var(--text3);margin-top:2px;"></div>
+        <div id="modal-size-hint" style="font-size:11px;color:rgba(180,120,255,.8);margin-top:2px;font-weight:600;"></div>
       </div>
       <button onclick="closeCropModal(false)" style="background:none;border:none;color:var(--text3);font-size:26px;cursor:pointer;line-height:1;">×</button>
     </div>
@@ -641,6 +644,15 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
     <!-- Hamburger (mobile only) -->
     <button class="hamburger" id="hamburger-btn" onclick="toggleMobileNav()" aria-label="القائمة" style="display:none;">
       <span></span><span></span><span></span>
+    </button>
+    <!-- Dark/Light toggle -->
+    <button id="theme-toggle-btn" onclick="toggleTheme()" title="تبديل الوضع" style="background:none;border:1px solid var(--border3);color:var(--text2);width:34px;height:34px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;" onmouseover="this.style.borderColor='var(--silver4)'" onmouseout="this.style.borderColor='var(--border3)'">
+      <svg id="theme-icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+      <svg id="theme-icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </button>
+    <!-- Language toggle (admin only) -->
+    <button id="lang-toggle-btn" onclick="toggleAdminLang()" title="تغيير لغة لوحة التحكم" style="display:flex;align-items:center;background:none;border:1px solid var(--border3);color:var(--text2);height:34px;padding:0 10px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:700;transition:.2s;" onmouseover="this.style.borderColor='var(--silver4)'" onmouseout="this.style.borderColor='var(--border3)'">
+      <span id="lang-label">EN</span>
     </button>
     <!-- Admin Notification Bell (hidden for visitors) -->
     <button class="icon-btn" id="notif-bell-btn" onclick="toggleNotifPanel()" title="الإشعارات" style="display:none;position:relative;">
@@ -1132,13 +1144,13 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
 <div class="page active" id="page-home">
   <div class="hero">
     <div class="hero-badge"><span class="hero-badge-dot"></span> <span id="hero-badge-text">متجر البرمجيات رقم 1</span></div>
-    <h1>حلول برمجية <em>احترافية</em><br>لكل مشروعك</h1>
-    <p class="hero-sub">اكتشف مئات الكودات والسكريبتات والتطبيقات الجاهزة — جودة عالية، تسليم فوري، دعم مستمر</p>
+    <h1 id="hero-title-h1">حلول برمجية <em>احترافية</em><br>لكل مشروعك</h1>
+    <p class="hero-sub" id="hero-sub-text">اكتشف مئات الكودات والسكريبتات والتطبيقات الجاهزة — جودة عالية، تسليم فوري، دعم مستمر</p>
 
     <!-- tagline -->
     <div class="hero-tagline">
       <div class="hero-tagline-line"></div>
-      <p class="hero-tagline-text">نحوّل أفكاركم إلى حلول رقمية متكاملة وفق أعلى معايير الاحترافية والجودة</p>
+      <p class="hero-tagline-text" id="hero-tagline-text">نحوّل أفكاركم إلى حلول رقمية متكاملة وفق أعلى معايير الاحترافية والجودة</p>
       <div class="hero-tagline-line"></div>
     </div>
 
@@ -1359,35 +1371,11 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
 
   <!-- PAYMENT METHODS BANNER -->
   <div style="background:var(--bg2);border-bottom:1px solid var(--border2);padding:10px 2rem;">
-    <div style="display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:nowrap;">
-      <span style="font-size:11px;color:var(--text3);font-family:'Cairo',sans-serif;white-space:nowrap;margin-left:8px;">طرق الدفع</span>
-      <div style="width:1px;height:18px;background:var(--border2);"></div>
-
-      <!-- Visa -->
-      <div style="height:34px;padding:0 14px;border-radius:7px;background:#1a1f71;display:inline-flex;align-items:center;">
-        <span style="font-size:16px;font-weight:900;color:#fff;font-family:Arial,sans-serif;letter-spacing:2px;font-style:italic;">VISA</span>
-      </div>
-
-      <!-- PayPal -->
-      <div style="height:34px;padding:0 12px;border-radius:7px;background:#003087;display:inline-flex;align-items:center;gap:5px;">
-        <svg width="15" height="18" viewBox="0 0 24 24" fill="none"><path d="M7.076 21.337H4.272a.641.641 0 01-.633-.74L5.498.911A.791.791 0 016.268.25h6.396c2.652 0 4.477.597 5.427 1.776.938 1.157.938 2.79.384 4.806-.574 2.102-1.606 3.735-3.068 4.853-1.302.993-2.96 1.497-4.926 1.497H8.547a.641.641 0 00-.634.548l-.837 7.607z" fill="#009cde"/><path d="M19.958 7.453c-.57 3.738-3.426 6.185-8.1 6.185H9.693a.641.641 0 00-.633.548l-1.22 7.743a.449.449 0 00.444.52h3.119a.641.641 0 00.633-.548l.506-3.207a.791.791 0 01.77-.64h1.476c3.88 0 6.568-2.088 7.37-5.85.317-1.494.162-2.75-.2-3.751z" fill="#012169"/></svg>
-        <span style="font-size:12px;font-weight:900;color:#fff;font-family:Arial;">Pay<span style="color:#009cde;">Pal</span></span>
-      </div>
-
-      <!-- Apple Pay -->
-      <div style="height:34px;padding:0 12px;border-radius:7px;background:#000;display:inline-flex;align-items:center;gap:6px;">
-        <svg width="14" height="17" viewBox="0 0 24 24" fill="white"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.7 9.05 7.4c1.37.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.39-1.32 2.76-2.53 3.99zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
-        <span style="font-size:11px;font-weight:700;color:#fff;font-family:Arial;">Apple Pay</span>
-      </div>
-
-      <!-- Kirtaz -->
-      <div style="height:34px;padding:0 12px;border-radius:7px;background:#111;display:inline-flex;align-items:center;justify-content:center;min-width:88px;">
-        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAAWCAYAAACVIF9YAAABCGlDQ1BJQ0MgUHJvZmlsZQAAeJxjYGA8wQAELAYMDLl5JUVB7k4KEZFRCuwPGBiBEAwSk4sLGHADoKpv1yBqL+viUYcLcKakFicD6Q9ArFIEtBxopAiQLZIOYWuA2EkQtg2IXV5SUAJkB4DYRSFBzkB2CpCtkY7ETkJiJxcUgdT3ANk2uTmlyQh3M/Ck5oUGA2kOIJZhKGYIYnBncAL5H6IkfxEDg8VXBgbmCQixpJkMDNtbGRgkbiHEVBYwMPC3MDBsO48QQ4RJQWJRIliIBYiZ0tIYGD4tZ2DgjWRgEL7AwMAVDQsIHG5TALvNnSEfCNMZchhSgSKeDHkMyQx6QJYRgwGDIYMZAKbWPz9HbOBQAAAFY0lEQVR4nO2Xf0wTZxjHn3uvlBZa0PHbIriCRTtFBSk/BM86RSJuZpLDZCRgNJNN3TIlw0yNBeePTSBBcZuwyRLihl5dTJhmiGbIGAIVHBYtiIACRaAFpaWl/Gj77g9wIxnbKJLwx/j8c+/d+973ue/dk+d5D2COOf4XEDOggQAA0TRNysbGxAzpTptXCi6TAfo3LWKGrE1XBmGMMRAA66h19nYGg/0oj2d0d3dHYrHYDACQnp5unSwewzDIzc2NkEql5okT8+wcA8WBS4x+wWL3SsUjXXOdov2d8HCHq5WVvQAwmdaUeJX35AgARoqiOEN6vQhxON06nW5QpVIZAABomiZpmob4+HjLn8EIAjDGAADC1UsDnV1HB1X3jUbSyYok722LyWnpanWLoSiPn68XD3su8qnLKyk98Kxde4emaVIul1v+4Tlm1CBBUZQ9abGIEpOS9j5sevhNRkZ2TVZWFjclJcWUSNMCxGZ7sB2hKy/v+66X9+Tm5rJEIhGWSqVo354Dn76fnLhLUVVeuTP5w+0Jm2P2cKwvMjcHS7higT+gvk7cr2uztBpNrLKGnnuDPgFvFxQUdOKxrMW2GkT/veQvcwAAoNWyEMB8RKJNJGa5+vv7u6WkpJj8fXzEIeHhZzdGb7zp57u0ateOHdvOZGVJAQAnJyePSqVSc3bm6cLTp0+mNbc+7e7Xac6GhdFcg6Z39zYqguvlBuZusw7/2FiPO9AIy5UkYHvkmqC+jqexb4aEuMTTNIJpZJwtBrFMJiPKVCoDi83W6vt1TyLWrq1ZI5GIrl8ruugt9HEruVVy9VFzU+ely4VHRIv9j0okkp8AYOGF8+cvHDt69ODoiLnMYh01tT1pe3Qg9bMKgA7w8Vtied7viIctr+PMwuu5GSVVsRduK5Mu3WuVZxYV5fZ2a0u5VqtJLpdbYRpfkGXL4rS0NKzX67l379zhxr61ZXW1QvFFz/Pn5yIj1ySoOxMe9vT0cA6mpi5X1j94TSDwviYQLDjs6emJJKESV71ev3P/J6lCxCPe2PvB/t3V5dXqWxU/ZEcFRT7tMPkHtbR42RkMHn4vtNXFXXzPxfwVEZbOwRYFHnysvdbQMAjTrBe2GCTi4+PRg9pa74bWVgOLJAeGTSbuLzdvLjQNDY9sid1yUqfrB6VSafn81Klsq9U6olar87u7u9va1Wpz9KZNkP9tXithh6Hit3IYMA61azSgKa9sIleKVmE7B3fr8qhda5euCq8N8BKs9HK1R32rg+HKjcKt0NZWRNM0mk6hmapBQiaTESrVbe6ywMCI/IKC3Bc6HdTU1BrqlcqLLc3Nhvzv8g/x+Tx1cXHx6L49H60gCBzX2PR44IqcUYRFhId8+VVOBpvNLuawWHbncr7uvVdfXwsA4MC1V3Rqft863wURXhyh/TwPYRDXaRSUTb9CQ/PdDrGvuKIUSonxFLUZm1L02TOz7+boVe1aTU/1x8dPXI6LiyPVnWqnQ4cOM9U1NTcAwCgUCp05Dg4Dzk6OCTwnfiCJiMGcM2eOpB07fuKlTmhoqEdUVJSXp6enRi6XnwxYFFS7jMe5Uqeq4QUIQ+B+Y5ViHn++fV1jdcbV0uY+GKsV0+6FU4EAAFgfFiYYP+cBAPABXACAtTs42C5m/Xrxhg0RC2iaJicTwBgjhmFIhmFImqbZEonEaeK8t7f3suCVaxOj1717cPwSO0lGcWA2tmsIIZDJZAgAgCT/7gdjTCCEgGEYEmNMMgwzqelxCBmMaVEUxQIAIIAAYob2ajY3ehgr1ROPMMl44topQflSnCH+kDPHJaavrCx9YjGxuTXMMYvM6u/RHHPMAn8A9S4tkuhrYBIAAAAASUVORK5CYII=" style="height:22px;width:auto;" alt="كريتزر">
-      </div>
+    <div id="payment-methods-bar" style="display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;min-height:34px;">
     </div>
   </div>
 
-  <!-- NEWSLETTER -->
+  <!-- NEWSLETTER  <!-- NEWSLETTER -->
   <div class="newsletter">
     <h3>📬 اشترك في النشرة البريدية</h3>
     <p>احصل على أحدث المنتجات والعروض مباشرةً في بريدك الإلكتروني</p>
@@ -1651,6 +1639,8 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
       <div class="sb-group">الإعلانات</div>
       <div class="sb-item" onclick="showAdmin('ads',this)"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg></span> إدارة الإعلانات</div>
       <div class="sb-group">الإعدادات</div>
+      <div class="sb-item" onclick="showAdmin('btneditor',this)"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="10" rx="3"/><path d="M8 11h.01M12 11h.01M16 11h.01"/></svg></span> تعديل الأزرار</div>
+      <div class="sb-item" onclick="showAdmin('payments',this)"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></span> وسائل الدفع</div>
       <div class="sb-item" onclick="showAdmin('coupons',this)"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/></svg></span> كوبونات الخصم</div>
       <div class="sb-item" onclick="showAdmin('contactmsgs',this)"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span> رسائل التواصل <span id="ct-msgs-badge" style="display:none;background:#5566ee;color:#fff;border-radius:50%;width:16px;height:16px;font-size:9px;display:none;align-items:center;justify-content:center;margin-right:4px;">0</span></div>
       <div class="sb-item" onclick="showAdmin('contact',this)"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></span> معلومات التواصل</div>
@@ -1733,7 +1723,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
 
           <!-- صورة المنتج -->
           <div class="form-group" style="margin-bottom:14px;">
-            <label class="form-label">صورة المنتج</label>
+            <label class="form-label">صورة المنتج <span style="font-size:10px;color:rgba(180,120,255,.7);">📐 400×320 px</span> <span style="font-size:10px;color:rgba(180,120,255,.7);">📐 200×200 px</span></label>
             <div id="ep-img-area" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
               <div id="ep-img-preview-wrap" style="width:80px;height:80px;background:var(--bg3);border:1px solid var(--border3);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:36px;overflow:hidden;">
                 <span id="ep-img-emoji">📦</span>
@@ -1839,7 +1829,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
           </div>
           <!-- Image upload -->
           <div class="form-group" style="margin-bottom:14px;">
-            <label class="form-label">صورة التصنيف (اختياري — تُعرض بدل الأيقونة)</label>
+            <label class="form-label">صورة التصنيف (اختياري) <span style="font-size:10px;color:rgba(180,120,255,.7);">📐 400×275 px</span></label>
             <input type="file" class="form-input" id="cat-img-file" accept="image/*" style="cursor:pointer;margin-bottom:8px;" onchange="previewCatImg(this)">
             <div id="cat-img-preview-wrap" style="display:none;align-items:center;gap:10px;">
               <img id="cat-img-preview" style="width:56px;height:56px;object-fit:cover;border-radius:10px;border:1px solid var(--border3);">
@@ -2027,6 +2017,70 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
       </div>
 
       <!-- CONTACT MANAGEMENT -->
+      <!-- BUTTON EDITOR -->
+      <div class="admin-pg" id="apg-btneditor">
+        <div class="admin-pg-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:8px;vertical-align:middle;"><rect x="2" y="7" width="20" height="10" rx="3"/></svg>
+          تعديل الأزرار
+        </div>
+        <div style="font-size:13px;color:var(--text2);margin-bottom:1.5rem;line-height:1.7;">غيّر نص ولون أي زر في الموقع — التغييرات تنعكس فوراً على الزوار</div>
+        <div id="btn-editor-list" style="display:flex;flex-direction:column;gap:12px;"></div>
+        <div class="form-actions" style="margin-top:1.5rem;">
+          <button class="btn-silver" onclick="saveBtnCustom()">💾 حفظ جميع الأزرار ←</button>
+          <button class="btn-outline" onclick="resetBtnCustom()">↺ استعادة الافتراضي</button>
+        </div>
+      </div>
+
+      <!-- PAYMENT METHODS -->
+      <div class="admin-pg" id="apg-payments">
+        <div class="admin-pg-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:8px;vertical-align:middle;"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          إدارة وسائل الدفع
+        </div>
+        <div class="form-card" style="max-width:100%;margin-bottom:1rem;">
+          <div class="form-card-title">+ إضافة وسيلة دفع جديدة</div>
+          <input type="hidden" id="pm-edit-id">
+          <div class="form-grid" style="margin-bottom:12px;">
+            <div class="form-group">
+              <label class="form-label">اسم وسيلة الدفع</label>
+              <input type="text" class="form-input" id="pm-name" placeholder="مثال: Visa, PayPal, كريتزر">
+            </div>
+            <div class="form-group">
+              <label class="form-label">لون الخلفية</label>
+              <input type="color" class="form-input" id="pm-bg" value="#1a1f71" style="height:42px;cursor:pointer;">
+            </div>
+          </div>
+          <div class="form-grid" style="margin-bottom:12px;">
+            <div class="form-group">
+              <label class="form-label">نص يظهر (اختياري)</label>
+              <input type="text" class="form-input" id="pm-text" placeholder="مثال: VISA">
+            </div>
+            <div class="form-group">
+              <label class="form-label">لون النص</label>
+              <input type="color" class="form-input" id="pm-textcolor" value="#ffffff" style="height:42px;cursor:pointer;">
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:12px;">
+            <label class="form-label">صورة الشعار (اختياري — تحل محل النص)</label>
+            <input type="file" class="form-input" id="pm-img-file" accept="image/*" style="cursor:pointer;margin-bottom:6px;" onchange="previewPmImg(this)">
+            <div id="pm-img-preview-wrap" style="display:none;align-items:center;gap:8px;">
+              <img id="pm-img-preview" style="height:30px;width:auto;border-radius:4px;">
+              <button type="button" onclick="clearPmImg()" style="background:none;border:1px solid rgba(200,60,60,.3);color:var(--red);padding:4px 10px;border-radius:6px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:11px;">✕</button>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn-silver" onclick="savePm()">حفظ ←</button>
+            <button class="btn-outline" id="pm-cancel-btn" style="display:none;" onclick="resetPmForm()">إلغاء</button>
+          </div>
+        </div>
+
+        <!-- List -->
+        <div class="tbl-box">
+          <div class="tbl-head"><span class="tbl-head-title">وسائل الدفع الحالية</span></div>
+          <div id="pm-list" style="display:flex;flex-wrap:wrap;gap:10px;padding:16px;"></div>
+        </div>
+      </div>
+
       <!-- CONTACT MESSAGES -->
       <div class="admin-pg" id="apg-contactmsgs">
         <div class="admin-pg-title">
@@ -2086,7 +2140,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
           </div>
           <!-- Custom image for contact icon -->
           <div class="form-group" style="margin-bottom:14px;">
-            <label class="form-label">صورة مخصصة للأيقونة <span style="color:var(--text3);font-weight:400;">(اختياري — تحل محل الأيقونة)</span></label>
+            <label class="form-label">صورة مخصصة للأيقونة <span style="color:var(--text3);font-weight:400;">(اختياري)</span> <span style="font-size:10px;color:rgba(180,120,255,.7);">📐 200×200 px — دائري</span></label>
             <input type="file" class="form-input" id="ct-icon-img" accept="image/*" style="cursor:pointer;margin-bottom:8px;" onchange="previewContactImg(this)">
             <div id="ct-icon-img-preview" style="display:none;flex-direction:column;gap:6px;">
               <img id="ct-icon-img-thumb" style="width:56px;height:56px;object-fit:cover;border-radius:12px;border:1px solid var(--border3);">
@@ -2320,7 +2374,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
             </div>
           </div>
           <div class="form-group" style="margin-bottom:14px;">
-            <label class="form-label">الصورة الشخصية (اختياري)</label>
+            <label class="form-label">الصورة الشخصية <span style="font-size:10px;color:rgba(180,120,255,.7);">📐 300×300 px — دائري</span></label>
             <input type="file" class="form-input" id="sf-img-file" accept="image/*" style="cursor:pointer;margin-bottom:8px;" onchange="previewStaffImg(this)">
             <div id="sf-img-preview-wrap" style="display:none;">
               <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
@@ -2502,7 +2556,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
           </div>
           <!-- Background image -->
           <div class="form-group" style="margin-bottom:12px;">
-            <label class="form-label">صورة خلفية (اختياري — تعلو فوق اللون)</label>
+            <label class="form-label">صورة خلفية <span style="font-size:10px;color:rgba(180,120,255,.7);">📐 600×270 px — بانر</span></label>
             <input type="file" class="form-input" id="set-promo-img" accept="image/*" style="cursor:pointer;margin-bottom:8px;" onchange="previewPromoBannerImg(this)">
             <div id="set-promo-img-preview" style="display:none;flex-direction:column;gap:6px;">
               <img id="set-promo-img-thumb" style="width:100%;height:80px;object-fit:cover;border-radius:8px;border:1px solid var(--border3);">
@@ -2541,7 +2595,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
             <input type="text" class="form-input" id="set-join-btn" placeholder="📝 تقدّم للانضمام الآن ←">
           </div>
           <div class="form-group" style="margin-bottom:14px;">
-            <label class="form-label">صورة خلفية المربع (اختياري)</label>
+            <label class="form-label">صورة خلفية المربع <span style="font-size:10px;color:rgba(180,120,255,.7);">📐 600×270 px — بانر</span></label>
             <input type="file" class="form-input" id="set-join-img" accept="image/*" style="cursor:pointer;margin-bottom:8px;" onchange="previewJoinImg(this)">
             <div id="set-join-img-preview" style="display:none;gap:10px;align-items:center;">
               <img id="set-join-img-thumb" style="width:100%;height:100px;object-fit:cover;border-radius:8px;border:1px solid var(--border3);">
@@ -3086,7 +3140,12 @@ function showPage(p) {
 function renderHomeCats() {
   const el = document.getElementById('home-cats');
   if(!el) return;
-  el.innerHTML = cats.map(c=>`<div class="cat-card" onclick="filterAndGo('${c.id}')"><div class="cat-emoji">${c.icon}</div><div class="cat-name">${c.name}</div><div class="cat-cnt">${products.filter(p=>p.cat===c.id).length} منتج</div></div>`).join('');
+  el.innerHTML = cats.map(c => {
+    const thumb = c.image
+      ? `<div class="cat-emoji" style="font-size:0;"><img src="${c.image}" style="width:52px;height:52px;object-fit:cover;border-radius:10px;margin-bottom:4px;"></div>`
+      : `<div class="cat-emoji">${c.icon}</div>`;
+    return `<div class="cat-card" onclick="filterAndGo('${c.id}')">${thumb}<div class="cat-name">${c.name}</div><div class="cat-cnt">${products.filter(p=>p.cat===c.id).length} منتج</div></div>`;
+  }).join('');
 }
 function renderFeatured() {
   const el = document.getElementById('home-featured');
@@ -3262,7 +3321,7 @@ function previewCatImg(input) {
     catImgBase64 = cropped;
     const img = document.getElementById('cat-img-preview'); if(img) img.src = cropped;
     const wrap = document.getElementById('cat-img-preview-wrap'); if(wrap) wrap.style.display='flex';
-  }, CROP_CONFIGS.category);
+  }, (typeof CROP_CONFIGS !== 'undefined' ? CROP_CONFIGS.category : {w:260, h:180, radius:'10px', hint:'صورة تصنيف', out:400, sizeHint:'400×275 px'}));
 }
 function clearCatImg() {
   catImgBase64 = '';
@@ -4280,6 +4339,7 @@ function doLogin(){
     showNotif('أهلاً بك في لوحة التحكم 👋','success');
     updateNotifBell();
     requestNotifPermission();
+    showAdminLangBtn();
     // restore last admin page
     const lastAdmin = sessionStorage.getItem('ccs_last_admin_pg');
     if(lastAdmin && lastAdmin !== 'dashboard') {
@@ -4309,11 +4369,11 @@ function doLogin(){
 // ====== PERMISSIONS ======
 const PERMISSIONS = {
   admin: {
-    pages: ['dashboard','products','addproduct','categories','orders','chat','customers','reports','coupons','ads','contact','features','team','jobs','staff','settings'],
+    pages: ['dashboard','products','addproduct','categories','orders','chat','customers','reports','coupons','ads','contact','contactmsgs','features','team','jobs','staff','reviews','settings','payments','btneditor'],
     actions: ['add_product','edit_product','delete_product','change_order_status','delete_order','reply_chat','lock_chat','delete_chat','add_coupon','delete_coupon','manage_ads','manage_team','manage_staff','manage_settings','view_reports','manage_jobs'],
   },
   moderator: {
-    pages: ['dashboard','products','addproduct','categories','orders','chat','customers','reports','coupons','ads','contact','features','team','jobs'],
+    pages: ['dashboard','products','addproduct','categories','orders','chat','customers','reports','coupons','ads','contact','contactmsgs','features','team','jobs','reviews'],
     actions: ['add_product','edit_product','delete_product','change_order_status','delete_order','reply_chat','lock_chat','add_coupon','manage_ads','manage_team','view_reports','manage_jobs'],
   },
   editor: {
@@ -4409,6 +4469,7 @@ function logout(){
   if(cu) cu.remove();
   showPage('home');
   showNotif('تم تسجيل الخروج بنجاح');
+  hideAdminLangBtn();
 }
 function showAdmin(p, el) {
   sessionStorage.setItem('ccs_last_admin_pg', p);
@@ -4433,6 +4494,8 @@ function showAdmin(p, el) {
   if(p==='customers') renderCustomers();
   if(p==='contactmsgs') renderContactMsgsAdmin();
   if(p==='advertise') renderAdvAdmin();
+  if(p==='payments') renderPmAdmin();
+  if(p==='btneditor') renderBtnEditor();
   if(p==='reports')   renderReports();
   setTimeout(applyButtonPermissions, 150);
 }
@@ -4523,7 +4586,7 @@ function openEditProduct(id) {
   if (!p) return;
   prodImageBase64 = p.image || '';
   document.getElementById('ep-id').value = id;
-  (document.getElementById(('prod-form-title'))||{}).textContent = '<span class="ico" style="margin-left:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span> تعديل المنتج';
+  { const _e=document.getElementById('prod-form-title'); if(_e) _e.innerHTML='✏ تعديل المنتج'; }
   (document.getElementById(('prod-form-subtitle'))||{}).textContent = 'تعديل معلومات: ' + p.name;
   (document.getElementById(('prod-save-btn'))||{}).textContent = 'حفظ التعديلات ←';
   document.getElementById('np-name').value = p.name;
@@ -4928,7 +4991,7 @@ function openEditFeature(id) {
     thumb.innerHTML = f.icon || '⭐';
     document.getElementById('feat-clear-img').style.display = 'none';
   }
-  (document.getElementById(('feat-form-title'))||{}).textContent   = `<span class="ico" style="margin-left:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span> تعديل: ${f.title}`;
+  { const _e=document.getElementById('feat-form-title'); if(_e) _e.innerHTML=`✏ تعديل: ${f.title}`; }
   (document.getElementById(('feat-save-btn'))||{}).textContent     = 'حفظ التعديلات ←';
   document.getElementById('feat-cancel-btn').style.display = 'inline-block';
   document.getElementById('apg-features').scrollIntoView({behavior:'smooth'});
@@ -5249,7 +5312,7 @@ function openEditContact(id) {
     const thumb=document.getElementById('ct-icon-img-thumb'); if(thumb) thumb.src=c.image;
     const prev=document.getElementById('ct-icon-img-preview'); if(prev) prev.style.display='flex';
   } else { clearContactImg(); }
-  (document.getElementById(('ct-form-title'))||{}).textContent   = `<span class="ico" style="margin-left:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span> تعديل: ${c.title}`;
+  { const _e=document.getElementById('ct-form-title'); if(_e) _e.innerHTML=`✏ تعديل: ${c.title}`; }
   (document.getElementById(('ct-save-btn'))||{}).textContent     = 'حفظ التعديلات ←';
   document.getElementById('ct-cancel-btn').style.display = 'inline-block';
   onContactTypeChange();
@@ -5676,6 +5739,7 @@ function previewTeamImg(input) {
     const img = document.getElementById('tm-img-preview');
     if(img) img.src = cropped;
     document.getElementById('tm-img-preview-wrap').style.display = 'block';
+    setTimeout(refreshImgEditables, 150);
   }, CROP_CONFIGS.team);
 }
 function applyTeamZoom() {
@@ -5703,6 +5767,7 @@ function previewStaffImg(input) {
     const img = document.getElementById('sf-img-preview');
     if(img) img.src = cropped;
     document.getElementById('sf-img-preview-wrap').style.display = 'block';
+    setTimeout(refreshImgEditables, 150);
   }, CROP_CONFIGS.staff);
 }
 function applyStaffZoom() {
@@ -5890,6 +5955,7 @@ function openEditTeam(id) {
     const zoom = document.getElementById('tm-zoom');
     wrap.style.position = 'relative';
     document.getElementById('tm-img-preview-wrap').style.display = 'block';
+    setTimeout(refreshImgEditables, 150);
     img.onload = () => { teamCrop = setupImageCrop(img, wrap, zoom); };
     img.src = m.image;
   } else {
@@ -6038,6 +6104,7 @@ function openEditStaff(id) {
     if(img && wrap) {
       wrap.style.position = 'relative';
       document.getElementById('sf-img-preview-wrap').style.display = 'block';
+    setTimeout(refreshImgEditables, 150);
       img.onload = () => { staffCrop = setupImageCrop(img, wrap, zoom); };
       img.src = s.image;
     }
@@ -6377,6 +6444,7 @@ function openEditAdModal(id) {
   document.getElementById('ad-f-image').value = '';
   if(a.image) {
     document.getElementById('ad-img-preview').style.display = 'block';
+    setTimeout(refreshImgEditables, 150);
     document.getElementById('ad-img-preview-img').src = a.image;
   } else {
     document.getElementById('ad-img-preview').style.display = 'none';
@@ -6390,6 +6458,7 @@ function previewAdImage(input) {
   universalImgInput(input, (cropped) => {
     adImageBase64 = cropped;
     document.getElementById('ad-img-preview').style.display = 'block';
+    setTimeout(refreshImgEditables, 150);
     document.getElementById('ad-img-preview-img').src = cropped;
   }, CROP_CONFIGS.ad);
 }
@@ -7249,6 +7318,7 @@ function previewPromoBannerImg(input) {
     promoBannerImgBase64 = cropped;
     const thumb = document.getElementById('set-promo-img-thumb'); if(thumb) thumb.src = cropped;
     const prev  = document.getElementById('set-promo-img-preview'); if(prev) prev.style.display = 'flex';
+    setTimeout(refreshImgEditables,150);
   }, CROP_CONFIGS.join);
 }
 
@@ -7285,14 +7355,15 @@ let _cropCallback = null;
 
 // Crop configs per use case
 const CROP_CONFIGS = {
-  team:     { w:260, h:260, radius:'50%',     hint:'صورة شخصية دائرية — اسحب لتحديد الوجه', out:300 },
-  staff:    { w:260, h:260, radius:'50%',     hint:'صورة شخصية دائرية — اسحب لتحديد الوجه', out:300 },
-  product:  { w:320, h:260, radius:'10px',    hint:'صورة منتج (4:3) — اسحب لتعديل الإطار', out:400 },
-  category: { w:260, h:180, radius:'10px',    hint:'صورة تصنيف (أفقية) — اسحب لتعديل الإطار', out:400 },
-  feature:  { w:120, h:120, radius:'12px',    hint:'أيقونة ميزة (مربعة)', out:200 },
-  contact:  { w:120, h:120, radius:'50%',     hint:'أيقونة تواصل دائرية', out:200 },
-  ad:       { w:340, h:200, radius:'10px',    hint:'صورة إعلان (16:9) — اسحب لتحديد المنطقة', out:480 },
-  join:     { w:400, h:180, radius:'10px',    hint:'صورة خلفية المربع (بانر عريض)', out:600 },
+  team:     { w:260, h:260, radius:'50%',  hint:'صورة شخصية دائرية — اسحب لتحديد الوجه', out:300,  sizeHint:'300×300 px — دائري' },
+  staff:    { w:260, h:260, radius:'50%',  hint:'صورة شخصية دائرية — اسحب لتحديد الوجه', out:300,  sizeHint:'300×300 px — دائري' },
+  product:  { w:320, h:260, radius:'10px', hint:'صورة منتج (4:3) — اسحب لتعديل الإطار',  out:400,  sizeHint:'400×320 px — 4:3' },
+  category: { w:260, h:180, radius:'10px', hint:'صورة تصنيف — اسحب لتعديل الإطار',       out:400,  sizeHint:'400×275 px — أفقي' },
+  feature:  { w:120, h:120, radius:'12px', hint:'أيقونة ميزة مربعة',                       out:200,  sizeHint:'200×200 px — مربع' },
+  contact:  { w:120, h:120, radius:'50%',  hint:'أيقونة تواصل دائرية',                     out:200,  sizeHint:'200×200 px — دائري' },
+  ad:       { w:340, h:200, radius:'10px', hint:'صورة إعلان (16:9)',                        out:480,  sizeHint:'480×280 px — 16:9' },
+  join:     { w:400, h:180, radius:'10px', hint:'صورة خلفية بانر عريض',                    out:600,  sizeHint:'600×270 px — بانر' },
+  promo:    { w:400, h:180, radius:'10px', hint:'صورة خلفية العرض المحدود',                out:600,  sizeHint:'600×270 px — بانر' },
 };
 
 function openCropModal(target) {
@@ -7325,6 +7396,8 @@ function openCropWith(src, cfg, callback) {
   wrap.style.height       = cfg.h + 'px';
   wrap.style.borderRadius = cfg.radius;
   if(hint) hint.textContent = cfg.hint || '';
+  const sizeEl = document.getElementById('modal-size-hint');
+  if(sizeEl) sizeEl.textContent = cfg.sizeHint ? `📐 الحجم المُخرَج: ${cfg.sizeHint}` : '';
 
   modal.style.display = 'flex';
   modalCrop = null;
@@ -7409,6 +7482,7 @@ function previewJoinImg(input) {
     joinImgBase64 = cropped;
     const thumb = document.getElementById('set-join-img-thumb'); if(thumb) thumb.src=cropped;
     const prev = document.getElementById('set-join-img-preview'); if(prev) prev.style.display='flex';
+    setTimeout(refreshImgEditables,150);
   }, CROP_CONFIGS.join);
 }
 
@@ -8000,6 +8074,703 @@ function loadSiteCustomFields() {
   if(el('cust-dir'))        el('cust-dir').value        = siteCustom.dir;
 }
 
+// ====== THEME TOGGLE (Dark / Light) ======
+let isLightTheme = false;
+
+function applyLightTheme() {
+  const root = document.documentElement;
+  root.style.setProperty('--bg',      '#f0f2f5');
+  root.style.setProperty('--bg2',     '#ffffff');
+  root.style.setProperty('--bg3',     '#f7f8fa');
+  root.style.setProperty('--bg4',     '#edf0f4');
+  root.style.setProperty('--bg5',     '#e4e8ee');
+  root.style.setProperty('--text',    '#1e2432');
+  root.style.setProperty('--text2',   '#4a5568');
+  root.style.setProperty('--text3',   '#8899aa');
+  root.style.setProperty('--silver',  '#2d3748');
+  root.style.setProperty('--silver2', '#1a202c');
+  root.style.setProperty('--silver3', '#4a5568');
+  root.style.setProperty('--silver4', '#718096');
+  root.style.setProperty('--border',  '#e2e8f0');
+  root.style.setProperty('--border2', '#e8edf4');
+  root.style.setProperty('--border3', '#d0d8e4');
+  root.style.setProperty('--grad',    'linear-gradient(135deg,#f7f8fa 0%,#edf0f4 100%)');
+  root.style.setProperty('--green',   '#38a169');
+  root.style.setProperty('--red',     '#e53e3e');
+  document.body.style.background = '#f0f2f5';
+  document.getElementById('theme-icon-moon').style.display = 'none';
+  document.getElementById('theme-icon-sun').style.display  = 'block';
+}
+
+function applyDarkTheme() {
+  const root = document.documentElement;
+  ['--bg','--bg2','--bg3','--bg4','--bg5','--text','--text2','--text3',
+   '--silver','--silver2','--silver3','--silver4','--border','--border2','--border3',
+   '--grad','--green','--red'].forEach(v => root.style.removeProperty(v));
+  document.body.style.background = '';
+  if(siteCustom && siteCustom.bg !== DEFAULT_CUSTOM.bg) applySiteCustom(false);
+  document.getElementById('theme-icon-moon').style.display = 'block';
+  document.getElementById('theme-icon-sun').style.display  = 'none';
+}
+
+function toggleTheme() {
+  isLightTheme = !isLightTheme;
+  isLightTheme ? applyLightTheme() : applyDarkTheme();
+  localStorage.setItem('ccs_theme', isLightTheme ? 'light' : 'dark');
+}
+
+// restore theme on load
+if(localStorage.getItem('ccs_theme') === 'light') { isLightTheme = true; }
+
+// ====== EDITABLE IMAGE PREVIEWS ======
+// Wraps any image preview with an edit overlay + size hint label
+function makeImgEditable(imgEl, wrapEl, cfg, onNewCrop) {
+  if(!imgEl || !wrapEl || wrapEl.dataset.editableReady) return;
+  wrapEl.dataset.editableReady = '1';
+  wrapEl.style.position = 'relative';
+
+  // Size hint badge
+  if(cfg?.sizeHint) {
+    const badge = document.createElement('div');
+    badge.style.cssText = 'position:absolute;bottom:4px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.7);color:rgba(255,255,255,.85);font-size:9px;padding:2px 7px;border-radius:20px;white-space:nowrap;pointer-events:none;z-index:10;font-family:monospace;';
+    badge.textContent = '📐 ' + cfg.sizeHint;
+    wrapEl.appendChild(badge);
+  }
+
+  // Edit overlay
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:absolute;inset:0;background:rgba(0,0,0,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;opacity:0;transition:.2s;cursor:pointer;border-radius:inherit;z-index:9;';
+  overlay.innerHTML = `
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+    <span style="color:#fff;font-size:10px;font-family:'Cairo',sans-serif;">تعديل</span>`;
+  overlay.onclick = () => openCropWith(imgEl.src, cfg, (cropped) => {
+    imgEl.src = cropped;
+    if(onNewCrop) onNewCrop(cropped);
+  });
+  wrapEl.onmouseenter = () => overlay.style.opacity = '1';
+  wrapEl.onmouseleave = () => overlay.style.opacity = '0';
+  wrapEl.appendChild(overlay);
+}
+
+// Apply to all image previews after they get a src
+function initAllImgEditables() {
+  const imgConfigs = [
+    { img:'ep-img-preview',      wrap:'ep-img-preview-wrap',      cfg: null,                              cb:(v)=>{ prodImageBase64=v; } },
+    { img:'cat-img-preview',     wrap:'cat-img-preview-wrap',      cfg: null,                              cb:(v)=>{ catImgBase64=v; } },
+    { img:'tm-img-preview',      wrap:'tm-crop-wrap',              cfg: null,                              cb:(v)=>{ teamImgBase64=v; } },
+    { img:'sf-img-preview',      wrap:'sf-crop-wrap',              cfg: null,                              cb:(v)=>{ staffImgBase64=v; } },
+    { img:'set-promo-img-thumb', wrap:'set-promo-img-preview',     cfg: null,                              cb:(v)=>{ promoBannerImgBase64=v; } },
+    { img:'set-join-img-thumb',  wrap:'set-join-img-preview',      cfg: null,                              cb:(v)=>{ joinImgBase64=v; } },
+    { img:'ad-img-preview-img',  wrap:'ad-img-preview',            cfg: null,                              cb:(v)=>{ adImageBase64=v; } },
+  ];
+  imgConfigs.forEach(({ img, wrap, cfg, cb }) => {
+    const imgEl  = document.getElementById(img);
+    const wrapEl = document.getElementById(wrap);
+    if(imgEl && wrapEl) makeImgEditable(imgEl, wrapEl, cfg, cb);
+  });
+}
+
+// Call after DOM is ready (also called after each preview is shown)
+function refreshImgEditables() {
+  // Update cfg from CROP_CONFIGS once available
+  if(typeof CROP_CONFIGS === 'undefined') return;
+  const map = {
+    'ep-img-preview':      CROP_CONFIGS.product,
+    'cat-img-preview':     CROP_CONFIGS.category,
+    'tm-img-preview':      CROP_CONFIGS.team,
+    'sf-img-preview':      CROP_CONFIGS.staff,
+    'set-promo-img-thumb': CROP_CONFIGS.promo || CROP_CONFIGS.join,
+    'set-join-img-thumb':  CROP_CONFIGS.join,
+    'ad-img-preview-img':  CROP_CONFIGS.ad,
+    'feat-img-thumb':      CROP_CONFIGS.feature,
+    'ct-icon-img-thumb':   CROP_CONFIGS.contact,
+  };
+  Object.entries(map).forEach(([imgId, cfg]) => {
+    const imgEl  = document.getElementById(imgId);
+    // find wrap: parent or labelled wrap
+    const wrapEl = imgEl?.parentElement;
+    if(imgEl && wrapEl && imgEl.src && imgEl.src !== window.location.href) {
+      makeImgEditable(imgEl, wrapEl, cfg, null);
+    }
+  });
+}
+
+// ====== BUTTON EDITOR ======
+const BTN_DEFS = [
+  // id, label (description), selector, default text, default bg, default text color
+  { id:'btn_shopnow',    label:'زر "تسوق الآن" — الصفحة الرئيسية',   sel:'#page-home .hero-btns .btn-silver:first-child', defText:'تسوق الآن', defBg:'', defColor:'' },
+  { id:'btn_aboutus',    label:'زر "تعرف علينا" — الصفحة الرئيسية',  sel:'#page-home .hero-btns .btn-silver:last-child',  defText:'تعرف علينا', defBg:'', defColor:'' },
+  { id:'btn_checkout',   label:'زر "إتمام الشراء" — السلة',           sel:'.checkout-btn',        defText:'إتمام الشراء ←',  defBg:'', defColor:'' },
+  { id:'btn_sendorder',  label:'زر "تأكيد إرسال الطلب" — نموذج الطلب', sel:'#order-submit-btn', defText:'تأكيد إرسال الطلب ←', defBg:'rgba(40,120,40,.8)', defColor:'#88ffaa' },
+  { id:'btn_sendmsg',    label:'زر "إرسال الرسالة" — تواصل معنا',     sel:'#page-contact .btn-silver', defText:'إرسال الرسالة ←', defBg:'', defColor:'' },
+  { id:'btn_applyform',  label:'زر "تقدّم للانضمام" — من نحن',        sel:'#join-banner-btn',    defText:'📝 تقدّم للانضمام الآن ←', defBg:'', defColor:'' },
+  { id:'btn_addcart',    label:'زر "أضف للسلة" — بطاقة المنتج',       sel:'.add-btn',            defText:'🛒', defBg:'', defColor:'' },
+  { id:'btn_coupon',     label:'زر "تطبيق" — كود الخصم',              sel:'.coupon-apply-btn',   defText:'تطبيق', defBg:'', defColor:'' },
+  { id:'btn_tracksrch',  label:'زر "بحث" — تتبع الطلب',               sel:'#track-search-btn',   defText:'بحث 🔍', defBg:'', defColor:'' },
+  { id:'btn_rateus',     label:'زر "إرسال التقييم" — تقييم الموقع',   sel:'#submit-site-rating', defText:'إرسال التقييم', defBg:'', defColor:'' },
+];
+
+let btnCustom = {};
+
+function renderBtnEditor() {
+  const list = document.getElementById('btn-editor-list'); if(!list) return;
+  list.innerHTML = BTN_DEFS.map(b => {
+    const saved = btnCustom[b.id] || {};
+    const curText = saved.text ?? b.defText;
+    const curBg   = saved.bg   ?? '';
+    const curColor= saved.color?? '';
+    // live preview
+    const previewStyle = `background:${curBg||'var(--grad)'};color:${curColor||'var(--silver2)'};border:1px solid ${curBg?curBg+'88':'var(--silver3)'};`;
+    return `
+    <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:14px 16px;">
+      <div style="font-size:12px;font-weight:700;color:var(--silver3);margin-bottom:10px;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-left:4px;"><rect x="2" y="7" width="20" height="10" rx="3"/></svg>
+        ${b.label}
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+        <!-- preview -->
+        <button style="${previewStyle}padding:8px 16px;border-radius:8px;cursor:default;font-family:'Cairo',sans-serif;font-size:13px;font-weight:700;min-width:80px;" id="btn-prev-${b.id}">${curText}</button>
+        <!-- text input -->
+        <input type="text" value="${curText}" placeholder="${b.defText}" class="form-input" style="flex:1;min-width:140px;" id="btext-${b.id}" oninput="previewBtnChange('${b.id}')">
+        <!-- bg color -->
+        <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
+          <span style="font-size:9px;color:var(--text3);">خلفية</span>
+          <input type="color" value="${curBg||'#1a1a1a'}" style="height:32px;width:36px;cursor:pointer;border-radius:6px;border:1px solid var(--border3);" id="bbg-${b.id}" oninput="previewBtnChange('${b.id}')">
+        </div>
+        <!-- text color -->
+        <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
+          <span style="font-size:9px;color:var(--text3);">نص</span>
+          <input type="color" value="${curColor||'#e0e0e0'}" style="height:32px;width:36px;cursor:pointer;border-radius:6px;border:1px solid var(--border3);" id="bcolor-${b.id}" oninput="previewBtnChange('${b.id}')">
+        </div>
+        <!-- reset this btn -->
+        <button onclick="resetSingleBtn('${b.id}')" style="background:none;border:1px solid var(--border3);color:var(--text3);padding:6px 10px;border-radius:6px;cursor:pointer;font-size:11px;">↺</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function previewBtnChange(id) {
+  const text  = document.getElementById(`btext-${id}`)?.value || '';
+  const bg    = document.getElementById(`bbg-${id}`)?.value || '';
+  const color = document.getElementById(`bcolor-${id}`)?.value || '';
+  const prev  = document.getElementById(`btn-prev-${id}`);
+  if(prev) {
+    prev.textContent = text;
+    prev.style.background = bg;
+    prev.style.color = color;
+    prev.style.borderColor = bg + '88';
+  }
+}
+
+function saveBtnCustom() {
+  BTN_DEFS.forEach(b => {
+    btnCustom[b.id] = {
+      text:  document.getElementById(`btext-${b.id}`)?.value.trim() || b.defText,
+      bg:    document.getElementById(`bbg-${b.id}`)?.value || '',
+      color: document.getElementById(`bcolor-${b.id}`)?.value || '',
+    };
+  });
+  applyBtnCustom();
+  saveAllData();
+  showNotif('✓ تم حفظ الأزرار','success');
+}
+
+function resetSingleBtn(id) {
+  const b = BTN_DEFS.find(x=>x.id===id); if(!b) return;
+  delete btnCustom[id];
+  const ti = document.getElementById(`btext-${id}`); if(ti) ti.value = b.defText;
+  const bi = document.getElementById(`bbg-${id}`); if(bi) bi.value = b.defBg||'#1a1a1a';
+  const ci = document.getElementById(`bcolor-${id}`); if(ci) ci.value = b.defColor||'#e0e0e0';
+  previewBtnChange(id);
+  applyBtnCustom();
+  saveAllData();
+}
+
+function resetBtnCustom() {
+  btnCustom = {};
+  applyBtnCustom();
+  saveAllData();
+  renderBtnEditor();
+  showNotif('✓ تم استعادة الأزرار الافتراضية','success');
+}
+
+function applyBtnCustom() {
+  BTN_DEFS.forEach(b => {
+    const c = btnCustom[b.id];
+    if(!c) return;
+    document.querySelectorAll(b.sel).forEach(el => {
+      // preserve inner SVG/icons
+      const svgEl = el.querySelector('svg');
+      if(c.text) {
+        if(svgEl) {
+          el.childNodes.forEach(n=>{ if(n.nodeType===3) n.textContent = ' '+c.text; });
+        } else {
+          // keep first svg if exists
+          const firstSvg = el.innerHTML.match(/<svg[^>]*>.*?<\/svg>/s);
+          el.textContent = c.text;
+          if(firstSvg) el.innerHTML = firstSvg[0] + ' ' + c.text;
+        }
+      }
+      if(c.bg)    { el.style.background = c.bg; el.style.borderColor = c.bg+'88'; }
+      if(c.color) el.style.color = c.color;
+    });
+  });
+}
+
+// ====== PAYMENT METHODS ======
+let paymentMethods = [
+  { id:1, name:'Visa',       bg:'#1a1f71', text:'VISA',      textColor:'#fff', textStyle:'font-size:16px;font-weight:900;font-family:Arial,sans-serif;letter-spacing:2px;font-style:italic;', img:'' },
+  { id:2, name:'PayPal',     bg:'#003087', text:'',          textColor:'#fff', textStyle:'', img:'', svgHtml:'<svg width="15" height="18" viewBox="0 0 24 24" fill="none"><path d="M7.076 21.337H4.272a.641.641 0 01-.633-.74L5.498.911A.791.791 0 016.268.25h6.396c2.652 0 4.477.597 5.427 1.776.938 1.157.938 2.79.384 4.806-.574 2.102-1.606 3.735-3.068 4.853-1.302.993-2.96 1.497-4.926 1.497H8.547a.641.641 0 00-.634.548l-.837 7.607z" fill="#009cde"/><path d="M19.958 7.453c-.57 3.738-3.426 6.185-8.1 6.185H9.693a.641.641 0 00-.633.548l-1.22 7.743a.449.449 0 00.444.52h3.119a.641.641 0 00.633-.548l.506-3.207a.791.791 0 01.77-.64h1.476c3.88 0 6.568-2.088 7.37-5.85.317-1.494.162-2.75-.2-3.751z" fill="#012169"/></svg><span style="font-size:12px;font-weight:900;color:#fff;font-family:Arial;margin-right:4px;">Pay<span style="color:#009cde;">Pal</span></span>' },
+  { id:3, name:'Apple Pay',  bg:'#000',    text:'',          textColor:'#fff', textStyle:'', img:'', svgHtml:'<svg width="14" height="17" viewBox="0 0 24 24" fill="white"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.7 9.05 7.4c1.37.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.39-1.32 2.76-2.53 3.99zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg><span style="font-size:11px;font-weight:700;color:#fff;font-family:Arial;margin-right:5px;">Apple Pay</span>' },
+  { id:4, name:'كريتزر',     bg:'#111',    text:'',          textColor:'#fff', textStyle:'', img:'__KIRTAZ__' },
+];
+
+let pmImgBase64 = '';
+let kirtazBase64 = ''; // stored separately
+
+function previewPmImg(input) {
+  universalImgInput(input, (cropped) => {
+    pmImgBase64 = cropped;
+    const prev = document.getElementById('pm-img-preview');
+    if(prev) prev.src = cropped;
+    const wrap = document.getElementById('pm-img-preview-wrap');
+    if(wrap) wrap.style.display = 'flex';
+  }, {w:200, h:80, radius:'6px', hint:'شعار وسيلة الدفع', out:200, sizeHint:'200×80 px'});
+}
+
+function clearPmImg() {
+  pmImgBase64 = '';
+  const f = document.getElementById('pm-img-file'); if(f) f.value='';
+  const w = document.getElementById('pm-img-preview-wrap'); if(w) w.style.display='none';
+}
+
+function savePm() {
+  const editId = parseInt(document.getElementById('pm-edit-id').value) || 0;
+  const name      = document.getElementById('pm-name')?.value.trim();
+  const bg        = document.getElementById('pm-bg')?.value || '#333';
+  const text      = document.getElementById('pm-text')?.value.trim() || '';
+  const textColor = document.getElementById('pm-textcolor')?.value || '#fff';
+  if(!name) { showNotif('أدخل اسم وسيلة الدفع','error'); return; }
+  const pm = { id: editId || Date.now(), name, bg, text, textColor, textStyle:'', img: pmImgBase64 || '' };
+  if(editId) {
+    const idx = paymentMethods.findIndex(x=>x.id===editId);
+    if(idx>=0) paymentMethods[idx] = {...paymentMethods[idx], ...pm, img: pmImgBase64 || paymentMethods[idx].img};
+    showNotif('✓ تم تحديث وسيلة الدفع','success');
+  } else {
+    paymentMethods.push(pm);
+    showNotif('✓ تمت الإضافة','success');
+  }
+  saveAllData(); resetPmForm(); renderPmAdmin(); renderPaymentBar();
+}
+
+function openEditPm(id) {
+  const pm = paymentMethods.find(x=>x.id===id); if(!pm) return;
+  document.getElementById('pm-edit-id').value = pm.id;
+  document.getElementById('pm-name').value     = pm.name;
+  document.getElementById('pm-bg').value       = pm.bg;
+  document.getElementById('pm-text').value     = pm.text||'';
+  document.getElementById('pm-textcolor').value = pm.textColor||'#fff';
+  if(pm.img && pm.img !== '__KIRTAZ__') {
+    pmImgBase64 = pm.img;
+    const prev = document.getElementById('pm-img-preview'); if(prev) prev.src = pm.img;
+    const wrap = document.getElementById('pm-img-preview-wrap'); if(wrap) wrap.style.display='flex';
+  }
+  const cb = document.getElementById('pm-cancel-btn'); if(cb) cb.style.display='inline-block';
+  document.getElementById('apg-payments').scrollIntoView({behavior:'smooth'});
+}
+
+function deletePm(id) {
+  showConfirmBox('حذف هذه الوسيلة؟', () => {
+    paymentMethods = paymentMethods.filter(x=>x.id!==id);
+    saveAllData(); renderPmAdmin(); renderPaymentBar();
+    showNotif('🗑 تم الحذف','error');
+  });
+}
+
+function resetPmForm() {
+  document.getElementById('pm-edit-id').value='';
+  document.getElementById('pm-name').value='';
+  document.getElementById('pm-bg').value='#1a1f71';
+  document.getElementById('pm-text').value='';
+  document.getElementById('pm-textcolor').value='#ffffff';
+  clearPmImg();
+  const cb = document.getElementById('pm-cancel-btn'); if(cb) cb.style.display='none';
+}
+
+function renderPmAdmin() {
+  const el = document.getElementById('pm-list'); if(!el) return;
+  el.innerHTML = paymentMethods.map(pm => `
+    <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px;width:160px;align-items:center;">
+      <!-- preview -->
+      <div style="height:34px;padding:0 12px;border-radius:7px;background:${pm.bg};display:flex;align-items:center;justify-content:center;gap:5px;width:100%;box-sizing:border-box;">
+        ${pm.img && pm.img!=='__KIRTAZ__' ? `<img src="${pm.img}" style="height:22px;width:auto;">` :
+          pm.svgHtml ? pm.svgHtml :
+          pm.img==='__KIRTAZ__' && kirtazBase64 ? `<img src="${kirtazBase64}" style="height:22px;width:auto;">` :
+          `<span style="color:${pm.textColor};${pm.textStyle||'font-size:13px;font-weight:700;font-family:Arial;'}">${pm.text||pm.name}</span>`}
+      </div>
+      <div style="font-size:11px;color:var(--text2);font-weight:600;">${pm.name}</div>
+      <div style="display:flex;gap:6px;">
+        <button class="a-action a-action-edit" onclick="openEditPm(${pm.id})" style="font-size:11px;padding:4px 8px;">✏</button>
+        <button class="a-action a-action-del" onclick="deletePm(${pm.id})" style="font-size:11px;padding:4px 8px;">🗑</button>
+      </div>
+    </div>`).join('');
+}
+
+function renderPaymentBar() {
+  const bar = document.getElementById('payment-methods-bar'); if(!bar) return;
+  bar.innerHTML = `<span style="font-size:11px;color:var(--text3);font-family:'Cairo',sans-serif;white-space:nowrap;margin-left:8px;">طرق الدفع</span>
+  <div style="width:1px;height:18px;background:var(--border2);"></div>` +
+  paymentMethods.map(pm => `
+    <div style="height:34px;padding:0 12px;border-radius:7px;background:${pm.bg};display:inline-flex;align-items:center;justify-content:center;gap:5px;">
+      ${pm.img && pm.img!=='__KIRTAZ__' ? `<img src="${pm.img}" style="height:22px;width:auto;">` :
+        pm.svgHtml ? pm.svgHtml :
+        pm.img==='__KIRTAZ__' && kirtazBase64 ? `<img src="${kirtazBase64}" style="height:22px;width:auto;">` :
+        `<span style="color:${pm.textColor};${pm.textStyle||'font-size:13px;font-weight:700;font-family:Arial;'}">${pm.text||pm.name}</span>`}
+    </div>`).join('');
+}
+
+// ====== FULL SITE TRANSLATION ======
+let siteLang = localStorage.getItem('ccs_lang') || 'ar';
+
+// All translatable strings
+const STRINGS = {
+  // Navigation
+  'الرئيسية':'Home', 'المتجر':'Shop', 'من نحن':'About Us', 'تواصل معنا':'Contact',
+  'تتبع طلبي':'Track Order', 'تسوق الآن':'Shop Now', 'تعرف علينا':'About Us',
+  // Stats
+  'منتج متاح':'Products', 'زيارة للموقع':'Site Visits', 'متوسط التقييم':'Avg Rating',
+  'دعم فني':'Support',
+  // Shop & Products
+  'التصنيفات':'Categories', 'الكل':'All', 'الأكثر مبيعًا':'Best Sellers',
+  'الأكثر مبيعاً':'Best Selling', 'السعر: الأقل':'Price: Low', 'السعر: الأعلى':'Price: High',
+  'الأحدث':'Newest', 'أضف للسلة':'Add to Cart', 'إتمام الشراء ←':'Checkout ←',
+  'إتمام الشراء':'Checkout', 'تفاصيل':'Details', 'السعر':'Price',
+  'متاح':'Available', 'نفد المخزون':'Out of Stock', 'الكمية':'Quantity',
+  'الوصف':'Description', 'مميزات المنتج':'Features', 'صور المنتج':'Gallery',
+  'منتج':'Product', 'منتجات':'Products', 'تصنيف':'Category',
+  // Cart
+  'سلة التسوق':'Shopping Cart', 'متابعة التسوق':'Continue', 'المجموع':'Subtotal',
+  'الخصم':'Discount', 'الإجمالي':'Total', 'كوبون الخصم':'Coupon', 'تطبيق':'Apply',
+  'كود الخصم':'Coupon Code', 'احصل على الخصم':'Get Discount', 'إزالة':'Remove',
+  // Order Form
+  'اسمك الكامل':'Full Name', 'رقم الجوال':'Phone', 'البريد الإلكتروني':'Email',
+  'العنوان':'Address', 'ملاحظات':'Notes', 'طريقة الدفع':'Payment Method',
+  'تأكيد إرسال الطلب ←':'Confirm Order ←', 'تأكيد الطلب وإرسال ←':'Confirm & Send ←',
+  'رقم الطلب':'Order #', 'حالة الطلب':'Order Status',
+  // Order Status
+  'جديد':'New', 'قيد المراجعة':'Under Review', 'تم التأكيد':'Confirmed',
+  'قيد التنفيذ':'In Progress', 'مكتمل':'Completed', 'ملغى':'Cancelled',
+  'تم البيع':'Sold', 'معلق':'Pending',
+  // Contact
+  'أرسل رسالة':'Send Message', 'الاسم الكامل':'Full Name', 'الموضوع':'Subject',
+  'الرسالة':'Message', 'إرسال الرسالة ←':'Send ←', 'تم إرسال رسالتك بنجاح!':'Sent!',
+  'إرسال رسالة أخرى':'Send Another',
+  // About
+  'فريق العمل':'Our Team', 'انضم إلى فريقنا':'Join Our Team',
+  'تقدّم للانضمام الآن ←':'Apply Now ←',
+  // Reviews
+  'تقييم الموقع':'Rate Us', 'إرسال التقييم':'Submit Rating',
+  'اكتب تعليقك...':'Write your comment...', 'اسمك':'Your Name',
+  // Auth
+  'لوحة التحكم':'Dashboard', 'لوحة تحكم الشركة':'Company Dashboard',
+  'اسم المستخدم':'Username', 'كلمة المرور':'Password',
+  'دخول إلى لوحة التحكم ←':'Login ←', 'تسجيل الخروج':'Logout',
+  // Admin Sidebar
+  'المنتجات':'Products', 'إضافة منتج':'Add Product', 'الطلبات':'Orders',
+  'الدردشة':'Live Chat', 'العملاء':'Customers', 'التقارير':'Reports',
+  'الكوبونات':'Coupons', 'إدارة الإعلانات':'Ads', 'رسائل التواصل':'Messages',
+  'معلومات التواصل':'Contact Info', 'مميزات الموقع':'Features',
+  'التقييمات':'Reviews', 'طلبات التقديم':'Applications',
+  'الموظفون':'Staff', 'الإعدادات':'Settings', 'وسائل الدفع':'Payments',
+  'تعديل الأزرار':'Edit Buttons',
+  // Admin actions
+  'إضافة':'Add', 'تعديل':'Edit', 'حذف':'Delete', 'حفظ':'Save',
+  'إلغاء':'Cancel', 'تأكيد':'Confirm', 'بحث':'Search', 'تصفية':'Filter',
+  'تحديث':'Update', 'إرسال':'Send', 'قفل':'Lock', 'فتح':'Unlock',
+  // Common
+  'نعم':'Yes', 'موافق':'OK', 'إغلاق':'Close', 'رجوع':'Back',
+  'التالي':'Next', 'السابق':'Prev', 'عرض الكل':'View All', 'المزيد':'More',
+  'أقل':'Less', 'جاري التحميل...':'Loading...', 'لا يوجد بيانات':'No data',
+  'لا توجد نتائج':'No results', 'خطأ':'Error', 'نجاح':'Success',
+  'تحذير':'Warning', 'تنبيه':'Alert', 'معلومة':'Info',
+  // Payment
+  'طرق الدفع':'Payment Methods', 'الدفع عند الاستلام':'Cash on Delivery',
+  // Time
+  'اليوم':'Today', 'أمس':'Yesterday', 'الآن':'Now', 'منذ':'ago',
+  // Units
+  'ريال':'SAR', 'دولار':'USD', 'دينار':'JOD',
+  // Notifications
+  'إشعارات':'Notifications', 'طلب جديد':'New Order', 'رسالة جديدة':'New Message',
+  'تقييم جديد':'New Review', 'لا توجد إشعارات':'No notifications',
+  // Promo
+  'عرض محدود':'Limited Offer', 'خصم':'Discount', 'ينتهي قريبًا':'Ends Soon',
+  // Join Team
+  'تقدّم للانضمام':'Apply Now', 'الاسم الكامل *':'Full Name *',
+  'البريد الإلكتروني (اختياري)':'Email (optional)', 'رقم الجوال *':'Phone *',
+  'التخصص / المهارة *':'Specialty *', 'نبذة عنك':'About You',
+  // Misc
+  'المتجر الرئيسي':'Main Store', 'حلول برمجية':'Software Solutions',
+  'نحن فريق متخصص':'We are a specialized team',
+  'ابحث...':'Search...', 'اكتب هنا...':'Type here...',
+  'اختر...':'Select...', 'جميع التصنيفات':'All Categories',
+  'إضافة تصنيف جديد':'Add Category', 'اسم التصنيف':'Category Name',
+  'المعرف':'ID', 'الأيقونة':'Icon', 'الصورة':'Image', 'اللون':'Color',
+  'الاسم':'Name', 'الوصف':'Description', 'الحالة':'Status',
+  'التاريخ':'Date', 'الوقت':'Time', 'الإجمالي':'Total',
+   'معطّل':'Inactive',    'غير نشط':'Inactive',
+  'مقروءة':'Read', 'جديدة':'New', 'تم الرد':'Replied',
+  'متوسط':'Average', 'النجوم':'Stars', 'التعليق':'Comment',
+  'اسم المستخدم':'Username', 'الدور':'Role', 'الصلاحيات':'Permissions',
+  'مدير':'Admin', 'محرر':'Editor', 'دعم':'Support', 'مشرف':'Moderator',
+  // Hero
+  'حلول برمجية':'Software Solutions',  'لكل مشروعك':'For Every Project',
+  'اكتشف مئات الكودات والسكريبتات والتطبيقات الجاهزة — جودة عالية، تسليم فوري، دعم مستمر':
+    'Hundreds of ready-made codes, scripts & apps — high quality, instant delivery, continuous support',
+  'نحوّل أفكاركم إلى حلول رقمية متكاملة وفق أعلى معايير الاحترافية والجودة':
+    'We turn your ideas into complete digital solutions at the highest standards of quality',
+  'متجر البرمجيات رقم 1':'#1 Software Store',
+  'جودة عالية':'High Quality', 'تسليم فوري':'Instant Delivery', 'دعم مستمر':'Ongoing Support',
+            };
+
+
+function translateEl(el) {
+  // text nodes
+  el.childNodes.forEach(n => {
+    if(n.nodeType === 3) {
+      const t = n.textContent.trim();
+      if(t && STRINGS[t] !== undefined) {
+        n.textContent = n.textContent.replace(t, siteLang==='en' ? STRINGS[t] : t);
+      }
+    } else if(n.nodeType === 1 && !['SCRIPT','STYLE'].includes(n.tagName)) {
+      // placeholder
+      if(n.placeholder) {
+        const pt = n.placeholder.trim();
+        if(STRINGS[pt] !== undefined) n.placeholder = siteLang==='en' ? STRINGS[pt] : pt;
+      }
+      translateEl(n);
+    }
+  });
+}
+
+
+function applyTranslation() {
+  const isEn = siteLang === 'en';
+  document.documentElement.lang = isEn ? 'en' : 'ar';
+  document.documentElement.dir  = isEn ? 'ltr' : 'rtl';
+  document.body.dir             = isEn ? 'ltr' : 'rtl';
+
+  if(!isEn) {
+    const lb = document.getElementById('lang-label');
+    if(lb) lb.textContent = 'EN';
+    return;
+  }
+
+  // Walk every text node in the page and translate Arabic text
+  function hasArabic(str) { return /[؀-ۿ]/.test(str); }
+
+  function translateText(txt) {
+    if(!hasArabic(txt)) return txt;
+    const t = txt.trim();
+    // Exact match first
+    if(STRINGS[t]) return txt.replace(t, STRINGS[t]);
+    // Partial matches
+    let result = txt;
+    const sorted = Object.keys(STRINGS).sort((a,b) => b.length - a.length);
+    for(const ar of sorted) {
+      if(result.includes(ar)) {
+        result = result.replace(new RegExp(ar.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'g'), STRINGS[ar]);
+      }
+    }
+    return result;
+  }
+
+  function walkNode(node) {
+    if(node.nodeType === 3) {
+      const txt = node.textContent;
+      if(hasArabic(txt)) {
+        node.textContent = translateText(txt);
+      }
+    } else if(node.nodeType === 1) {
+      const tag = node.tagName?.toUpperCase();
+      if(['SCRIPT','STYLE'].includes(tag)) return;
+      if(node.placeholder && hasArabic(node.placeholder)) {
+        node.placeholder = translateText(node.placeholder);
+      }
+      if(node.title && hasArabic(node.title)) {
+        node.title = translateText(node.title);
+      }
+      node.childNodes.forEach(walkNode);
+    }
+  }
+
+  // Translate everything visible
+  document.querySelectorAll('body > *').forEach(walkNode);
+
+  // Update lang button
+  const lb = document.getElementById('lang-label');
+  if(lb) lb.textContent = '\u0639\u0631';
+}
+
+function toggleSiteLang() {
+  siteLang = siteLang === 'ar' ? 'en' : 'ar';
+  localStorage.setItem('ccs_lang', siteLang);
+  if(siteLang === 'ar') {
+    location.reload();
+  } else {
+    doFullTranslation();
+  }
+}
+
+// ── Collect every Arabic text node in page ──
+function hasArabic(s){ return /[\u0600-\u06FF]/.test(s); }
+
+function getAllArabicTextNodes() {
+  const nodes = [];
+  const walk = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+    acceptNode: n => {
+      const p = n.parentElement;
+      if(!p) return NodeFilter.FILTER_REJECT;
+      if(['SCRIPT','STYLE','NOSCRIPT'].includes(p.tagName)) return NodeFilter.FILTER_REJECT;
+      return hasArabic(n.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
+    }
+  });
+  let n; while(n = walk.nextNode()) nodes.push(n);
+  return nodes;
+}
+
+// ── Fast local STRINGS lookup + MyMemory fallback ──
+const _tCache = {};
+
+async function translateOne(text) {
+  const t = text.trim();
+  if(!t || !hasArabic(t)) return text;
+  if(_tCache[t]) return text.replace(t, _tCache[t]);
+  if(STRINGS[t])  { _tCache[t] = STRINGS[t]; return text.replace(t, STRINGS[t]); }
+  // partial match in STRINGS (longest first)
+  let result = text;
+  for(const [ar, en] of Object.entries(STRINGS)) {
+    if(result.includes(ar)) result = result.replaceAll(ar, en);
+  }
+  if(!hasArabic(result)) return result; // fully translated locally
+  // API fallback for remaining Arabic
+  try {
+    const r = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(t)}&langpair=ar|en`);
+    const d = await r.json();
+    if(d.responseStatus===200 && d.responseData?.translatedText) {
+      const tr = d.responseData.translatedText;
+      if(tr !== t) { _tCache[t] = tr; return text.replace(t, tr); }
+    }
+  } catch(e){}
+  return result;
+}
+
+// ── Main function — translates EVERYTHING instantly then cleans up via API ──
+async function doFullTranslation() {
+  // 1. Set page direction immediately
+  document.documentElement.lang = 'en';
+  document.documentElement.dir  = 'ltr';
+  document.body.dir = 'ltr';
+
+  // Special handling for elements with mixed HTML+Arabic
+  const heroH1 = document.getElementById('hero-title-h1');
+  if(heroH1 && hasArabic(heroH1.innerText)) {
+    heroH1.innerHTML = 'Professional <em>Software Solutions</em><br>For Every Project';
+  }
+  const heroSub = document.getElementById('hero-sub-text');
+  if(heroSub && hasArabic(heroSub.textContent)) {
+    heroSub.textContent = 'Discover hundreds of ready-made codes, scripts & apps — high quality, instant delivery, continuous support';
+  }
+  const heroTag = document.getElementById('hero-tagline-text');
+  if(heroTag && hasArabic(heroTag.textContent)) {
+    heroTag.textContent = 'We turn your ideas into complete digital solutions at the highest standards of quality';
+  }
+  const heroBadge = document.getElementById('hero-badge-text');
+  if(heroBadge && hasArabic(heroBadge.textContent)) {
+    heroBadge.textContent = '#1 Software Store';
+  }
+
+  const lb = document.getElementById('lang-label');
+  if(lb) lb.textContent = 'عر';
+
+  // 2. INSTANT: translate placeholders & title attrs via STRINGS dict
+  document.querySelectorAll('[placeholder]').forEach(el => {
+    const t = el.placeholder.trim();
+    if(STRINGS[t]) el.placeholder = STRINGS[t];
+  });
+
+  // 3. INSTANT: walk all text nodes — STRINGS dict (exact match only)
+  const allNodes = getAllArabicTextNodes();
+  allNodes.forEach(node => {
+    const t = node.nodeValue.trim();
+    if(t && STRINGS[t]) {
+      _tCache[t] = STRINGS[t];
+      node.nodeValue = node.nodeValue.replace(t, STRINGS[t]);
+    }
+    // No partial replacement — let API handle remaining Arabic
+  });
+
+  // 4. Show bar for remaining API translations
+  let bar = document.getElementById('_trans_bar');
+  if(!bar) {
+    bar = document.createElement('div');
+    bar.id = '_trans_bar';
+    bar.style.cssText = 'position:fixed;bottom:0;left:0;right:0;height:3px;background:rgba(140,100,255,.3);z-index:99999;transition:width .3s;';
+    const fill = document.createElement('div');
+    fill.id = '_trans_fill';
+    fill.style.cssText = 'height:100%;width:0%;background:linear-gradient(90deg,#7c3aed,#4f46e5);transition:width .4s;';
+    bar.appendChild(fill);
+    document.body.appendChild(bar);
+  }
+
+  // 5. Collect still-Arabic nodes, translate via API in background
+  const remaining = getAllArabicTextNodes();
+  const unique = [...new Set(remaining.map(n => n.nodeValue.trim()).filter(t => t.length>0 && t.length<200 && hasArabic(t) && !_tCache[t]))];
+  
+  if(unique.length === 0) { bar.remove(); return; }
+
+  let done = 0;
+  const fill = document.getElementById('_trans_fill');
+  
+  // Parallel batches of 3
+  const batchSize = 3;
+  for(let i = 0; i < unique.length; i += batchSize) {
+    const batch = unique.slice(i, i+batchSize);
+    await Promise.all(batch.map(async t => {
+      try {
+        const r = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(t)}&langpair=ar|en`);
+        const d = await r.json();
+        if(d.responseStatus===200 && d.responseData?.translatedText && d.responseData.translatedText !== t) {
+          _tCache[t] = d.responseData.translatedText;
+        }
+      } catch(e){ _tCache[t] = t; }
+      done++;
+      if(fill) fill.style.width = Math.round(done/unique.length*100)+'%';
+    }));
+    // Apply after each batch
+    getAllArabicTextNodes().forEach(node => {
+      const orig = node.nodeValue;
+      const t = orig.trim();
+      // Only replace if the cached value is the FULL text (not partial)
+      if(_tCache[t] && _tCache[t] !== t && t === orig.trim()) {
+        node.nodeValue = orig.replace(t, _tCache[t]);
+      }
+    });
+  }
+  
+  setTimeout(() => bar.remove(), 800);
+}
+
+function applyTranslation() {
+  if(siteLang === 'en') doFullTranslation();
+}
+
+
+function toggleAdminLang() { toggleSiteLang(); }
+
+// Show/hide lang button
+function showAdminLangBtn() {}
+function hideAdminLangBtn() {}
+
 // ====== MOBILE NAV ======
 function toggleMobileNav() {
   const nav = document.getElementById('mobile-nav');
@@ -8094,6 +8865,11 @@ renderPromoBanner();
 renderJoinBanner();
 setTimeout(initVisitorCounter, 800);
 
+// Restore theme & lang
+renderPaymentBar();
+if(localStorage.getItem('ccs_theme') === 'light') { isLightTheme = true; applyLightTheme(); }
+if(localStorage.getItem('ccs_lang') === 'en') { siteLang = 'en'; setTimeout(applyTranslation, 500); }
+
 // ── Restore last page after reload ──
 (function restoreLastPage() {
   const lastPage  = sessionStorage.getItem('ccs_last_page');
@@ -8125,10 +8901,10 @@ function deobfuscate(str) {
 
 function buildPayload() {
   return {
-    products, orders, coupons, adsData, teamList, staffList,
+    products, orders, coupons, cats, adsData, teamList, staffList,
     contactList, featuresList, featuresSectionTitle,
     jobApplications, siteRatings, staffRatings,
-    chatConversations, sales, contactMessages, promoBanner, heroBadgeText, joinBanner, siteCustom, advPage, adminPassword,
+    chatConversations, sales, contactMessages, promoBanner, heroBadgeText, joinBanner, siteCustom, advPage, paymentMethods, btnCustom, adminPassword,
     _ts: Date.now(), _v: '2.0'
   };
 }
@@ -8204,6 +8980,7 @@ function applyLoadedData(d) {
   if(d.products    ?.length)    products             = d.products;
   if(d.orders      ?.length)    orders               = d.orders;
   if(d.coupons     ?.length)    coupons              = d.coupons;
+  if(d.cats        ?.length)    cats                 = d.cats;
   if(d.adsData     ?.length)    adsData              = d.adsData;
   if(d.teamList    ?.length)    teamList             = d.teamList;
   if(d.staffList   ?.length)    staffList            = d.staffList;
@@ -8223,6 +9000,8 @@ function applyLoadedData(d) {
   if(d.joinBanner)              joinBanner           = {...joinBanner, ...d.joinBanner};
   if(d.siteCustom)              { siteCustom = {...DEFAULT_CUSTOM, ...d.siteCustom}; applySiteCustom(false); }
   if(d.advPage)                 advPage = {...advPage, ...d.advPage, packages:d.advPage.packages||advPage.packages, features:d.advPage.features||advPage.features, gallery:d.advPage.gallery||[]};
+  if(d.paymentMethods)          paymentMethods = d.paymentMethods;
+  if(d.btnCustom)               { btnCustom = d.btnCustom; setTimeout(applyBtnCustom, 300); }
   if(d.sales)                   sales                = d.sales;
   if(d.adminPassword)           adminPassword        = d.adminPassword;
 }
@@ -8233,6 +9012,7 @@ function normalizeArrays() {
   products          = toArr(products);
   orders            = toArr(orders);
   coupons           = toArr(coupons);
+  cats              = toArr(cats);
   adsData           = toArr(adsData);
   teamList          = toArr(teamList);
   staffList         = toArr(staffList);
@@ -8468,6 +9248,26 @@ window.openCropModal = openCropModal;
 window.closeCropModal = closeCropModal;
 window.applyModalZoom = applyModalZoom;
 window.resetModalZoom = resetModalZoom;
+window.makeImgEditable = makeImgEditable;
+window.refreshImgEditables = refreshImgEditables;
+window.saveBtnCustom = saveBtnCustom;
+window.resetBtnCustom = resetBtnCustom;
+window.resetSingleBtn = resetSingleBtn;
+window.previewBtnChange = previewBtnChange;
+window.applyBtnCustom = applyBtnCustom;
+window.savePm = savePm;
+window.openEditPm = openEditPm;
+window.deletePm = deletePm;
+window.resetPmForm = resetPmForm;
+window.previewPmImg = previewPmImg;
+window.clearPmImg = clearPmImg;
+window.renderPaymentBar = renderPaymentBar;
+window.toggleTheme = toggleTheme;
+window.applyTranslation = applyTranslation;
+window.toggleSiteLang = toggleSiteLang;
+window.toggleAdminLang = toggleAdminLang;
+window.showAdminLangBtn = showAdminLangBtn;
+window.hideAdminLangBtn = hideAdminLangBtn;
 window.toggleMobileNav = toggleMobileNav;
 window.closeMobileNav = closeMobileNav;
 window.saveJoinBanner = saveJoinBanner;
