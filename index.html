@@ -39,8 +39,8 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-h
 .logo-text span{font-size:9px;letter-spacing:5px;color:var(--silver3);}
 .hamburger{display:none;}
 .mobile-nav{display:none;}
-.nav-links{display:flex;gap:4px;}
-.nav-link{background:none;border:1px solid transparent;color:var(--text2);padding:7px 16px;border-radius:20px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:13px;font-weight:600;transition:.2s;text-decoration:none;display:inline-flex;align-items:center;gap:5px;}
+.logo-cycle-item{position:absolute;}
+.nav-links{display:flex;gap:4px;}.nav-link{background:none;border:1px solid transparent;color:var(--text2);padding:7px 16px;border-radius:20px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:13px;font-weight:600;transition:.2s;text-decoration:none;display:inline-flex;align-items:center;gap:5px;}
 .nav-link:hover{color:var(--silver2);background:rgba(255,255,255,.06);border-color:var(--border3);box-shadow:0 0 12px rgba(180,180,200,.08);}
 .nav-link.active{color:var(--silver2);background:rgba(255,255,255,.08);border-color:rgba(200,200,200,.2);box-shadow:0 0 10px rgba(180,180,200,.1);}.nav-link:hover,.nav-link.active{background:var(--bg3);color:var(--silver2);}
 .topbar-right{display:flex;align-items:center;gap:8px;}
@@ -627,6 +627,10 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
       المتجر
     </button>
+    <button class="nav-link" id="nl-subs" onclick="showPage('subs')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      الاشتراكات
+    </button>
     <button class="nav-link" id="nl-about" onclick="showPage('about')">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
       من نحن
@@ -690,6 +694,10 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
   <button class="nav-link" id="ml-shop" onclick="showPage('shop');closeMobileNav()">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
     المتجر
+  </button>
+  <button class="nav-link" onclick="showPage('subs');closeMobileNav()">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+    الاشتراكات
   </button>
   <button class="nav-link" id="ml-about" onclick="showPage('about');closeMobileNav()">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
@@ -1596,6 +1604,11 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
   <div id="adv-page-content"><!-- rendered by JS --></div>
 </div>
 
+<!-- ================================================ SUBSCRIPTIONS PAGE ================================================ -->
+<div class="page" id="page-subs">
+  <div id="subs-page-content" style="min-height:80vh;"></div>
+</div>
+
 <!-- ================================================ LOGIN PAGE ================================================ -->
 <div class="page" id="page-login">
   <div class="login-page">
@@ -1639,6 +1652,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
       <div class="sb-group">الإعلانات</div>
       <div class="sb-item" onclick="showAdmin('ads',this)"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg></span> إدارة الإعلانات</div>
       <div class="sb-group">الإعدادات</div>
+      <div class="sb-item" onclick="showAdmin('subs',this)"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span> الاشتراكات</div>
       <div class="sb-item" onclick="showAdmin('btneditor',this)"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="10" rx="3"/><path d="M8 11h.01M12 11h.01M16 11h.01"/></svg></span> تعديل الأزرار</div>
       <div class="sb-item" onclick="showAdmin('payments',this)"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></span> وسائل الدفع</div>
       <div class="sb-item" onclick="showAdmin('coupons',this)"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/></svg></span> كوبونات الخصم</div>
@@ -2017,6 +2031,50 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
       </div>
 
       <!-- CONTACT MANAGEMENT -->
+      <!-- SUBSCRIPTIONS EDITOR -->
+      <div class="admin-pg" id="apg-subs">
+        <div class="admin-pg-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:8px;vertical-align:middle;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          إدارة الاشتراكات
+        </div>
+
+        <!-- Page Settings -->
+        <div class="form-card" style="max-width:100%;margin-bottom:1rem;">
+          <div class="form-card-title">⚙ إعدادات الصفحة</div>
+          <div class="form-grid" style="margin-bottom:12px;">
+            <div class="form-group">
+              <label class="form-label">عنوان الصفحة</label>
+              <input type="text" class="form-input" id="subs-page-title" value="باقات الاشتراك">
+            </div>
+            <div class="form-group">
+              <label class="form-label">وصف الصفحة</label>
+              <input type="text" class="form-input" id="subs-page-desc" value="اختر الباقة المناسبة لك واستمتع بمميزات حصرية">
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:12px;">
+            <label class="form-label">نص زر التواصل (الـ CTA)</label>
+            <input type="text" class="form-input" id="subs-cta-text" value="اشترك الآن ←">
+          </div>
+          <div class="form-group" style="margin-bottom:12px;">
+            <label class="form-label">رقم واتساب للاشتراك</label>
+            <input type="text" class="form-input" id="subs-wa" placeholder="970597789932" dir="ltr">
+          </div>
+        </div>
+
+        <!-- Plans editor -->
+        <div class="tbl-box" style="margin-bottom:1rem;">
+          <div class="tbl-head"><span class="tbl-head-title">الباقات</span>
+            <button class="btn-outline" style="font-size:12px;padding:6px 14px;" onclick="addSubsPlan()">+ إضافة باقة</button>
+          </div>
+          <div id="subs-plans-editor" style="padding:16px;display:flex;flex-direction:column;gap:16px;"></div>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn-silver" onclick="saveSubsPage()">💾 حفظ ونشر ←</button>
+          <button class="btn-outline" style="font-size:12px;" onclick="showPage('subs')">👁 معاينة</button>
+        </div>
+      </div>
+
       <!-- BUTTON EDITOR -->
       <div class="admin-pg" id="apg-btneditor">
         <div class="admin-pg-title">
@@ -2763,6 +2821,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
         <div class="tbl-box" style="max-width:100%;">
           <div class="tbl-head">
             <span class="tbl-head-title">سجل المبيعات (<span id="sales-list-count">0</span>)</span>
+            <button class="btn-outline" style="font-size:11px;padding:5px 12px;color:var(--red);border-color:rgba(200,60,60,.3);" onclick="clearAllSales()">🗑 حذف الكل</button>
           </div>
           <table class="a-table">
             <thead><tr><th>#</th><th>العميل</th><th>المنتج</th><th>المبلغ</th><th>التاريخ</th><th>النوع</th><th>إجراءات</th></tr></thead>
@@ -3133,6 +3192,7 @@ function showPage(p) {
   if(p==='shop') renderShop();
   if(p==='wishlist') renderWishlist();
   if(p==='advertise') renderAdvPage();
+  if(p==='subs') renderSubsPage();
   if(p==='admin'){renderAdminProds();renderDashOrders();renderOrders();renderCoupons();renderCatsAdmin();buildChart('sales-chart',salesData);buildChart('report-chart',salesData);updateAdminCounts();updateSalesDash();renderSbRatingsMini();}
 }
 
@@ -4369,7 +4429,7 @@ function doLogin(){
 // ====== PERMISSIONS ======
 const PERMISSIONS = {
   admin: {
-    pages: ['dashboard','products','addproduct','categories','orders','chat','customers','reports','coupons','ads','contact','contactmsgs','features','team','jobs','staff','reviews','settings','payments','btneditor'],
+    pages: ['dashboard','products','addproduct','categories','orders','chat','customers','reports','coupons','ads','contact','contactmsgs','features','team','jobs','staff','reviews','settings','payments','btneditor','subs'],
     actions: ['add_product','edit_product','delete_product','change_order_status','delete_order','reply_chat','lock_chat','delete_chat','add_coupon','delete_coupon','manage_ads','manage_team','manage_staff','manage_settings','view_reports','manage_jobs'],
   },
   moderator: {
@@ -4495,6 +4555,7 @@ function showAdmin(p, el) {
   if(p==='contactmsgs') renderContactMsgsAdmin();
   if(p==='advertise') renderAdvAdmin();
   if(p==='payments') renderPmAdmin();
+  if(p==='subs') renderSubsAdmin();
   if(p==='btneditor') renderBtnEditor();
   if(p==='reports')   renderReports();
   setTimeout(applyButtonPermissions, 150);
@@ -6831,6 +6892,14 @@ function deleteSale(id) {
   });
 }
 
+function clearAllSales() {
+  showConfirmBox('⚠ حذف جميع سجلات المبيعات؟ لا يمكن التراجع!', ()=>{
+    sales = [];
+    saveAllData(); renderSalesList(); updateSalesDash();
+    showNotif('🗑 تم حذف جميع سجلات المبيعات','error');
+  });
+}
+
 // ====== LIVE CHAT ======
 let chatOpen = false;
 let chatMinimized = false;
@@ -8122,6 +8191,430 @@ function toggleTheme() {
 // restore theme on load
 if(localStorage.getItem('ccs_theme') === 'light') { isLightTheme = true; }
 
+// ====== SUBSCRIPTIONS ======
+let subsData = {
+  title: 'باقات الاشتراك',
+  desc:  'اختر الباقة المناسبة لك واستمتع بمميزات حصرية',
+  ctaText: 'اشترك الآن ←',
+  wa: '',
+  plans: [
+    {
+      id: 1, name: 'برونز', nameEn: 'Bronze',
+      icon: `<svg viewBox="0 0 280 60" width="220" height="48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="bronzeG" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#f0c080"/><stop offset="50%" stop-color="#cd7f32"/><stop offset="100%" stop-color="#8b4a00"/></linearGradient><filter id="bGlow"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><text x="6" y="44" font-family="Arial Black,sans-serif" font-size="44" font-weight="900" font-style="italic" fill="url(#bronzeG)" filter="url(#bGlow)" letter-spacing="-1">Core Code</text></svg>`,
+      color: '#cd7f32', price: '9', currency: '$', period: 'شهرياً',
+      badge: '', highlight: false, image: '', logoText: 'Core Code', logoSize: '56',
+      features: ['الوصول للمنتجات الأساسية', 'دعم فني عبر البريد', 'تحديثات ربع سنوية', '1 مشروع نشط'],
+    },
+    {
+      id: 2, name: 'فضي', nameEn: 'Silver',
+      icon: `<svg viewBox="0 0 280 60" width="220" height="48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="silverG" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ffffff"/><stop offset="40%" stop-color="#d0d0d0"/><stop offset="100%" stop-color="#808080"/></linearGradient><filter id="sGlow"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><text x="6" y="44" font-family="Arial Black,sans-serif" font-size="44" font-weight="900" font-style="italic" fill="url(#silverG)" filter="url(#sGlow)" letter-spacing="-1">Core Code</text></svg>`,
+      color: '#aaaaaa', price: '19', currency: '$', period: 'شهرياً',
+      badge: 'الأكثر طلباً', highlight: true, image: '', logoText: 'Core Code', logoSize: '56',
+      features: ['كل مميزات البرونز', 'وصول لجميع المنتجات', 'دعم فني أولوية', 'تحديثات شهرية', '5 مشاريع نشطة', 'قوالب حصرية'],
+    },
+    {
+      id: 3, name: 'ذهبي', nameEn: 'Gold',
+      icon: `<svg viewBox="0 0 280 60" width="220" height="48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="goldG" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fff6a0"/><stop offset="40%" stop-color="#f5c518"/><stop offset="100%" stop-color="#b8860b"/></linearGradient><filter id="gGlow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><text x="6" y="44" font-family="Arial Black,sans-serif" font-size="44" font-weight="900" font-style="italic" fill="url(#goldG)" filter="url(#gGlow)" letter-spacing="-1">Core Code</text></svg>`,
+      color: '#f5c518', price: '39', currency: '$', period: 'شهرياً',
+      badge: 'VIP', highlight: false, image: '', logoText: 'Core Code', logoSize: '56',
+      features: ['كل مميزات الفضي', 'مشاريع غير محدودة', 'دعم مباشر 24/7', 'تحديثات فورية', 'باقات مخصصة', 'تقارير تفصيلية', 'أولوية في الطلبات'],
+    },
+  ]
+};
+
+let subsImgBase64 = {};
+
+// ── Admin: render plans editor ──
+function renderSubsAdmin() {
+  const el = id => document.getElementById(id);
+  if(el('subs-page-title'))  el('subs-page-title').value = subsData.title;
+  if(el('subs-page-desc'))   el('subs-page-desc').value  = subsData.desc;
+  if(el('subs-cta-text'))    el('subs-cta-text').value   = subsData.ctaText;
+  if(el('subs-wa'))          el('subs-wa').value         = subsData.wa;
+  renderSubsPlansEditor();
+}
+
+function renderSubsPlansEditor() {
+  const cont = document.getElementById('subs-plans-editor'); if(!cont) return;
+  cont.innerHTML = subsData.plans.map((p,i) => `
+  <div style="background:var(--bg2);border:1px solid ${p.color}44;border-radius:14px;padding:18px;position:relative;">
+    <div style="position:absolute;top:14px;left:14px;display:flex;gap:6px;">
+      ${i>0?`<button onclick="moveSubsPlan(${i},-1)" style="background:var(--bg4);border:1px solid var(--border3);color:var(--text2);width:26px;height:26px;border-radius:6px;cursor:pointer;font-size:12px;">↑</button>`:''}
+      ${i<subsData.plans.length-1?`<button onclick="moveSubsPlan(${i},1)" style="background:var(--bg4);border:1px solid var(--border3);color:var(--text2);width:26px;height:26px;border-radius:6px;cursor:pointer;font-size:12px;">↓</button>`:''}
+      <button onclick="deleteSubsPlan(${i})" style="background:none;border:1px solid rgba(200,60,60,.3);color:var(--red);width:26px;height:26px;border-radius:6px;cursor:pointer;font-size:12px;">✕</button>
+    </div>
+    <div class="form-grid" style="margin-bottom:10px;padding-top:8px;">
+      <div class="form-group">
+        <label class="form-label" style="font-size:11px;">الأيقونة</label>
+        <input type="text" value="${p.icon}" class="form-input" style="font-size:20px;text-align:center;" maxlength="4" onchange="updSubsPlan(${i},'icon',this.value)">
+      </div>
+      <div class="form-group">
+        <label class="form-label" style="font-size:11px;">اسم الباقة</label>
+        <input type="text" value="${p.name}" class="form-input" onchange="updSubsPlan(${i},'name',this.value)">
+      </div>
+      <div class="form-group">
+        <label class="form-label" style="font-size:11px;">نص الشعار المتحرك</label>
+        <input type="text" value="${p.logoText||'Core Code'}" class="form-input" placeholder="Core Code" onchange="updSubsPlan(${i},'logoText',this.value)">
+      </div>
+      <div class="form-group">
+        <label class="form-label" style="font-size:11px;">حجم الشعار (px)</label>
+        <input type="number" value="${p.logoSize||'56'}" class="form-input" min="20" max="120" placeholder="56" style="width:100%;" onchange="updSubsPlan(${i},'logoSize',this.value)">
+      </div>
+        <input type="text" value="${p.price}" class="form-input" onchange="updSubsPlan(${i},'price',this.value)">
+      </div>
+      <div class="form-group">
+        <label class="form-label" style="font-size:11px;">العملة</label>
+        <input type="text" value="${p.currency}" class="form-input" onchange="updSubsPlan(${i},'currency',this.value)">
+      </div>
+      <div class="form-group">
+        <label class="form-label" style="font-size:11px;">الفترة</label>
+        <input type="text" value="${p.period}" class="form-input" onchange="updSubsPlan(${i},'period',this.value)">
+      </div>
+      <div class="form-group">
+        <label class="form-label" style="font-size:11px;">شارة (اختياري)</label>
+        <input type="text" value="${p.badge||''}" placeholder="الأكثر طلباً" class="form-input" onchange="updSubsPlan(${i},'badge',this.value)">
+      </div>
+      <div class="form-group">
+        <label class="form-label" style="font-size:11px;">لون الباقة</label>
+        <input type="color" value="${p.color}" style="height:38px;width:100%;cursor:pointer;border-radius:8px;border:1px solid var(--border3);" onchange="updSubsPlan(${i},'color',this.value)">
+      </div>
+      <div class="form-group" style="display:flex;flex-direction:column;justify-content:flex-end;">
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;color:var(--text2);">
+          <input type="checkbox" ${p.highlight?'checked':''} onchange="updSubsPlan(${i},'highlight',this.checked)" style="width:16px;height:16px;">
+          تمييز هذه الباقة
+        </label>
+      </div>
+    </div>
+    <!-- Image -->
+    <div class="form-group" style="margin-bottom:10px;">
+      <label class="form-label" style="font-size:11px;">صورة الباقة (اختياري) <span style="color:rgba(180,120,255,.7);font-size:10px;">📐 600×300 px</span></label>
+      <input type="file" class="form-input" accept="image/*" style="cursor:pointer;margin-bottom:6px;" onchange="previewSubsImg(this,${i})">
+      <div id="subs-img-wrap-${i}" style="display:${p.image?'flex':'none'};align-items:center;gap:8px;margin-top:6px;">
+        <img id="subs-img-prev-${i}" src="${p.image||''}" style="height:50px;border-radius:8px;object-fit:cover;">
+        <button type="button" onclick="clearSubsImg(${i})" style="background:none;border:1px solid rgba(200,60,60,.3);color:var(--red);padding:4px 10px;border-radius:6px;cursor:pointer;font-size:11px;">✕</button>
+      </div>
+    </div>
+    <!-- Features -->
+    <div class="form-group">
+      <label class="form-label" style="font-size:11px;">المميزات (سطر لكل ميزة)</label>
+      <textarea class="form-textarea" style="min-height:90px;" onchange="updSubsPlan(${i},'features',this.value.split('\\n').filter(x=>x.trim()))">${p.features.join('\n')}</textarea>
+    </div>
+  </div>`).join('');
+}
+
+function updSubsPlan(i, key, val) { subsData.plans[i][key] = val; }
+
+function addSubsPlan() {
+  subsData.plans.push({
+    id: Date.now(), name: 'باقة جديدة', icon: '⭐', color: '#888',
+    price: '0', currency: '$', period: 'شهرياً', badge: '', highlight: false, image: '', features: ['ميزة 1']
+  });
+  renderSubsPlansEditor();
+}
+
+function deleteSubsPlan(i) {
+  showConfirmBox('حذف هذه الباقة؟', () => { subsData.plans.splice(i,1); renderSubsPlansEditor(); });
+}
+
+function moveSubsPlan(i, dir) {
+  const j = i + dir;
+  if(j<0 || j>=subsData.plans.length) return;
+  [subsData.plans[i], subsData.plans[j]] = [subsData.plans[j], subsData.plans[i]];
+  renderSubsPlansEditor();
+}
+
+function previewSubsImg(input, i) {
+  universalImgInput(input, (cropped) => {
+    subsData.plans[i].image = cropped;
+    const prev = document.getElementById(`subs-img-prev-${i}`);
+    const wrap = document.getElementById(`subs-img-wrap-${i}`);
+    if(prev) prev.src = cropped;
+    if(wrap) wrap.style.display = 'flex';
+  }, {w:400, h:200, radius:'10px', hint:'صورة الباقة', out:600, sizeHint:'600×300 px'});
+}
+
+function clearSubsImg(i) {
+  subsData.plans[i].image = '';
+  const wrap = document.getElementById(`subs-img-wrap-${i}`);
+  if(wrap) wrap.style.display = 'none';
+}
+
+function saveSubsPage() {
+  const el = id => document.getElementById(id);
+  subsData.title   = el('subs-page-title')?.value.trim() || subsData.title;
+  subsData.desc    = el('subs-page-desc')?.value.trim()  || subsData.desc;
+  subsData.ctaText = el('subs-cta-text')?.value.trim()   || subsData.ctaText;
+  subsData.wa      = el('subs-wa')?.value.trim()         || subsData.wa;
+  saveAllData();
+  renderSubsPage();
+  showNotif('✓ تم حفظ صفحة الاشتراكات','success');
+}
+
+// ── Visitor page ──
+function renderSubsPage() {
+  const cont = document.getElementById('subs-page-content'); if(!cont) return;
+  const s = subsData;
+
+  // Inject CSS if not done
+  if(!document.getElementById('subs-css')) {
+    const st = document.createElement('style');
+    st.id = 'subs-css';
+    st.textContent = `
+      @keyframes subsFly{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-10px) rotate(3deg)}}
+      @keyframes subsGlow{0%,100%{box-shadow:0 0 20px currentColor}50%{box-shadow:0 0 40px currentColor,0 0 60px currentColor}}
+      @keyframes subsPulse{0%,100%{opacity:.6;transform:scale(1)}50%{opacity:1;transform:scale(1.04)}}
+      @keyframes subsFadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+      .subs-card:hover{transform:translateY(-8px) scale(1.02)!important;}
+    `;
+    document.head.appendChild(st);
+  }
+
+  cont.innerHTML = `
+  <!-- Header -->
+  <div style="text-align:center;padding:4rem 2rem 2rem;background:var(--bg);position:relative;overflow:hidden;">
+    <div style="position:absolute;inset:0;pointer-events:none;">
+      <div style="position:absolute;width:350px;height:350px;border-radius:50%;background:radial-gradient(circle,rgba(245,197,24,.06),transparent 70%);top:-100px;right:-80px;animation:subsPulse 5s ease infinite;"></div>
+      <div style="position:absolute;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,rgba(180,120,255,.06),transparent 70%);bottom:-60px;left:-60px;animation:subsPulse 6s ease infinite 1s;"></div>
+    </div>
+    <div style="position:relative;z-index:1;animation:subsFadeUp .7s ease both;">
+
+      <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(245,197,24,.1);border:1px solid rgba(245,197,24,.3);border-radius:20px;padding:5px 18px;font-size:12px;color:rgba(245,197,24,.9);margin-bottom:1rem;">
+        <span style="width:6px;height:6px;border-radius:50%;background:rgba(245,197,24,.9);animation:subsPulse 1.5s ease infinite;display:inline-block;"></span>
+        باقات حصرية
+      </div>
+      <h1 style="font-size:clamp(1.8rem,4vw,2.6rem);font-weight:900;color:var(--silver2);margin-bottom:.8rem;">${s.title}</h1>
+      <p style="font-size:14px;color:var(--text2);max-width:500px;margin:0 auto;line-height:1.8;">${s.desc}</p>
+    </div>
+  </div>
+
+  <!-- Plans -->
+  <div style="padding:3rem 2rem 5rem;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;max-width:980px;margin:0 auto;">
+      ${s.plans.map((p,i) => `
+      <div class="subs-card" style="background:var(--bg2);border:1px solid ${p.color}${p.highlight?'99':'44'};border-radius:18px;overflow:hidden;position:relative;cursor:pointer;transition:.3s;animation:subsFadeUp .6s ease ${i*.12}s both;${p.highlight?`box-shadow:0 0 30px ${p.color}33;`:''}" onclick="openSubsPlan(${i})">
+        <!-- top bar -->
+        <div style="height:4px;background:linear-gradient(90deg,${p.color},${p.color}88);"></div>
+        ${p.badge?`<div style="position:absolute;top:14px;right:14px;background:${p.color};color:#000;font-size:9px;font-weight:900;padding:3px 10px;border-radius:20px;white-space:nowrap;">${p.badge}</div>`:''}
+
+        <!-- image or icon area -->
+        <div style="height:140px;overflow:hidden;position:relative;background:linear-gradient(135deg,var(--bg3),var(--bg4));">
+          ${p.image
+            ? `<img src="${p.image}" style="width:100%;height:100%;object-fit:cover;">`
+            : `<div style="height:100%;width:100%;display:flex;align-items:center;justify-content:center;animation:subsFly 3s ease infinite;">
+                <span style="font-family:'Arial Black',Arial,sans-serif;font-size:${p.logoSize||'56'}px;font-weight:900;font-style:italic;letter-spacing:-1px;background:linear-gradient(135deg,${i===0?'#f0c080, #cd7f32, #8b4a00':i===1?'#ffffff, #d0d0d0, #808080':'#fff6a0, #f5c518, #b8860b'});-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 8px ${p.color}99);white-space:nowrap;">${p.logoText||'Core Code'}</span>
+               </div>`}
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,var(--bg2),transparent 60%);"></div>
+        </div>
+
+        <!-- content -->
+        <div style="padding:1.4rem;">
+          <div style="font-size:13px;color:${p.color};font-weight:800;letter-spacing:.5px;margin-bottom:4px;">${p.name}</div>
+          <div style="display:flex;align-items:baseline;gap:4px;margin-bottom:1rem;">
+            <span style="font-size:34px;font-weight:900;color:var(--silver2);">${p.currency}${p.price}</span>
+            <span style="font-size:12px;color:var(--text3);">/ ${p.period}</span>
+          </div>
+          <!-- features preview (first 3) -->
+          ${p.features.slice(0,3).map(f=>`
+          <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--border);">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="${p.color}" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            <span style="font-size:12px;color:var(--text2);">${f}</span>
+          </div>`).join('')}
+          ${p.features.length>3?`<div style="font-size:11px;color:var(--text3);margin-top:8px;text-align:center;">+${p.features.length-3} مزايا أخرى ←</div>`:''}
+
+          <!-- CTA -->
+          <button onclick="event.stopPropagation();subsSubscribe(${i})" style="width:100%;margin-top:1rem;background:${p.color}22;border:1px solid ${p.color}55;color:${p.color};padding:11px;border-radius:10px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:13px;font-weight:800;transition:.2s;" onmouseover="this.style.background='${p.color}44'" onmouseout="this.style.background='${p.color}22'">${s.ctaText}</button>
+        </div>
+      </div>`).join('')}
+    </div>
+  </div>
+
+  <footer style="background:var(--bg2);border-top:1px solid var(--border2);padding:1.5rem 2rem;text-align:center;">
+    <span class="footer-copy">© 2025 Core Code Store</span>
+  </footer>`;
+}
+
+// ── Plan detail modal ──
+function openSubsPlan(i) {
+  const p = subsData.plans[i];
+  // Add to cart as subscription
+  const modal = document.createElement('div');
+  modal.style.cssText = 'position:fixed;inset:0;z-index:9990;background:rgba(0,0,0,.88);display:flex;align-items:center;justify-content:center;padding:1rem;';
+  modal.innerHTML = `
+  <div style="background:var(--bg2);border:1px solid ${p.color}55;border-radius:20px;width:min(520px,98vw);max-height:90vh;overflow-y:auto;position:relative;">
+    <button onclick="this.closest('[style*=fixed]').remove()" style="position:absolute;top:14px;left:14px;background:rgba(255,255,255,.08);border:none;color:var(--text2);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:18px;">×</button>
+    <!-- Hero -->
+    <div style="background:linear-gradient(135deg,${p.color}15,${p.color}05);padding:2.5rem 2rem;text-align:center;border-radius:20px 20px 0 0;border-bottom:1px solid ${p.color}33;">
+      ${p.image
+        ? `<img src="${p.image}" style="width:100%;height:160px;object-fit:cover;border-radius:12px;margin-bottom:1rem;">`
+        : `<div style="display:flex;justify-content:center;margin-bottom:.8rem;animation:subsFly 3s ease infinite;">${p.icon}</div>`}
+      <div style="font-size:12px;color:${p.color};letter-spacing:2px;margin-bottom:6px;">باقة اشتراك</div>
+      <h2 style="font-size:1.8rem;font-weight:900;color:var(--silver2);margin-bottom:8px;">${p.icon} ${p.name}</h2>
+      ${p.badge?`<span style="background:${p.color};color:#000;font-size:10px;font-weight:900;padding:3px 14px;border-radius:20px;">${p.badge}</span>`:''}
+      <div style="font-size:40px;font-weight:900;color:var(--silver2);margin-top:1rem;">${p.currency}${p.price}</div>
+      <div style="font-size:12px;color:var(--text3);">/ ${p.period}</div>
+    </div>
+    <!-- Features full list -->
+    <div style="padding:1.6rem 2rem;">
+      <div style="font-size:13px;font-weight:700;color:var(--silver2);margin-bottom:12px;">ما يشمله الاشتراك:</div>
+      ${p.features.map(f=>`
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);">
+        <div style="width:22px;height:22px;border-radius:50%;background:${p.color}22;border:1px solid ${p.color}55;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="${p.color}" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <span style="font-size:13px;color:var(--text2);">${f}</span>
+      </div>`).join('')}
+    </div>
+    <!-- Actions -->
+    <div style="padding:1.2rem 2rem 2rem;display:flex;gap:10px;flex-wrap:wrap;">
+      <button onclick="subsSubscribe(${i});this.closest('[style*=fixed]').remove();" style="flex:1;background:linear-gradient(135deg,${p.color},${p.color}bb);border:none;color:#fff;padding:14px;border-radius:12px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:15px;font-weight:800;min-width:140px;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+        🛒 اشترك الآن — ${p.currency}${p.price}/${p.period}
+      </button>
+      <button onclick="this.closest('[style*=fixed]').remove()" style="background:none;border:1px solid var(--border3);color:var(--text2);padding:14px 20px;border-radius:12px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:14px;">إلغاء</button>
+    </div>
+  </div>`;
+  document.body.appendChild(modal);
+}
+
+// Track current subscription order
+let _subsOrderPlan = null;
+
+function subsSubscribe(i) {
+  _subsOrderPlan = subsData.plans[i];
+  // Close plan detail modal if open
+  document.querySelectorAll('body > div[style*="position:fixed"][style*="9990"]').forEach(el => el.remove());
+  // Open subscription order modal
+  openSubsOrderModal(_subsOrderPlan);
+}
+
+function openSubsOrderModal(p) {
+  const existing = document.getElementById('subs-order-modal');
+  if(existing) existing.remove();
+
+  const modal = document.createElement('div');
+  modal.id = 'subs-order-modal';
+  modal.style.cssText = 'position:fixed;inset:0;z-index:9995;background:rgba(0,0,0,.88);display:flex;align-items:center;justify-content:center;padding:1rem;';
+  modal.innerHTML = `
+  <div style="background:var(--bg2);border:1px solid ${p.color}44;border-radius:20px;width:min(540px,98vw);max-height:90vh;overflow-y:auto;position:relative;">
+    <!-- Header -->
+    <div style="background:linear-gradient(135deg,${p.color}18,${p.color}08);padding:1.6rem 2rem;border-radius:20px 20px 0 0;border-bottom:1px solid ${p.color}33;display:flex;align-items:center;gap:14px;">
+      <div style="font-size:40px;">${p.icon}</div>
+      <div>
+        <div style="font-size:11px;color:${p.color};letter-spacing:1px;margin-bottom:3px;">اشتراك</div>
+        <div style="font-size:18px;font-weight:800;color:var(--silver2);">${p.name}</div>
+        <div style="font-size:20px;font-weight:900;color:${p.color};">${p.currency}${p.price}<span style="font-size:12px;color:var(--text3);font-weight:400;"> / ${p.period}</span></div>
+      </div>
+      <button onclick="document.getElementById('subs-order-modal').remove()" style="position:absolute;top:14px;left:14px;background:rgba(255,255,255,.08);border:none;color:var(--text2);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;">×</button>
+    </div>
+
+    <!-- Form -->
+    <div style="padding:1.6rem 2rem;display:flex;flex-direction:column;gap:12px;">
+      <div style="font-size:13px;font-weight:700;color:var(--silver2);margin-bottom:4px;">أدخل بياناتك لإتمام الاشتراك</div>
+
+      <!-- Name -->
+      <div class="form-group">
+        <label class="form-label">الاسم الكامل *</label>
+        <input type="text" class="form-input" id="subs-co-name" placeholder="اسمك الكامل">
+      </div>
+      <!-- Phone -->
+      <div class="form-group">
+        <label class="form-label">رقم الواتساب *</label>
+        <div style="display:flex;gap:8px;">
+          <select id="subs-co-country" class="form-input" style="width:100px;flex-shrink:0;">
+            <option value="+970">🇵🇸 +970</option>
+            <option value="+972">+972</option>
+            <option value="+962">🇯🇴 +962</option>
+            <option value="+966">🇸🇦 +966</option>
+            <option value="+971">🇦🇪 +971</option>
+            <option value="+965">🇰🇼 +965</option>
+            <option value="+974">🇶🇦 +974</option>
+            <option value="+20">🇪🇬 +20</option>
+            <option value="+1">🇺🇸 +1</option>
+          </select>
+          <input type="tel" class="form-input" id="subs-co-phone" placeholder="رقم الواتساب" style="flex:1;" dir="ltr">
+        </div>
+      </div>
+      <!-- Email -->
+      <div class="form-group">
+        <label class="form-label">البريد الإلكتروني *</label>
+        <input type="email" class="form-input" id="subs-co-email" placeholder="example@email.com" dir="ltr">
+      </div>
+      <!-- Notes -->
+      <div class="form-group">
+        <label class="form-label">ملاحظات (اختياري)</label>
+        <textarea class="form-textarea" id="subs-co-notes" placeholder="أي تفاصيل إضافية..." style="min-height:70px;"></textarea>
+      </div>
+
+      <!-- Warning -->
+      <div style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);border-radius:10px;padding:12px 14px;font-size:12px;color:rgba(245,158,11,.9);line-height:1.7;">
+        ⚠ سيتم مراجعة طلب اشتراكك والتواصل معك خلال 24 ساعة على الواتساب أو البريد الإلكتروني.
+      </div>
+
+      <!-- Submit -->
+      <button onclick="submitSubsOrder()" style="background:linear-gradient(135deg,${p.color},${p.color}aa);border:none;color:#fff;padding:14px;border-radius:12px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:15px;font-weight:800;transition:.2s;margin-top:4px;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+        ✓ تأكيد الاشتراك ←
+      </button>
+    </div>
+  </div>`;
+  document.body.appendChild(modal);
+  setTimeout(() => document.getElementById('subs-co-name')?.focus(), 200);
+}
+
+function submitSubsOrder() {
+  const p = _subsOrderPlan;
+  if(!p) return;
+
+  const name  = document.getElementById('subs-co-name')?.value.trim();
+  const phone = document.getElementById('subs-co-phone')?.value.trim();
+  const cc    = document.getElementById('subs-co-country')?.value || '+970';
+  const email = document.getElementById('subs-co-email')?.value.trim();
+  const notes = document.getElementById('subs-co-notes')?.value.trim() || '';
+
+  if(!name)  { showNotif('أدخل اسمك الكامل','error'); document.getElementById('subs-co-name').focus(); return; }
+  if(!phone) { showNotif('أدخل رقم الواتساب','error'); document.getElementById('subs-co-phone').focus(); return; }
+  if(!email) { showNotif('أدخل البريد الإلكتروني','error'); document.getElementById('subs-co-email').focus(); return; }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showNotif('البريد الإلكتروني غير صحيح','error'); document.getElementById('subs-co-email').focus(); return; }
+
+  const priceNum = parseFloat(p.price) || 0;
+  const order = {
+    id: '#S' + (1000 + orders.length),
+    customer: name,
+    product:  `اشتراك ${p.name} ${p.icon}`,
+    amount:   priceNum,
+    coupon:   '',
+    discount: 0,
+    date:     new Date().toISOString().slice(0,10),
+    status:   'pending',
+    phone:    cc + phone,
+    email:    email,
+    notes:    notes,
+    type:     'subscription',
+    planColor: p.color,
+  };
+
+  orders.unshift(order);
+  saveAllData();
+
+  // Save to my orders
+  const myOrders = JSON.parse(localStorage.getItem('ccs_my_orders') || '[]');
+  myOrders.unshift(order.id);
+  localStorage.setItem('ccs_my_orders', JSON.stringify(myOrders));
+
+  // Notify admin
+  notifyAdminFirebase('new_order', { id:order.id, customer:order.customer, product:order.product, amount:order.amount });
+  if(isAdminLoggedIn) {
+    addAdminNotif('order', `⭐ اشتراك جديد — ${order.customer}`, `${order.product} — $${order.amount}`);
+    renderOrders(); renderDashOrders(); updateAdminCounts();
+  }
+
+  // Close modal
+  document.getElementById('subs-order-modal')?.remove();
+  playSuccessSound?.();
+
+  // Show success
+  showNotif(`✓ تم تأكيد اشتراكك في ${p.name}! سنتواصل معك قريباً 🎉`, 'success');
+  setTimeout(showMyOrders, 600);
+}
+
 // ====== EDITABLE IMAGE PREVIEWS ======
 // Wraps any image preview with an edit overlay + size hint label
 function makeImgEditable(imgEl, wrapEl, cfg, onNewCrop) {
@@ -8928,7 +9421,7 @@ function buildPayload() {
     products, orders, coupons, cats, adsData, teamList, staffList,
     contactList, featuresList, featuresSectionTitle,
     jobApplications, siteRatings, staffRatings,
-    chatConversations, sales, contactMessages, promoBanner, heroBadgeText, joinBanner, siteCustom, advPage, paymentMethods, btnCustom, adminPassword,
+    chatConversations, sales, contactMessages, promoBanner, heroBadgeText, joinBanner, siteCustom, advPage, paymentMethods, btnCustom, subsData, adminPassword,
     _ts: Date.now(), _v: '2.0'
   };
 }
@@ -9026,6 +9519,7 @@ function applyLoadedData(d) {
   if(d.advPage)                 advPage = {...advPage, ...d.advPage, packages:d.advPage.packages||advPage.packages, features:d.advPage.features||advPage.features, gallery:d.advPage.gallery||[]};
   if(d.paymentMethods)          paymentMethods = d.paymentMethods;
   if(d.btnCustom)               { btnCustom = d.btnCustom; setTimeout(applyBtnCustom, 300); }
+  if(d.subsData)                subsData = {...subsData, ...d.subsData, plans: d.subsData.plans||subsData.plans};
   if(d.sales)                   sales                = d.sales;
   if(d.adminPassword)           adminPassword        = d.adminPassword;
 }
@@ -9279,6 +9773,18 @@ window.resetBtnCustom = resetBtnCustom;
 window.resetSingleBtn = resetSingleBtn;
 window.previewBtnChange = previewBtnChange;
 window.applyBtnCustom = applyBtnCustom;
+window.saveSubsPage = saveSubsPage;
+window.addSubsPlan = addSubsPlan;
+window.deleteSubsPlan = deleteSubsPlan;
+window.moveSubsPlan = moveSubsPlan;
+window.updSubsPlan = updSubsPlan;
+window.previewSubsImg = previewSubsImg;
+window.clearSubsImg = clearSubsImg;
+window.openSubsPlan = openSubsPlan;
+window.subsSubscribe = subsSubscribe;
+window.openSubsOrderModal = openSubsOrderModal;
+window.submitSubsOrder = submitSubsOrder;
+window.renderSubsPage = renderSubsPage;
 window.savePm = savePm;
 window.openEditPm = openEditPm;
 window.deletePm = deletePm;
@@ -9361,6 +9867,7 @@ window.updateSalesDash = updateSalesDash;
 window.renderSalesList = renderSalesList;
 window.addManualSale = addManualSale;
 window.deleteSale = deleteSale;
+window.clearAllSales = clearAllSales;
 window.can = can;
 window.canPage = canPage;
 window.applyButtonPermissions = applyButtonPermissions;
