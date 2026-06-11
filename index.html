@@ -8792,7 +8792,8 @@ checkMobileNav();
 
 // ====== VISITOR COUNTER ======
 function initVisitorCounter() {
-  const COUNTER_KEY = 'ccs_visits';
+  const COUNTER_KEY  = 'ccs_visits';
+  const VISITORS_KEY = 'ccs_unique_visitors';
   const el = document.getElementById('s-visitors');
 
   function formatNum(n) {
@@ -8801,17 +8802,40 @@ function initVisitorCounter() {
     return n.toString();
   }
 
-  if(firebaseReady && db) {
-    // increment visit count in Firebase
-    const ref = db.ref(COUNTER_KEY);
-    ref.transaction(current => (current || 0) + 1);
-    // listen for realtime updates
-    ref.on('value', snap => {
-      const count = snap.val() || 0;
+  // Check if this visitor was already counted
+  const alreadyCounted = localStorage.getItem('ccs_counted');
+  if(alreadyCounted) {
+    // Just read the current count without incrementing
+    if(firebaseReady && db) {
+      db.ref(COUNTER_KEY).on('value', snap => {
+        if(el) el.textContent = formatNum(snap.val() || 0);
+      });
+    } else {
+      const count = parseInt(localStorage.getItem(COUNTER_KEY)||'0');
       if(el) el.textContent = formatNum(count);
+    }
+    return;
+  }
+
+  // First time visitor — mark and increment
+  localStorage.setItem('ccs_counted', '1');
+
+  if(firebaseReady && db) {
+    // Add this visitor's ID to unique visitors set & increment counter
+    const counterRef  = db.ref(COUNTER_KEY);
+    const visitorRef  = db.ref(VISITORS_KEY + '/' + visitorId);
+    visitorRef.once('value', snap => {
+      if(!snap.val()) {
+        // New unique visitor — increment counter
+        counterRef.transaction(current => (current || 0) + 1);
+        visitorRef.set(true);
+      }
+    });
+    counterRef.on('value', snap => {
+      if(el) el.textContent = formatNum(snap.val() || 0);
     });
   } else {
-    // fallback: localStorage counter
+    // Fallback localStorage
     let count = parseInt(localStorage.getItem(COUNTER_KEY)||'0') + 1;
     localStorage.setItem(COUNTER_KEY, count);
     if(el) el.textContent = formatNum(count);
