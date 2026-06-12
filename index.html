@@ -7459,7 +7459,7 @@ function sendChatMsg() {
   addMsgToConv(activeChatId, text, 'visitor', chatVisitorName);
   renderVisitorChat();
   document.getElementById('chat-quick').style.display = 'none';
-  saveAllData();
+  saveChatSafe().then(()=>renderVisitorChat());
   notifyAdminNewMsg();
   notifyAdminFirebase('new_chat', { convId: activeChatId, name: chatVisitorName, text: text.slice(0,60) });
   // auto reply if no agent replied recently
@@ -7470,7 +7470,7 @@ function sendChatMsg() {
     setTimeout(()=>{
       addMsgToConv(activeChatId, 'شكراً لرسالتك! سيرد عليك أحد أعضاء فريقنا قريباً 😊', 'agent', 'دعم Core Code');
       renderVisitorChat();
-      saveAllData();
+      saveChatSafe();
     }, 1200);
   }
 }
@@ -7480,7 +7480,7 @@ function sendQuick(text) {
   document.getElementById('chat-quick').style.display = 'none';
   addMsgToConv(activeChatId, text, 'visitor', chatVisitorName);
   renderVisitorChat();
-  saveAllData();
+  saveChatSafe().then(()=>renderVisitorChat());
   notifyAdminNewMsg();
   notifyAdminFirebase('new_chat', { convId: activeChatId, name: chatVisitorName, text: text.slice(0,60) });
   const replies = {
@@ -7492,7 +7492,7 @@ function sendQuick(text) {
   setTimeout(()=>{
     addMsgToConv(activeChatId, replies[text]||'شكراً! سيرد فريقنا عليك قريباً 😊', 'agent', 'دعم Core Code');
     renderVisitorChat();
-    saveAllData();
+    saveChatSafe();
   }, 900);
 }
 
@@ -7735,6 +7735,18 @@ function renderAdminChat(convId) {
   msgs.scrollTop = msgs.scrollHeight;
 }
 
+// ── Safe chat save: pull latest remote chat, merge, then write (no message loss) ──
+async function saveChatSafe() {
+  if(firebaseReady && db) {
+    try {
+      const snap = await db.ref(FB_PATH + '/chatConversations').once('value');
+      const remote = snap.val();
+      if(remote) chatConversations = mergeChatConversations(remote);
+    } catch(e) { console.warn('chat merge pull failed:', e.message); }
+  }
+  saveAllData();
+}
+
 function adminSendMsg() {
   if(!adminActiveChatId) return;
   const input = document.getElementById('admin-chat-input');
@@ -7745,7 +7757,7 @@ function adminSendMsg() {
   addMsgToConv(adminActiveChatId, text, 'agent', agentName);
   renderAdminChat(adminActiveChatId);
   renderAdminChatList();
-  saveAllData();
+  saveChatSafe().then(()=>{ renderAdminChat(adminActiveChatId); renderAdminChatList(); });
   // update visitor chat if same conv
   if(adminActiveChatId===activeChatId) renderVisitorChat();
   // notify visitor
@@ -10410,8 +10422,7 @@ function applyLoadedData(d) {
   if(d.siteRatings)             siteRatings          = d.siteRatings;
   if(d.staffRatings)            staffRatings         = d.staffRatings;
   if(d.chatConversations) {
-    chatConversations = (Array.isArray(d.chatConversations)?d.chatConversations:Object.values(d.chatConversations||{}))
-      .map(c=>({...c, messages: Array.isArray(c.messages)?c.messages:Object.values(c.messages||{})}));
+    chatConversations = mergeChatConversations(d.chatConversations);
   }
   if(d.contactMessages)         contactMessages      = d.contactMessages;
   if(d.promoBanner)             promoBanner          = {...promoBanner, ...d.promoBanner};
@@ -10433,6 +10444,37 @@ function applyLoadedData(d) {
   }
   if(d.sales)                   sales                = d.sales;
   if(d.adminPassword)           adminPassword        = d.adminPassword;
+}
+
+// ── Merge chat conversations: union of messages, never lose any (fixes write races) ──
+function mergeChatConversations(remote) {
+  const toArr = v => Array.isArray(v) ? v : (v && typeof v==='object' ? Object.values(v) : []);
+  const remoteConvs = toArr(remote).map(c=>({...c, messages: toArr(c.messages)}));
+  const localConvs  = toArr(chatConversations).map(c=>({...c, messages: toArr(c.messages)}));
+  const byId = {};
+  // start with remote
+  remoteConvs.forEach(c => { byId[c.id] = {...c, messages:[...c.messages]}; });
+  // merge local on top
+  localConvs.forEach(lc => {
+    if(!byId[lc.id]) { byId[lc.id] = {...lc, messages:[...lc.messages]}; return; }
+    const target = byId[lc.id];
+    const seen = new Set(target.messages.map(m => (m.from||'')+'|'+(m.text||'')+'|'+(m.time||'')));
+    lc.messages.forEach(m => {
+      const key = (m.from||'')+'|'+(m.text||'')+'|'+(m.time||'');
+      if(!seen.has(key)) { target.messages.push(m); seen.add(key); }
+    });
+    // sort messages by time
+    target.messages.sort((a,b) => new Date(a.time||0) - new Date(b.time||0));
+    // keep richer metadata
+    target.unread = Math.max(target.unread||0, lc.unread||0);
+    if(lc.status==='closed' || target.status==='closed') target.status='closed';
+    target.visitorName = target.visitorName || lc.visitorName;
+  });
+  return Object.values(byId).sort((a,b) => {
+    const la = a.messages[a.messages.length-1]?.time || 0;
+    const lb = b.messages[b.messages.length-1]?.time || 0;
+    return new Date(lb) - new Date(la);
+  });
 }
 
 function normalizeArrays() {
@@ -10746,6 +10788,8 @@ window.renderTiersList = renderTiersList;
 window.moveTier = moveTier;
 window.deleteTier = deleteTier;
 window.editTierFull = editTierFull;
+window.saveChatSafe = saveChatSafe;
+window.mergeChatConversations = mergeChatConversations;
 window.playMsgSound = playMsgSound;
 window.setTierLogoImg = setTierLogoImg;
 window.editTierImg = editTierImg;
