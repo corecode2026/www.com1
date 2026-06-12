@@ -10512,8 +10512,8 @@ function mergeChatConversations(remote) {
       const key = (m.from||'')+'|'+(m.text||'')+'|'+(m.time||'');
       if(!seen.has(key)) { target.messages.push(m); seen.add(key); }
     });
-    // sort messages by time
-    target.messages.sort((a,b) => new Date(a.time||0) - new Date(b.time||0));
+    // NOTE: no time-sort — keep arrival order (device clocks can differ);
+    // remote (Firebase) order is the source of truth, new local msgs append at the end
     // keep richer metadata
     target.unread = Math.max(target.unread||0, lc.unread||0);
     if(lc.status==='closed' || target.status==='closed') target.status='closed';
