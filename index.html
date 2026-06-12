@@ -7355,6 +7355,7 @@ let chatOpen = false;
 let chatMinimized = false;
 let chatConversations = [];
 let activeChatId = null;
+let deletedConvIds = []; // tombstones — deleted conversations never come back
 let adminActiveChatId = null;
 let chatVisitorName = '';
 let chatWaNumber = '970597789932';
@@ -7669,6 +7670,7 @@ function deleteChatConv(convId) {
   const conv = chatConversations.find(c=>c.id===convId);
   showConfirmBox(`هل تريد حذف محادثة "${conv?.visitorName}"؟`, ()=>{
     chatConversations = chatConversations.filter(c=>c.id!==convId);
+    if(!deletedConvIds.includes(convId)) deletedConvIds.push(convId);
 
     // إذا كانت المحادثة المحذوفة هي محادثة الزبون الحالية — أعد تهيئة واجهته
     if(activeChatId === convId) {
@@ -10344,7 +10346,7 @@ function buildPayload() {
     products, orders, coupons, cats, adsData, teamList, staffList,
     contactList, featuresList, featuresSectionTitle,
     jobApplications, siteRatings, staffRatings,
-    chatConversations, sales, contactMessages, promoBanner, heroBadgeText, joinBanner, siteCustom, advPage, paymentMethods, btnCustom, subsData, customRoles, adminPassword,
+    chatConversations, deletedConvIds, sales, contactMessages, promoBanner, heroBadgeText, joinBanner, siteCustom, advPage, paymentMethods, btnCustom, subsData, customRoles, adminPassword,
     _ts: Date.now(), _v: '2.0'
   };
 }
@@ -10402,6 +10404,21 @@ function loadAllData() {
 let _chatSyncBusy = false;
 function refreshChatViews() {
   try { updateChatBadge(); } catch(e){}
+  // active conversation deleted by staff? reset visitor window
+  if(activeChatId && !chatConversations.find(c=>c.id===activeChatId)) {
+    activeChatId = null;
+    chatVisitorName = '';
+    const myConvs = getMyConversations();
+    if(myConvs.length) {
+      activeChatId = myConvs[myConvs.length-1].id;
+      chatVisitorName = myConvs[myConvs.length-1].visitorName;
+    } else if(chatOpen) {
+      // no conversations left — show name step again
+      const ns = document.getElementById('chat-name-step'); if(ns) ns.style.display='flex';
+      const hide = ['chat-msgs','chat-input-area','chat-wa-btn','chat-quick'];
+      hide.forEach(id => { const el=document.getElementById(id); if(el) el.style.display='none'; });
+    }
+  }
   // visitor opened chat before data loaded? restore their conversations now
   if(chatOpen && !activeChatId) { try { restoreVisitorConvs(); } catch(e){} }
   if(activeChatId) { try { renderVisitorChat(); } catch(e){} }
@@ -10479,6 +10496,10 @@ function applyLoadedData(d) {
   if(d.jobApplications)         jobApplications      = d.jobApplications;
   if(d.siteRatings)             siteRatings          = d.siteRatings;
   if(d.staffRatings)            staffRatings         = d.staffRatings;
+  if(d.deletedConvIds) {
+    const remote = Array.isArray(d.deletedConvIds) ? d.deletedConvIds : Object.values(d.deletedConvIds||{});
+    deletedConvIds = [...new Set([...deletedConvIds, ...remote])];
+  }
   if(d.chatConversations) {
     chatConversations = mergeChatConversations(d.chatConversations);
   }
@@ -10528,6 +10549,8 @@ function mergeChatConversations(remote) {
     if(lc.status==='closed' || target.status==='closed') target.status='closed';
     target.visitorName = target.visitorName || lc.visitorName;
   });
+  // Drop tombstoned conversations — deletion is final
+  deletedConvIds.forEach(id => { delete byId[id]; });
   return Object.values(byId).sort((a,b) => {
     const la = a.messages[a.messages.length-1]?.time || 0;
     const lb = b.messages[b.messages.length-1]?.time || 0;
