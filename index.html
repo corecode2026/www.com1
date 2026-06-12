@@ -7737,6 +7737,7 @@ function renderAdminChat(convId) {
 
 // ── Safe chat save: pull latest remote chat, merge, then write (no message loss) ──
 async function saveChatSafe() {
+  _chatSyncBusy = true;
   if(firebaseReady && db) {
     try {
       const snap = await db.ref(FB_PATH + '/chatConversations').once('value');
@@ -7745,6 +7746,7 @@ async function saveChatSafe() {
     } catch(e) { console.warn('chat merge pull failed:', e.message); }
   }
   saveAllData();
+  setTimeout(()=>{ _chatSyncBusy = false; }, 600);
 }
 
 function adminSendMsg() {
@@ -10389,8 +10391,55 @@ function loadAllData() {
 }
 
 // ── Real-time listener: updates ALL connected browsers instantly ──
+// ── Dedicated realtime CHAT listener: instant sync both ways, bypasses _ts guard ──
+let _chatSyncBusy = false;
+function refreshChatViews() {
+  try { updateChatBadge(); } catch(e){}
+  if(activeChatId) { try { renderVisitorChat(); } catch(e){} }
+  if(isAdminLoggedIn) {
+    try { renderAdminChatList(); } catch(e){}
+    if(adminActiveChatId) { try { renderAdminChat(adminActiveChatId); } catch(e){} }
+  }
+}
+
+function startChatListener() {
+  if(!firebaseReady || !db) return;
+  db.ref(FB_PATH + '/chatConversations').on('value', snap => {
+    if(_chatSyncBusy) return;
+    const remote = snap.val();
+    if(!remote) return;
+    const before = JSON.stringify(chatConversations);
+    chatConversations = mergeChatConversations(remote);
+    const after = JSON.stringify(chatConversations);
+    if(before !== after) {
+      refreshChatViews();
+      // a new visitor message arrived for staff? play sound
+      if(isAdminLoggedIn && canPage('chat')) {
+        try {
+          const b = JSON.parse(before), a = chatConversations;
+          const countMsgs = list => list.reduce((s,c)=>s+(c.messages?.length||0),0);
+          if(countMsgs(a) > countMsgs(b)) playMsgSound?.();
+        } catch(e){}
+      }
+    }
+  });
+  // Safety net: poll every 5s in case a realtime event is missed
+  setInterval(async () => {
+    if(!firebaseReady || !db || _chatSyncBusy) return;
+    try {
+      const snap = await db.ref(FB_PATH + '/chatConversations').once('value');
+      const remote = snap.val();
+      if(!remote) return;
+      const before = JSON.stringify(chatConversations);
+      chatConversations = mergeChatConversations(remote);
+      if(before !== JSON.stringify(chatConversations)) refreshChatViews();
+    } catch(e){}
+  }, 5000);
+}
+
 function startFirebaseListener() {
   if(!firebaseReady || !db) return;
+  startChatListener();
   db.ref(FB_PATH).on('value', snap => {
     const d = snap.val();
     if(!d) return;
