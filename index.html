@@ -4569,9 +4569,11 @@ function doLogin(){
     applyRoleUI();
     showPage('admin');
     // redirect to first allowed page
-    const allowed = PERMISSIONS[staff.role]?.pages || [];
-    if(allowed.length && !allowed.includes('dashboard')) {
-      setTimeout(()=>{ const el=document.querySelector(`.sb-item[onclick*="'${allowed[0]}'"]`); showAdmin(allowed[0], el); },100);
+    const allowed = (customRoles[staff.role]?.pages) || [];
+    if(!allowed.length) { showNotif('رتبتك لا تملك أي صلاحيات — تواصل مع المدير','error'); }
+    const firstPg = allowed.includes('dashboard') ? 'dashboard' : allowed[0];
+    if(firstPg) {
+      setTimeout(()=>{ const el=document.querySelector(`.sb-item[onclick*="'${firstPg}'"]`); showAdmin(firstPg, el); },150);
     }
     updateNotifBell();
     requestNotifPermission();
@@ -10418,7 +10420,15 @@ function applyLoadedData(d) {
   if(d.paymentMethods)          paymentMethods = d.paymentMethods;
   if(d.btnCustom)               { btnCustom = d.btnCustom; setTimeout(applyBtnCustom, 300); }
   if(d.subsData)                subsData = {...subsData, ...d.subsData, plans: d.subsData.plans||subsData.plans};
-  if(d.customRoles)             customRoles = {...customRoles, ...d.customRoles};
+  if(d.customRoles) {
+    customRoles = {...customRoles, ...d.customRoles};
+    // Defensive: built-in roles must never lose their core pages
+    if(!customRoles.admin?.pages?.length)     customRoles.admin     = { label:'مدير', color:'#f5c518', pages: ALL_PAGES.map(p=>p.id) };
+    else customRoles.admin.pages = ALL_PAGES.map(p=>p.id); // admin always sees everything
+    if(!customRoles.support?.pages?.length)   customRoles.support   = { label:'دعم فني', color:'#34d399', pages:['orders','chat','customers'] };
+    if(!customRoles.editor?.pages?.length)    customRoles.editor    = { label:'محرر', color:'#60a5fa', pages:['products','addproduct','categories'] };
+    if(!customRoles.moderator?.pages?.length) customRoles.moderator = { label:'مشرف', color:'#a78bfa', pages:['dashboard','products','addproduct','categories','orders','chat','customers','reports','coupons','ads','contact','contactmsgs','features','team','jobs','reviews'] };
+  }
   if(d.sales)                   sales                = d.sales;
   if(d.adminPassword)           adminPassword        = d.adminPassword;
 }
@@ -10450,6 +10460,9 @@ function refreshAllViews() {
   renderTeamDisplay(); renderContactDisplay(); renderReviews();
   updateHomeStat();
   renderPromoBanner();
+  // refresh visitor chat window if open (so admin replies appear live)
+  if(typeof chatOpen !== 'undefined' && chatOpen) { try { renderVisitorChat(); } catch(e){} }
+  updateChatBadge?.();
   // refresh admin if open
   if(isAdminLoggedIn) {
     updateAdminCounts(); updateSalesDash(); updateChatBadge();
@@ -10459,7 +10472,7 @@ function refreshAllViews() {
       if(id==='dashboard')  { renderDashOrders(); updateSalesDash(); }
       if(id==='orders')     renderOrders();
       if(id==='products')   renderAdminProds();
-      if(id==='chat')       renderAdminChatList();
+      if(id==='chat')       { renderAdminChatList(); if(adminActiveChatId) renderAdminChat(adminActiveChatId); }
       if(id==='jobs')       renderJobsAdmin();
       if(id==='customers')  {} // handled
     }
@@ -10658,27 +10671,41 @@ function playMsgSound() {
   } catch(e) {}
 }
 
+// Per-browser processed-notification tracker (no global read flag — every staff browser gets its own copy)
+const _processedNotifs = new Set();
+
 if(firebaseReady && db) db.ref('ccs_notifications').orderByChild('ts').startAt(Date.now()).on('child_added', snap => {
   const n = snap.val();
-  if(!n || n.read) return;
-  // mark read immediately
-  snap.ref.update({read:true});
+  const key = snap.key;
+  if(!n || _processedNotifs.has(key)) return;
+  _processedNotifs.add(key);
+
+  // Cleanup: delete notifications older than 24h (only admin does cleanup)
+  if(isAdminLoggedIn && currentUser.role==='admin' && n.ts && (Date.now() - n.ts) > 86400000) {
+    try { snap.ref.remove(); } catch(e){}
+    return;
+  }
+
   if(!isAdminLoggedIn) return;
-  if(n.type === 'new_order') {
+
+  // Role-aware delivery: anyone whose role includes the relevant page gets notified
+  if(n.type === 'new_order' && canPage('orders')) {
     addAdminNotif('order', `🛍 طلب جديد — ${n.data?.customer||'زبون'}`, `${n.data?.product||''} — $${n.data?.amount||''}`);
     showNotif(`🛍 طلب جديد من ${n.data?.customer||'زبون'}!`,'success');
     playCartSound?.();
     updateOrdersBadge();
-    // refresh orders view
     const activePg = document.querySelector('.admin-pg.active');
     renderDashOrders(); updateSalesDash(); updateAdminCounts();
     if(activePg?.id==='apg-orders') renderOrders();
     if(activePg?.id==='apg-dashboard') renderDashOrders();
   }
-  if(n.type === 'new_chat') {
+  if(n.type === 'new_chat' && canPage('chat')) {
+    addAdminNotif('chat', `💬 رسالة/محادثة جديدة`, 'اضغط لعرض الدردشات');
+    showNotif('💬 رسالة جديدة من زبون!','success');
+    playMsgSound?.();
     updateChatBadge();
     const activePg = document.querySelector('.admin-pg.active');
-    if(activePg?.id==='apg-chat') renderAdminChatList();
+    if(activePg?.id==='apg-chat') { renderAdminChatList(); if(adminActiveChatId) renderAdminChat(adminActiveChatId); }
   }
 });
 
