@@ -1656,7 +1656,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
       <div class="sb-item" onclick="showAdmin('contactmsgs',this)"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span> رسائل التواصل <span id="ct-msgs-badge" style="display:none;background:#5566ee;color:#fff;border-radius:50%;width:16px;height:16px;font-size:9px;display:none;align-items:center;justify-content:center;margin-right:4px;">0</span></div>
       <div class="sb-item" onclick="showAdmin('contact',this)"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></span> معلومات التواصل</div>
       <div class="sb-item" onclick="showAdmin('features',this)"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span> مميزات الموقع</div>
-      <div class="sb-item" onclick="showAdmin('reviews',this)"><span class="ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="#f5c518" stroke="#f5c518" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></span> التقييمات</div>
+      <div class="sb-item" onclick="showAdmin('reviews',this)"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></span> التقييمات</div>
       <div class="sb-item" onclick="showAdmin('jobs',this)"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg></span> طلبات التقديم</div>
       <div class="sb-item" onclick="showAdmin('team',this)"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span> فريق العمل</div>
       <div class="sb-item" onclick="showAdmin('roles',this)"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span> إدارة الرتب</div>
@@ -7461,6 +7461,7 @@ function sendChatMsg() {
   document.getElementById('chat-quick').style.display = 'none';
   saveAllData();
   notifyAdminNewMsg();
+  notifyAdminFirebase('new_chat', { convId: activeChatId, name: chatVisitorName, text: text.slice(0,60) });
   // auto reply if no agent replied recently
   const conv = chatConversations.find(c=>c.id===activeChatId);
   const lastAgentMsg = conv?.messages.filter(m=>m.from==='agent').pop();
@@ -7481,6 +7482,7 @@ function sendQuick(text) {
   renderVisitorChat();
   saveAllData();
   notifyAdminNewMsg();
+  notifyAdminFirebase('new_chat', { convId: activeChatId, name: chatVisitorName, text: text.slice(0,60) });
   const replies = {
     'استفسار عن منتج':'يسعدنا مساعدتك في اختيار المنتج المناسب! 🛍 أخبرنا بما تحتاجه وسنوجهك.',
     'مشكلة في الطلب':'نأسف لسماع ذلك! 😔 أرسل لنا رقم طلبك وسنحل الأمر فوراً.',
@@ -10454,31 +10456,35 @@ function normalizeArrays() {
 }
 
 function refreshAllViews() {
-  normalizeArrays();
+  const safe = fn => { try { fn(); } catch(e) { console.warn('refresh err:', e.message); } };
+  safe(normalizeArrays);
   // refresh visitor pages
-  renderFeatured(); renderHomeCats(); renderFeaturesDisplay();
-  renderTeamDisplay(); renderContactDisplay(); renderReviews();
-  updateHomeStat();
-  renderPromoBanner();
+  safe(renderFeatured); safe(renderHomeCats); safe(renderFeaturesDisplay);
+  safe(renderTeamDisplay); safe(renderContactDisplay); safe(renderReviews);
+  safe(updateHomeStat);
+  safe(renderPromoBanner);
   // refresh visitor chat window if open (so admin replies appear live)
-  if(typeof chatOpen !== 'undefined' && chatOpen) { try { renderVisitorChat(); } catch(e){} }
-  updateChatBadge?.();
+  if(typeof chatOpen !== 'undefined' && chatOpen) safe(renderVisitorChat);
+  safe(()=>updateChatBadge());
   // refresh admin if open
   if(isAdminLoggedIn) {
-    updateAdminCounts(); updateSalesDash(); updateChatBadge();
+    safe(updateAdminCounts); safe(updateSalesDash); safe(updateChatBadge);
+    safe(updateOrdersBadge);
+    // ALWAYS refresh chat list + open conversation for staff with chat access
+    safe(renderAdminChatList);
+    if(adminActiveChatId) safe(()=>renderAdminChat(adminActiveChatId));
     const activePg = document.querySelector('.admin-pg.active');
     if(activePg) {
       const id = activePg.id.replace('apg-','');
-      if(id==='dashboard')  { renderDashOrders(); updateSalesDash(); }
-      if(id==='orders')     renderOrders();
-      if(id==='products')   renderAdminProds();
-      if(id==='chat')       { renderAdminChatList(); if(adminActiveChatId) renderAdminChat(adminActiveChatId); }
-      if(id==='jobs')       renderJobsAdmin();
-      if(id==='customers')  {} // handled
+      if(id==='dashboard')  { safe(renderDashOrders); safe(updateSalesDash); }
+      if(id==='orders')     safe(renderOrders);
+      if(id==='products')   safe(renderAdminProds);
+      if(id==='jobs')       safe(renderJobsAdmin);
+      if(id==='customers')  safe(renderCustomers);
     }
   }
   // update visitor chat if open
-  if(activeChatId) renderVisitorChat();
+  if(activeChatId) safe(renderVisitorChat);
 }
 
 // ── Notify admin of new orders/messages via Firebase ──
@@ -10700,12 +10706,14 @@ if(firebaseReady && db) db.ref('ccs_notifications').orderByChild('ts').startAt(D
     if(activePg?.id==='apg-dashboard') renderDashOrders();
   }
   if(n.type === 'new_chat' && canPage('chat')) {
-    addAdminNotif('chat', `💬 رسالة/محادثة جديدة`, 'اضغط لعرض الدردشات');
-    showNotif('💬 رسالة جديدة من زبون!','success');
+    const who = n.data?.name || 'زبون';
+    const preview = n.data?.text ? `: ${n.data.text}` : '';
+    addAdminNotif('chat', `💬 رسالة جديدة — ${who}`, `اضغط للرد${preview}`);
+    showNotif(`💬 رسالة جديدة من ${who}!`,'success');
     playMsgSound?.();
     updateChatBadge();
-    const activePg = document.querySelector('.admin-pg.active');
-    if(activePg?.id==='apg-chat') { renderAdminChatList(); if(adminActiveChatId) renderAdminChat(adminActiveChatId); }
+    renderAdminChatList();
+    if(adminActiveChatId) renderAdminChat(adminActiveChatId);
   }
 });
 
