@@ -1198,9 +1198,12 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
         <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg>
       </button>
     </div>
-    <div style="text-align:center;">
+    <div style="text-align:center;display:flex;justify-content:center;gap:12px;">
       <button onclick="newChatConversation()" style="background:none;border:none;color:rgba(120,140,255,.6);cursor:pointer;font-family:'Cairo',sans-serif;font-size:11px;padding:2px 8px;border-radius:5px;transition:.2s;" onmouseover="this.style.color='rgba(160,180,255,.9)'" onmouseout="this.style.color='rgba(120,140,255,.6)'">
         ✦ بدء محادثة جديدة
+      </button>
+      <button onclick="visitorDeleteConv()" style="background:none;border:none;color:rgba(200,80,80,.5);cursor:pointer;font-family:'Cairo',sans-serif;font-size:11px;padding:2px 8px;border-radius:5px;transition:.2s;" onmouseover="this.style.color='rgba(220,100,100,.85)'" onmouseout="this.style.color='rgba(200,80,80,.5)'" title="حذف المحادثة من عندك فقط">
+        🗑 حذف المحادثة
       </button>
     </div>
   </div>
@@ -7426,7 +7429,8 @@ let visitorId = localStorage.getItem('ccs_visitor_id');
 if(!visitorId){ visitorId='v_'+Date.now()+'_'+Math.random().toString(36).slice(2,7); localStorage.setItem('ccs_visitor_id',visitorId); }
 
 function getMyConversations() {
-  return chatConversations.filter(c=>c.visitorId===visitorId);
+  const hidden = JSON.parse(localStorage.getItem('ccs_hidden_convs') || '[]');
+  return chatConversations.filter(c => c.visitorId===visitorId && !hidden.includes(c.id));
 }
 
 function getChatWaNumber() {
@@ -7606,6 +7610,34 @@ function renderVisitorChat() {
 function switchVisitorConv(convId) {
   activeChatId = convId;
   renderVisitorChat();
+}
+
+function visitorDeleteConv() {
+  if(!activeChatId) return;
+  showConfirmBox('حذف هذه المحادثة من عندك؟ ستبقى محفوظة عند الفريق', () => {
+    // Save to localStorage so it stays hidden even after page reload
+    const hidden = JSON.parse(localStorage.getItem('ccs_hidden_convs') || '[]');
+    if(!hidden.includes(activeChatId)) hidden.push(activeChatId);
+    localStorage.setItem('ccs_hidden_convs', JSON.stringify(hidden));
+
+    // Remove from visitor's active view (NOT from Firebase/global chatConversations)
+    activeChatId = null;
+    chatVisitorName = '';
+
+    // Check if other convs remain
+    const myConvs = getMyConversations().filter(c => !hidden.includes(c.id));
+    if(myConvs.length) {
+      activeChatId = myConvs[myConvs.length-1].id;
+      chatVisitorName = myConvs[myConvs.length-1].visitorName;
+      renderVisitorChat();
+    } else {
+      // No convs left — show start screen
+      const ns = document.getElementById('chat-name-step'); if(ns) ns.style.display='flex';
+      const hide = ['chat-msgs','chat-input-area','chat-wa-btn','chat-quick'];
+      hide.forEach(id => { const el=document.getElementById(id); if(el) el.style.display='none'; });
+    }
+    showNotif('تم حذف المحادثة من عندك','success');
+  });
 }
 
 function newChatConversation() {
@@ -10844,6 +10876,7 @@ window.openJobDetail = openJobDetail;
 window.changeJobStatus = changeJobStatus;
 window.toggleLockChat = toggleLockChat;
 window.deleteChatConv = deleteChatConv;
+window.visitorDeleteConv = visitorDeleteConv;
 window.newChatConversation = newChatConversation;
 window.switchVisitorConv = switchVisitorConv;
 window.toggleChat = toggleChat;
