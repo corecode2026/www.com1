@@ -20,7 +20,7 @@
   <meta property="og:url" content="https://corecode.store">
   <meta property="og:title" content="Core Code Store — متجر البرمجيات والسكريبتات">
   <meta property="og:description" content="اشتري أفضل السكريبتات والكودات الجاهزة. جودة عالية، تسليم فوري، دعم مستمر. Buy premium ready-made scripts & code.">
-  <meta property="og:image" content="https://corecode.store/og-image.png">
+  <meta property="og:image" content="https://corecodeweb.store/og-image.svg">
   <meta property="og:locale" content="ar_AR">
   <meta property="og:locale:alternate" content="en_US">
   <meta property="og:site_name" content="Core Code Store">
@@ -30,7 +30,7 @@
   <meta name="twitter:site" content="@CoreCodeStore">
   <meta name="twitter:title" content="Core Code Store — Software Scripts & Code">
   <meta name="twitter:description" content="Premium ready-made scripts, plugins & web apps. Fast delivery, quality guaranteed.">
-  <meta name="twitter:image" content="https://corecode.store/og-image.png">
+  <meta name="twitter:image" content="https://corecodeweb.store/og-image.svg">
 
   <!-- Structured Data (Google Rich Results) -->
   <script type="application/ld+json">
@@ -42,7 +42,7 @@
     "description": "متجر متخصص في بيع السكريبتات والكودات والتطبيقات الجاهزة. جودة عالية وتسليم فوري.",
     "url": "https://corecode.store",
     "logo": "https://corecode.store/logo.png",
-    "image": "https://corecode.store/og-image.png",
+    "image": "https://corecodeweb.store/og-image.svg",
     "priceRange": "$",
     "currenciesAccepted": "USD, JOD, SAR",
     "paymentAccepted": "Credit Card, PayPal, Bank Transfer",
@@ -791,7 +791,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
   </div>
   <div id="notif-panel-list" style="overflow-y:auto;flex:1;"></div>
   <div style="padding:10px 16px;border-top:1px solid var(--border2);text-align:center;">
-    <button onclick="showAdmin('orders',null);showPage('admin');toggleNotifPanel()" style="background:none;border:none;color:var(--silver3);cursor:pointer;font-family:'Cairo',sans-serif;font-size:12px;">عرض جميع الطلبات ←</button>
+    <button onclick="showAdmin('orders',null);showPage('admin'); requestNotifPermission?.();toggleNotifPanel()" style="background:none;border:none;color:var(--silver3);cursor:pointer;font-family:'Cairo',sans-serif;font-size:12px;">عرض جميع الطلبات ←</button>
   </div>
 </div>
 
@@ -10054,6 +10054,37 @@ async function translateOne(text) {
 }
 
 // ── Main function — translates EVERYTHING instantly then cleans up via API ──
+// ── Browser Push Notifications for staff/admin ──
+let _notifPermission = null;
+
+async function requestNotifPermission() {
+  if(!('Notification' in window)) return;
+  if(Notification.permission === 'granted') { _notifPermission = 'granted'; return; }
+  if(Notification.permission !== 'denied') {
+    _notifPermission = await Notification.requestPermission();
+  }
+}
+
+function sendBrowserNotif(title, body) {
+  if(!isAdminLoggedIn) return;
+  if(!('Notification' in window)) return;
+  if(Notification.permission !== 'granted') { requestNotifPermission(); return; }
+  try {
+    const n = new Notification(title, {
+      body,
+      icon: 'https://corecodeweb.store/og-image.svg',
+      badge: 'https://corecodeweb.store/og-image.svg',
+      tag: 'corecode-notif',
+      requireInteraction: false,
+    });
+    n.onclick = () => { window.focus(); n.close(); };
+    setTimeout(() => n.close(), 8000);
+  } catch(e) {}
+}
+
+// Request permission automatically when staff logs in
+const _origApplyRoleUI = typeof applyRoleUI === 'function' ? applyRoleUI : null;
+
 // ── Shared API translator: Google (fast) → MyMemory (fallback) ──
 async function apiTranslate(text) {
   if(_tCache[text] && !hasArabic(_tCache[text])) return _tCache[text];
@@ -10491,6 +10522,7 @@ function refreshChatViews() {
 
 function startChatListener() {
   if(!firebaseReady || !db) return;
+  // ── Realtime CHAT listener ──
   db.ref(FB_PATH + '/chatConversations').on('value', snap => {
     if(_chatSyncBusy) return;
     const remote = snap.val();
@@ -10500,13 +10532,35 @@ function startChatListener() {
     const after = JSON.stringify(chatConversations);
     if(before !== after) {
       refreshChatViews();
-      // a new visitor message arrived for staff? play sound
       if(isAdminLoggedIn && canPage('chat')) {
         try {
           const b = JSON.parse(before), a = chatConversations;
-          const countMsgs = list => list.reduce((s,c)=>s+(c.messages?.length||0),0);
-          if(countMsgs(a) > countMsgs(b)) playMsgSound?.();
+          const countBefore = b.reduce((s,c)=>s+(c.messages?.length||0),0);
+          const countAfter  = a.reduce((s,c)=>s+(c.messages?.length||0),0);
+          if(countAfter > countBefore) playMsgSound?.();
         } catch(e){}
+      }
+    }
+  });
+
+  // ── Realtime ORDERS listener — shows new orders instantly without page reload ──
+  db.ref(FB_PATH + '/orders').on('value', snap => {
+    const remote = snap.val();
+    if(!remote) return;
+    const remoteOrders = Array.isArray(remote) ? remote : Object.values(remote);
+    if(JSON.stringify(orders) === JSON.stringify(remoteOrders)) return;
+    const prevCount = orders.length;
+    orders = remoteOrders;
+    updateAdminCounts?.();
+    updateOrdersBadge?.();
+    if(isAdminLoggedIn) {
+      const activePg = document.querySelector('.admin-pg.active');
+      if(activePg?.id === 'apg-orders') renderOrders?.();
+      if(activePg?.id === 'apg-dashboard') renderDashOrders?.();
+      // New order arrived?
+      if(remoteOrders.length > prevCount) {
+        renderDashOrders?.();
+        updateSalesDash?.();
       }
     }
   });
@@ -10880,10 +10934,14 @@ if(firebaseReady && db) db.ref('ccs_notifications').orderByChild('ts').startAt(D
 
   // Role-aware delivery: anyone whose role includes the relevant page gets notified
   if(n.type === 'new_order' && canPage('orders')) {
-    addAdminNotif('order', `🛍 طلب جديد — ${n.data?.customer||'زبون'}`, `${n.data?.product||''} — $${n.data?.amount||''}`);
-    showNotif(`🛍 طلب جديد من ${n.data?.customer||'زبون'}!`,'success');
+    const orderCustomer = n.data?.customer||'زبون';
+    const orderProduct  = n.data?.product||'';
+    const orderAmount   = n.data?.amount||'';
+    addAdminNotif('order', `🛍 طلب جديد — ${orderCustomer}`, `${orderProduct} — $${orderAmount}`);
+    showNotif(`🛍 طلب جديد من ${orderCustomer}!`,'success');
     playCartSound?.();
     updateOrdersBadge();
+    sendBrowserNotif(`🛍 طلب جديد — ${orderCustomer}`, `${orderProduct} — $${orderAmount}`);
     const activePg = document.querySelector('.admin-pg.active');
     renderDashOrders(); updateSalesDash(); updateAdminCounts();
     if(activePg?.id==='apg-orders') renderOrders();
@@ -10895,6 +10953,7 @@ if(firebaseReady && db) db.ref('ccs_notifications').orderByChild('ts').startAt(D
     addAdminNotif('chat', `💬 رسالة جديدة — ${who}`, `اضغط للرد${preview}`);
     showNotif(`💬 رسالة جديدة من ${who}!`,'success');
     playMsgSound?.();
+    sendBrowserNotif(`💬 رسالة جديدة — ${who}`, preview.slice(1)||'اضغط للرد');
     updateChatBadge();
     renderAdminChatList();
     if(adminActiveChatId) renderAdminChat(adminActiveChatId);
@@ -10952,6 +11011,8 @@ window.submitSubsOrder = submitSubsOrder;
 window.renderSubsPage = renderSubsPage;
 window.toggleCustDetail = toggleCustDetail;
 window.updateOrdersBadge = updateOrdersBadge;
+window.sendBrowserNotif = sendBrowserNotif;
+window.requestNotifPermission = requestNotifPermission;
 window.renderFooterSocial = renderFooterSocial;
 window.togglePmBgType = togglePmBgType;
 window.togglePmNameType = togglePmNameType;
