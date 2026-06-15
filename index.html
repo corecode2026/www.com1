@@ -8395,9 +8395,9 @@ function startChat() {
   document.getElementById('chat-input-area').style.display = 'flex';
   document.getElementById('chat-wa-btn').style.display = 'flex';
 
-  // welcome message from agent
+  // welcome message from AI bot
   setTimeout(()=>{
-    addMsgToConv(activeChatId, `أهلاً ${name}! 👋 أنا هنا لمساعدتك. كيف يمكنني خدمتك اليوم؟`, 'agent', 'دعم Core Code');
+    addMsgToConv(activeChatId, `أهلاً ${name}! 👋 أنا ${AI_AGENT_NAME}، مساعدك الذكي. كيف يمكنني خدمتك اليوم؟`, 'agent', AI_AGENT_NAME);
     renderVisitorChat();
     notifyAdminNewChat(conv);
     saveAllData();
@@ -8536,9 +8536,13 @@ function aiAutoReply(convId, visitorText) {
     const lastNow = fresh.messages[fresh.messages.length-1];
     // Only skip if a HUMAN replied (not the bot itself)
     if(lastNow?.from === 'agent' && lastNow?.senderName !== AI_AGENT_NAME) return;
+    // Prevent listener from overwriting our write
+    _chatSyncBusy = true;
     addMsgToConv(convId, reply, 'agent', AI_AGENT_NAME);
     renderVisitorChat();
-    saveChatSafe();
+    saveChatSafe().then(() => {
+      setTimeout(()=>{ _chatSyncBusy = false; }, 800);
+    });
   }, delay);
 }
 
