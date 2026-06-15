@@ -1750,6 +1750,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
       <div class="sb-item" onclick="showAdmin('jobs',this)"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg></span> طلبات التقديم</div>
       <div class="sb-item" onclick="showAdmin('team',this)"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span> فريق العمل</div>
       <div class="sb-item" onclick="showAdmin('roles',this)"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span> إدارة الرتب</div>
+      <div class="sb-item" onclick="showAdmin('newsletter',this)"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span> النشرة البريدية</div>
       <div class="sb-item" onclick="showAdmin('workhours',this)"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg></span> ساعات العمل</div>
       <div class="sb-item" onclick="showAdmin('staff',this)"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span> الموظفون</div>
       <div class="sb-item" onclick="showAdmin('settings',this)"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span> الإعدادات</div>
@@ -2639,6 +2640,56 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
         <div class="tbl-box">
           <div class="tbl-head"><span class="tbl-head-title">الرتب الحالية</span></div>
           <div id="roles-list" style="padding:16px;display:flex;flex-direction:column;gap:10px;"></div>
+        </div>
+      </div>
+
+      <!-- NEWSLETTER -->
+      <div class="admin-pg" id="apg-newsletter">
+        <div class="admin-pg-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:8px;vertical-align:middle;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          إدارة النشرة البريدية
+        </div>
+
+        <!-- Stats + Action -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:1rem;">
+          <div style="background:var(--bg2);border:1px solid rgba(245,197,24,.25);border-radius:14px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+            <div style="width:44px;height:44px;border-radius:12px;background:rgba(245,197,24,.12);border:1px solid rgba(245,197,24,.3);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">📬</div>
+            <div>
+              <div style="font-size:24px;font-weight:900;color:#f5c518;font-family:monospace;line-height:1;"><span id="nl-count">0</span></div>
+              <div style="font-size:11px;color:var(--text3);margin-top:4px;">إجمالي المشتركين</div>
+            </div>
+          </div>
+          <div style="background:var(--bg2);border:1px solid rgba(34,197,94,.25);border-radius:14px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+            <div style="width:44px;height:44px;border-radius:12px;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🟢</div>
+            <div>
+              <div style="font-size:24px;font-weight:900;color:#22c55e;font-family:monospace;line-height:1;"><span id="nl-active">0</span></div>
+              <div style="font-size:11px;color:var(--text3);margin-top:4px;">نشطون</div>
+            </div>
+          </div>
+          <div style="background:var(--bg2);border:1px solid rgba(167,139,250,.25);border-radius:14px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+            <div style="width:44px;height:44px;border-radius:12px;background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.3);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">📅</div>
+            <div>
+              <div style="font-size:18px;font-weight:900;color:#a78bfa;font-family:monospace;line-height:1;" id="nl-this-month">0</div>
+              <div style="font-size:11px;color:var(--text3);margin-top:4px;">هذا الشهر</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action bar -->
+        <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:14px;margin-bottom:1rem;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+          <button class="btn-silver" onclick="broadcastCustom()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-left:5px;"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg>
+            إرسال نشرة مخصصة لجميع المشتركين
+          </button>
+          <button class="btn-outline" onclick="copyAllEmails()">📋 نسخ كل الإيميلات</button>
+          <button class="btn-outline" onclick="exportSubsCSV()">⬇ تصدير CSV</button>
+          <button class="btn-outline" style="color:var(--red);border-color:rgba(200,60,60,.25);margin-right:auto;" onclick="clearAllSubs()">🗑 مسح الكل</button>
+        </div>
+
+        <!-- Subscribers list -->
+        <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:14px;overflow:hidden;">
+          <div style="padding:14px 18px;border-bottom:1px solid var(--border2);font-size:13px;font-weight:700;color:var(--silver2);">قائمة المشتركين</div>
+          <div id="nl-subs-list" style="padding:12px;display:flex;flex-direction:column;gap:8px;"></div>
         </div>
       </div>
 
@@ -4739,7 +4790,232 @@ function copyPromo(){
     showNotif(`✓ تم نسخ الكود: ${code}`,'success');
   }
 }
-function subscribe(){const v=document.getElementById('nl-email').value;if(!v||!v.includes('@')){showNotif('أدخل بريداً إلكترونياً صحيحاً','error');return;}document.getElementById('nl-email').value='';showNotif('✓ تم الاشتراك في النشرة البريدية','success');}
+// ====== NEWSLETTER SYSTEM ======
+let newsletterSubs = []; // {email, subscribedAt, active}
+
+function subscribe() {
+  const input = document.getElementById('nl-email');
+  const email = input?.value.trim();
+  if(!email || !email.includes('@') || !email.includes('.')) {
+    showNotif('أدخل بريداً إلكترونياً صحيحاً','error');
+    return;
+  }
+  if(newsletterSubs.find(s => s.email.toLowerCase() === email.toLowerCase())) {
+    showNotif('أنت مشترك بالفعل ✓','success');
+    if(input) input.value = '';
+    return;
+  }
+  // Collect richer subscriber info
+  const newSub = {
+    id:           'nl_' + Date.now(),
+    email,
+    subscribedAt: new Date().toISOString(),
+    active:       true,
+    // Browser & visitor info
+    visitorId:    typeof visitorId !== 'undefined' ? visitorId : '',
+    userAgent:    navigator.userAgent,
+    platform:     navigator.platform || 'unknown',
+    language:     navigator.language || 'unknown',
+    referrer:     document.referrer || 'direct',
+    page:         window.location.pathname,
+    screen:       `${screen.width}×${screen.height}`,
+  };
+  newsletterSubs.push(newSub);
+  saveAllData();
+
+  // Notify admin instantly (Firebase notification)
+  notifyAdminFirebase('new_subscriber', { email, ts: Date.now() });
+
+  // Refresh the admin page if open
+  if(document.querySelector('.admin-pg.active')?.id === 'apg-newsletter') {
+    renderNewsletterAdmin();
+  }
+
+  if(input) input.value = '';
+  showNotif('✅ تم الاشتراك بنجاح! ستصلك أحدث العروض والمنتجات على إيميلك','success');
+}
+
+// Open mailto with all subscribers as BCC and a templated body
+function sendNewsletterEmail(product) {
+  const active = newsletterSubs.filter(s=>s.active);
+  if(!active.length) { showNotif('لا يوجد مشتركون بعد','error'); return; }
+  const subject = `🎉 منتج/عرض جديد في Core Code Store — ${product?.name || ''}`;
+  const body = `مرحباً 👋
+
+لدينا ${product?.type==='offer' ? 'عرض' : 'منتج'} جديد في Core Code Store!
+
+📦 ${product?.name || 'منتج جديد'}
+💵 السعر: $${product?.price || ''}
+${product?.desc ? `\n📝 ${product.desc}\n` : ''}
+${product?.url ? `\n🔗 اطلع عليه: ${product.url}\n` : ''}
+
+— فريق Core Code Store
+https://corecodeweb.store
+`;
+  // Open default mail client with all subs as BCC
+  const bcc = active.map(s=>s.email).join(',');
+  const mailtoUrl = `mailto:?bcc=${encodeURIComponent(bcc)}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  window.open(mailtoUrl, '_blank');
+  showNotif(`📧 جاهز للإرسال إلى ${active.length} مشترك`,'success');
+}
+
+// Auto-prompt admin to notify subscribers after adding a new product
+function maybePromptNewsletter(product) {
+  const active = newsletterSubs.filter(s=>s.active);
+  if(!active.length) return;
+  const modal = document.createElement('div');
+  modal.style.cssText = 'position:fixed;inset:0;z-index:99998;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(6px);';
+  modal.innerHTML = `
+    <div style="background:linear-gradient(135deg,#0d0d0f,#13131a);border:1px solid rgba(245,197,24,.25);border-radius:18px;width:min(440px,96vw);padding:1.8rem;text-align:center;">
+      <div style="font-size:42px;margin-bottom:10px;">📧</div>
+      <div style="font-size:17px;font-weight:900;color:#f5c518;margin-bottom:6px;">إخطار المشتركين؟</div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:18px;line-height:1.6;">
+        لديك <strong style="color:#f5c518;">${active.length} مشترك</strong> في النشرة البريدية.<br>
+        هل تريد إرسال إيميل بالمنتج الجديد <strong style="color:var(--silver2);">"${product.name}"</strong>؟
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button onclick="this.closest('[style*=fixed]').remove();sendNewsletterEmail(${JSON.stringify({name:product.name,price:product.price,desc:product.desc||'',type:'product'}).replace(/"/g,'&quot;')})" class="btn-silver" style="flex:1;">📧 نعم، أرسل الآن</button>
+        <button onclick="this.closest('[style*=fixed]').remove()" class="btn-outline">لاحقاً</button>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+}
+
+function renderNewsletterAdmin() {
+  const count = document.getElementById('nl-count');
+  const active = document.getElementById('nl-active');
+  const monthly = document.getElementById('nl-this-month');
+  if(count) count.textContent = newsletterSubs.length;
+  if(active) active.textContent = newsletterSubs.filter(s=>s.active).length;
+  if(monthly) {
+    const now = new Date();
+    const thisMonth = newsletterSubs.filter(s=>{
+      const d = new Date(s.subscribedAt);
+      return d.getMonth()===now.getMonth() && d.getFullYear()===now.getFullYear();
+    }).length;
+    monthly.textContent = thisMonth;
+  }
+  const list = document.getElementById('nl-subs-list');
+  if(!list) return;
+  if(!newsletterSubs.length) {
+    list.innerHTML = '<div style="text-align:center;padding:3rem;color:var(--text3);">📭 لا يوجد مشتركون بعد — ستظهر هنا بمجرد اشتراك أول زائر</div>';
+    return;
+  }
+  // Sort newest first
+  const sorted = [...newsletterSubs].sort((a,b)=>new Date(b.subscribedAt)-new Date(a.subscribedAt));
+  list.innerHTML = sorted.map((s,i)=>{
+    const d        = new Date(s.subscribedAt);
+    const dateStr  = d.toLocaleDateString('ar-SA',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+    const timeStr  = d.toLocaleTimeString('ar',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    const browser  = (s.userAgent||'').includes('Chrome') ? 'Chrome'
+                   : (s.userAgent||'').includes('Firefox') ? 'Firefox'
+                   : (s.userAgent||'').includes('Safari') ? 'Safari'
+                   : (s.userAgent||'').includes('Edge') ? 'Edge'
+                   : 'متصفح';
+    const mobile   = /Mobile|Android|iPhone/i.test(s.userAgent||'') ? '📱 موبايل' : '💻 كمبيوتر';
+    return `
+    <div style="background:var(--bg2);border:1px solid ${s.active?'rgba(34,197,94,.2)':'var(--border2)'};border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+      <!-- # -->
+      <div style="width:32px;height:32px;border-radius:50%;background:${s.active?'rgba(34,197,94,.12)':'var(--bg4)'};border:1px solid ${s.active?'rgba(34,197,94,.3)':'var(--border3)'};display:flex;align-items:center;justify-content:center;font-weight:900;color:${s.active?'#22c55e':'var(--text3)'};font-size:13px;flex-shrink:0;">${i+1}</div>
+      <!-- Email + status -->
+      <div style="flex:1;min-width:200px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px;flex-wrap:wrap;">
+          <span style="font-weight:700;color:var(--silver2);font-size:14px;direction:ltr;">${s.email}</span>
+          <span style="font-size:10px;padding:2px 8px;border-radius:10px;${s.active?'background:rgba(34,197,94,.15);color:#22c55e;border:1px solid rgba(34,197,94,.3);':'background:rgba(120,120,120,.15);color:#888;border:1px solid rgba(120,120,120,.3);'}">${s.active?'🟢 نشط':'⏸ موقوف'}</span>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--text3);">
+          <span>📅 ${dateStr}</span>
+          <span>🕐 ${timeStr}</span>
+        </div>
+      </div>
+      <!-- Tech info -->
+      <div style="display:flex;flex-direction:column;gap:3px;align-items:flex-start;min-width:130px;font-size:10px;color:var(--text3);">
+        <div>${mobile}</div>
+        <div>🌐 ${browser}</div>
+        ${s.platform?`<div>💾 ${s.platform}</div>`:''}
+        ${s.language?`<div>🗣 ${s.language}</div>`:''}
+      </div>
+      <!-- Actions -->
+      <div style="display:flex;gap:6px;flex-shrink:0;">
+        <button onclick="copyEmail('${s.email}')" class="a-action a-action-edit" style="font-size:11px;" title="نسخ الإيميل">📋</button>
+        <button onclick="sendSingleEmail('${s.email}')" class="a-action a-action-edit" style="font-size:11px;background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.3);color:#22c55e;" title="إرسال إيميل">📧</button>
+        <button onclick="toggleNlSub('${s.id}')" class="a-action a-action-edit" style="font-size:11px;">${s.active?'⏸':'▶'}</button>
+        <button onclick="deleteNlSub('${s.id}')" class="a-action a-action-del">🗑</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function copyAllEmails() {
+  if(!newsletterSubs.length) { showNotif('لا يوجد مشتركون','error'); return; }
+  const emails = newsletterSubs.filter(s=>s.active).map(s=>s.email).join(', ');
+  navigator.clipboard.writeText(emails).then(()=>showNotif(`📋 تم نسخ ${newsletterSubs.filter(s=>s.active).length} إيميل`,'success'));
+}
+
+function exportSubsCSV() {
+  if(!newsletterSubs.length) { showNotif('لا يوجد مشتركون','error'); return; }
+  const headers = ['#','Email','Subscribed At','Status','Browser','Platform','Language','Referrer'];
+  const rows = newsletterSubs.map((s,i)=>[
+    i+1,
+    s.email,
+    new Date(s.subscribedAt).toLocaleString('ar'),
+    s.active?'Active':'Paused',
+    (s.userAgent||'').match(/Chrome|Firefox|Safari|Edge/)?.[0] || 'Other',
+    s.platform || '',
+    s.language || '',
+    s.referrer || 'direct',
+  ]);
+  const csv = '\uFEFF' + [headers, ...rows].map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob([csv],{type:'text/csv;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `subscribers_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  showNotif('⬇ تم تصدير الملف','success');
+}
+
+function clearAllSubs() {
+  showConfirmBox('⚠ مسح جميع المشتركين؟ لا يمكن التراجع!', () => {
+    newsletterSubs = [];
+    saveAllData(); renderNewsletterAdmin();
+    showNotif('🗑 تم مسح جميع المشتركين','error');
+  });
+}
+
+function copyEmail(email) {
+  navigator.clipboard.writeText(email).then(()=>showNotif(`📋 تم نسخ: ${email}`,'success'));
+}
+function sendSingleEmail(email) {
+  window.open(`mailto:${email}?subject=${encodeURIComponent('من Core Code Store')}&body=${encodeURIComponent('مرحباً،\n\n')}`, '_blank');
+}
+
+function toggleNlSub(id) {
+  const s = newsletterSubs.find(x=>x.id===id);
+  if(!s) return;
+  s.active = !s.active;
+  saveAllData(); renderNewsletterAdmin();
+}
+
+function deleteNlSub(id) {
+  showConfirmBox('حذف هذا المشترك؟', () => {
+    newsletterSubs = newsletterSubs.filter(s=>s.id!==id);
+    saveAllData(); renderNewsletterAdmin();
+    showNotif('🗑 تم الحذف','error');
+  });
+}
+
+function broadcastCustom() {
+  const subject = prompt('عنوان الإيميل:');
+  if(!subject) return;
+  const body = prompt('محتوى الإيميل:');
+  if(!body) return;
+  const active = newsletterSubs.filter(s=>s.active);
+  if(!active.length) { showNotif('لا يوجد مشتركون نشطون','error'); return; }
+  const bcc = active.map(s=>s.email).join(',');
+  const mailto = `mailto:?bcc=${encodeURIComponent(bcc)}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body+'\n\n— فريق Core Code Store')}`;
+  window.open(mailto, '_blank');
+  showNotif(`📧 جاهز للإرسال إلى ${active.length} مشترك`,'success');
+}
 function sendContact(){showNotif('✓ تم إرسال رسالتك، سنرد قريباً','success');}
 
 // ====== ADMIN ======
@@ -4811,6 +5087,7 @@ const ALL_PAGES = [
   { id:'subs',         label:'الاشتراكات' },
   { id:'roles',        label:'إدارة الرتب' },
   { id:'workhours',    label:'ساعات العمل' },
+  { id:'newsletter',   label:'النشرة البريدية' },
 ];
 
 // Custom roles — starts with defaults, admin can add/edit/delete
@@ -5132,8 +5409,10 @@ function saveProduct(){
     if (idx !== -1) products[idx] = { ...products[idx], ...data };
     showNotif('✓ تم تحديث المنتج بنجاح', 'success'); saveAllData();
   } else {
-    products.push({ id: Date.now(), ...data });
+    const newProd = { id: Date.now(), ...data };
+    products.push(newProd);
     showNotif('✓ تم إضافة المنتج بنجاح', 'success'); saveAllData();
+    setTimeout(()=>maybePromptNewsletter(newProd), 800);
   }
 
   prodImageBase64 = '';
@@ -6689,14 +6968,11 @@ function toggleClockWidget() {
     _clockSessionId = null;
     updateClockWidgetUI(false);
     if(session) {
-      const dur = fmtDur(session.durationMin);
-      const pay = parseFloat(session.pay).toFixed(2);
-      showNotif(`⏹ تم تسجيل الخروج — ${dur} • $${pay}`,'success');
+      showSessionSummary(session);
     } else {
       showNotif('⏹ تم تسجيل خروجك','success');
     }
   } else {
-    // Clock in
     _clockStartTime = new Date();
     _clockActive    = true;
     recordWorkLogin();
@@ -6705,6 +6981,59 @@ function toggleClockWidget() {
     updateClockWidgetUI(true);
     showNotif('▶ بدأت الوردية!','success');
   }
+}
+
+// ── Detailed summary modal shown after clocking out ──
+function showSessionSummary(s) {
+  const login   = new Date(s.loginAt);
+  const logout  = new Date(s.logoutAt);
+  const date    = login.toLocaleDateString('ar-SA',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const inTime  = login.toLocaleTimeString('ar',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  const outTime = logout.toLocaleTimeString('ar',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  const dur     = fmtDur(s.durationMin);
+  const pay     = parseFloat(s.pay).toFixed(3);
+  const rate    = parseFloat(s.hourlyRate||0).toFixed(2);
+
+  const modal = document.createElement('div');
+  modal.style.cssText = 'position:fixed;inset:0;z-index:99998;background:rgba(0,0,0,.88);display:flex;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(6px);';
+  modal.innerHTML = `
+    <div style="background:linear-gradient(135deg,#0d0d0f,#13131a);border:1px solid rgba(34,197,94,.25);border-radius:20px;width:min(440px,96vw);padding:2rem;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.6);">
+      <div style="font-size:42px;margin-bottom:10px;">✅</div>
+      <div style="font-size:18px;font-weight:900;color:#22c55e;margin-bottom:4px;">تم تسجيل خروجك بنجاح</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.5);margin-bottom:22px;">شكراً لك ${s.staffName} — وردية ناجحة 💪</div>
+
+      <!-- Summary -->
+      <div style="background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.2);border-radius:14px;padding:16px;margin-bottom:14px;">
+        <div style="font-size:11px;color:rgba(180,160,255,.7);font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px;">💰 ربحك من هذه الوردية</div>
+        <div style="font-size:36px;font-weight:900;color:#22c55e;font-family:monospace;letter-spacing:-1px;">$${pay}</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">معدل: $${rate} / ساعة</div>
+      </div>
+
+      <!-- Details grid -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;text-align:right;">
+        <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:11px;">
+          <div style="font-size:10px;color:var(--text3);margin-bottom:4px;">📅 التاريخ</div>
+          <div style="font-size:12px;font-weight:700;color:var(--silver2);">${date}</div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:11px;">
+          <div style="font-size:10px;color:var(--text3);margin-bottom:4px;">⏱ المدة الإجمالية</div>
+          <div style="font-size:14px;font-weight:900;color:var(--silver2);font-family:monospace;">${dur}</div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:11px;">
+          <div style="font-size:10px;color:#22c55e;margin-bottom:4px;">▶ وقت الدخول</div>
+          <div style="font-size:13px;font-weight:700;color:var(--silver2);font-family:monospace;">${inTime}</div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:11px;">
+          <div style="font-size:10px;color:#ef4444;margin-bottom:4px;">⏹ وقت الخروج</div>
+          <div style="font-size:13px;font-weight:700;color:var(--silver2);font-family:monospace;">${outTime}</div>
+        </div>
+      </div>
+
+      <button onclick="this.closest('[style*=fixed]').remove()" style="margin-top:18px;width:100%;padding:12px;background:linear-gradient(135deg,#22c55e,#16a34a);border:none;border-radius:10px;color:#fff;font-weight:900;font-family:Cairo,sans-serif;font-size:14px;cursor:pointer;">إغلاق ←</button>
+    </div>`;
+  document.body.appendChild(modal);
+  // Auto-close after 15s
+  setTimeout(()=>{ if(modal.parentNode) modal.remove(); }, 15000);
 }
 
 function startClockTick() {
@@ -6933,12 +7262,13 @@ function renderWorkHoursReport() {
   cards.innerHTML = sessions.map(s=>{
     const isRunning = !s.logoutAt;
     const login  = new Date(s.loginAt);
-    const inTime = login.toLocaleTimeString('ar',{hour:'2-digit',minute:'2-digit'});
-    const outTime = s.logoutAt ? new Date(s.logoutAt).toLocaleTimeString('ar',{hour:'2-digit',minute:'2-digit'}) : null;
-    const date   = login.toLocaleDateString('ar-SA',{weekday:'short',year:'numeric',month:'short',day:'numeric'});
-    const durStr = s.durationMin!=null ? fmtDur(s.durationMin) : '—';
-    const payStr = isAdmin && s.pay!=null ? `$${parseFloat(s.pay).toFixed(3)}` : null;
-    const role   = customRoles[s.staffRole]?.label || s.staffRole || '';
+    const inTime = login.toLocaleTimeString('ar',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    const outTime = s.logoutAt ? new Date(s.logoutAt).toLocaleTimeString('ar',{hour:'2-digit',minute:'2-digit',second:'2-digit'}) : null;
+    const dayName = login.toLocaleDateString('ar-SA',{weekday:'long'});
+    const date    = login.toLocaleDateString('ar-SA',{year:'numeric',month:'short',day:'numeric'});
+    const durStr  = s.durationMin!=null ? fmtDur(s.durationMin) : '—';
+    const payStr  = isAdmin && s.pay!=null ? `$${parseFloat(s.pay).toFixed(3)}` : null;
+    const role    = customRoles[s.staffRole]?.label || s.staffRole || '';
     const roleColor = customRoles[s.staffRole]?.color || '#888';
 
     return `
@@ -6951,10 +7281,11 @@ function renderWorkHoursReport() {
           <div style="font-size:10px;color:${roleColor};margin-top:2px;">${role}</div>
         </div>
       </div>
-      <!-- Date -->
-      <div style="min-width:110px;text-align:center;">
+      <!-- Date + Day -->
+      <div style="min-width:130px;text-align:center;">
         <div style="font-size:10px;color:rgba(180,160,255,.7);font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px;">التاريخ</div>
-        <div style="font-size:12px;color:var(--silver2);font-weight:600;">${date}</div>
+        <div style="font-size:12px;color:var(--silver2);font-weight:700;">${date}</div>
+        <div style="font-size:10px;color:#f5c518;margin-top:2px;">${dayName}</div>
       </div>
       <!-- In/Out -->
       <div style="min-width:110px;text-align:center;">
@@ -8073,6 +8404,138 @@ function startChat() {
   }, 500);
 }
 
+// ====== SMART AI CHAT ASSISTANT ======
+// Built-in knowledge base + intent detection
+// Replies to every visitor message until a real staff agent takes over
+
+const AI_AGENT_NAME = 'Core Bot 🤖';
+const AI_INTENTS = [
+  // [keywords (any match), reply template]
+  {
+    keys: ['سعر','اسعار','أسعار','كم','بكم','تكلفة','كلفة','price','cost','how much'],
+    reply: () => {
+      const list = products.slice(0,5).map(p=>`• ${p.name} — $${p.price}`).join('\n');
+      return `💵 أسعار منتجاتنا تبدأ من سعر مناسب للجميع.\n${list?'\nبعض منتجاتنا:\n'+list:''}\n\nهل تبحث عن منتج معين؟`;
+    }
+  },
+  {
+    keys: ['منتج','منتجات','عندك','عندكم','تبيع','تبيعو','بتبيع','بتبيعو','شو','ايش','what','products','catalog'],
+    reply: () => {
+      const cats = [...new Set(products.map(p=>p.category))].slice(0,6).join('، ');
+      return `🛍 نوفر منتجات متنوعة بجودة عالية وتسليم فوري!\n${cats?`الفئات الرئيسية: ${cats}`:''}\n\nتصفح موقعنا لعرض كل المنتجات، أو أخبرني بما تبحث عنه تحديداً.`;
+    }
+  },
+  {
+    keys: ['دفع','الدفع','payment','pay','فيزا','visa','paypal','بنك','تحويل','حواله','حوالة'],
+    reply: () => {
+      const pms = paymentMethods.map(p=>p.name).filter(Boolean).slice(0,5).join('، ');
+      return `💳 نقبل عدة وسائل دفع آمنة:\n${pms?'• '+pms:'• فيزا/ماستركارد\n• PayPal\n• تحويل بنكي'}\n\nالدفع مشفر 100% ومحمي.`;
+    }
+  },
+  {
+    keys: ['تسليم','شحن','وصول','وقت','كم تأخذ','متى','delivery','shipping','how long','when'],
+    reply: () => `🚀 تسليم فوري! بمجرد تأكيد الدفع تستلم منتجك مباشرةً على البريد الإلكتروني بدون انتظار. للمنتجات المخصصة قد يستغرق 1-3 أيام عمل.`
+  },
+  {
+    keys: ['اشتراك','الاشتراك','باقة','باقات','subscription','plan'],
+    reply: () => `📦 لدينا باقات اشتراك متنوعة (برونز، فضي، ذهبي) بمميزات مختلفة. شاهد صفحة "الاشتراكات" في الموقع لمعرفة كل التفاصيل والأسعار.`
+  },
+  {
+    keys: ['طلب','طلبي','تتبع','رقم الطلب','order','track','status'],
+    reply: () => `📦 لتتبع طلبك أعطنا رقم الطلب أو إيميلك وسنوافيك بالتفاصيل فوراً.\nاسم العميل: ${chatVisitorName||'—'}`
+  },
+  {
+    keys: ['ضمان','استرجاع','استرداد','refund','warranty','guarantee'],
+    reply: () => `🛡 جميع منتجاتنا مضمونة! إذا واجهت أي مشكلة خلال 7 أيام من الشراء نعيد لك المبلغ كاملاً أو نوفر لك منتج بديل.`
+  },
+  {
+    keys: ['تحديث','تحديثات','جديد','updates','new','update','مجاني','مجانا'],
+    reply: () => `🔄 جميع منتجاتنا تأتي مع تحديثات مستقبلية مجانية! لما يصدر إصدار جديد تستلمه على إيميلك المسجل دون أي رسوم إضافية.`
+  },
+  {
+    keys: ['دعم','مساعدة','help','support','مشكلة','مشكله','عطل','خطأ','error','bug','problem'],
+    reply: () => `🛠 فريق الدعم جاهز لمساعدتك! اشرح لي المشكلة بالتفصيل وسأحاول مساعدتك فوراً، وإن احتجت تدخل بشري سنحوّلك لأحد أعضاء الفريق.`
+  },
+  {
+    keys: ['شكر','شكراً','شكرا','تسلم','thanks','thank','thx'],
+    reply: () => `🌟 العفو! نحن هنا لخدمتك دائماً. إذا احتجت أي شيء آخر لا تتردد في التواصل معنا!`
+  },
+  {
+    keys: ['مرحبا','مرحباً','اهلا','أهلا','هاي','hi','hello','hey','صباح','مساء','السلام'],
+    reply: () => `👋 أهلاً بك في Core Code Store! أنا ${AI_AGENT_NAME}، مساعدك الذكي.\nكيف يمكنني مساعدتك اليوم؟\n• استفسار عن منتج 🛍\n• مشكلة في طلب 📦\n• دعم فني 🛠\n• معرفة الأسعار والعروض 💰`
+  },
+  {
+    keys: ['خصم','كوبون','عرض','تخفيض','discount','coupon','offer','sale','promo'],
+    reply: () => {
+      const active = (typeof coupons !== 'undefined' && coupons.length) ? coupons.filter(c=>c.active!==false).slice(0,3) : [];
+      const list = active.map(c=>`• كود ${c.code} — خصم ${c.discount}%`).join('\n');
+      return `🎁 لدينا عروض مميزة!${list?'\n\nالعروض الحالية:\n'+list:''}\n\nتابعنا للحصول على آخر الكوبونات والخصومات!`;
+    }
+  },
+  {
+    keys: ['من انت','مين انت','من أنت','بوت','bot','robot','ai','ذكاء','اصطناعي'],
+    reply: () => `🤖 أنا ${AI_AGENT_NAME}، مساعد ذكي يساعدك على مدار الساعة! يمكنني الإجابة على معظم استفساراتك فوراً، وعند الحاجة لتدخل بشري سيتواصل معك أحد أعضاء فريقنا.`
+  },
+  {
+    keys: ['كيف','شو طريقة','كيفية','استخدام','how to','use','تثبيت','install'],
+    reply: () => `📖 كل منتج يأتي مع وثائق وشرح كامل لطريقة الاستخدام والتثبيت. بعد الشراء ستجد دليل المستخدم مرفقاً مع الملفات. هل تحتاج مساعدة في منتج معين؟`
+  },
+  {
+    keys: ['وين','مكان','عنوان','address','location','where'],
+    reply: () => `🌐 نحن متجر إلكتروني عالمي! تخدم منتجاتنا الزبائن في كل أنحاء العالم العربي والعالم. كل التعاملات تتم عبر الموقع.`
+  },
+];
+
+// Detect intent from message
+function detectIntent(msg) {
+  const text = msg.toLowerCase();
+  for(const intent of AI_INTENTS) {
+    if(intent.keys.some(k => text.includes(k.toLowerCase()))) {
+      return intent.reply();
+    }
+  }
+  return null;
+}
+
+// Generic fallback replies
+const AI_FALLBACKS = [
+  'شكراً لرسالتك! 🌟 لم أفهم استفسارك بدقة — هل يمكنك توضيح أكثر؟ مثلاً: تبحث عن منتج معين؟ لديك مشكلة في طلب؟',
+  'مرحباً! 👋 أنا هنا لمساعدتك. أخبرني بما تحتاج: استفسار عن منتج، سعر، طريقة دفع، أو دعم فني؟',
+  'حدد لي ما تريد وسأساعدك فوراً: 🛍 منتجات | 💰 أسعار | 📦 طلباتك | 🛠 دعم فني',
+  'تواصلت مع المكان الصحيح! 💯 أخبرني بسؤالك بتفاصيل أكثر وسأقدم لك الإجابة الأنسب.',
+];
+
+// Check if a real human agent has joined this conversation
+function hasHumanAgentJoined(conv) {
+  if(!conv?.messages) return false;
+  return conv.messages.some(m => m.from === 'agent' && m.senderName && m.senderName !== AI_AGENT_NAME);
+}
+
+// Main AI auto-reply trigger
+function aiAutoReply(convId) {
+  const conv = chatConversations.find(c=>c.id===convId);
+  if(!conv) return;
+  // Stop if a real human has joined
+  if(hasHumanAgentJoined(conv)) return;
+  const lastMsg = conv.messages[conv.messages.length-1];
+  if(!lastMsg || lastMsg.from !== 'visitor') return;
+  // Generate reply
+  const intentReply = detectIntent(lastMsg.text);
+  const reply = intentReply || AI_FALLBACKS[Math.floor(Math.random()*AI_FALLBACKS.length)];
+  // Typing delay (1-2.5s for realism)
+  const delay = 800 + Math.min(reply.length * 12, 1800);
+  setTimeout(() => {
+    // Check again — staff may have replied during the delay
+    const fresh = chatConversations.find(c=>c.id===convId);
+    if(!fresh) return;
+    const lastNow = fresh.messages[fresh.messages.length-1];
+    if(lastNow?.from === 'agent') return; // someone replied, skip
+    addMsgToConv(convId, reply, 'agent', AI_AGENT_NAME);
+    renderVisitorChat();
+    saveChatSafe();
+  }, delay);
+}
+
 function sendChatMsg() {
   const input = document.getElementById('chat-input');
   const text = input.value.trim();
@@ -8090,17 +8553,8 @@ function sendChatMsg() {
   saveChatSafe().then(()=>renderVisitorChat());
   notifyAdminNewMsg();
   notifyAdminFirebase('new_chat', { convId: activeChatId, name: chatVisitorName, text: text.slice(0,60) });
-  // auto reply if no agent replied recently
-  const conv = chatConversations.find(c=>c.id===activeChatId);
-  const lastAgentMsg = conv?.messages.filter(m=>m.from==='agent').pop();
-  const lastMsg = conv?.messages[conv.messages.length-2];
-  if(!lastAgentMsg || (Date.now()-new Date(lastAgentMsg.time).getTime()) > 30000) {
-    setTimeout(()=>{
-      addMsgToConv(activeChatId, 'شكراً لرسالتك! سيرد عليك أحد أعضاء فريقنا قريباً 😊', 'agent', 'دعم Core Code');
-      renderVisitorChat();
-      saveChatSafe();
-    }, 1200);
-  }
+  // Smart AI auto-reply (until human staff joins)
+  aiAutoReply(activeChatId);
 }
 
 function sendQuick(text) {
@@ -8111,17 +8565,8 @@ function sendQuick(text) {
   saveChatSafe().then(()=>renderVisitorChat());
   notifyAdminNewMsg();
   notifyAdminFirebase('new_chat', { convId: activeChatId, name: chatVisitorName, text: text.slice(0,60) });
-  const replies = {
-    'استفسار عن منتج':'يسعدنا مساعدتك في اختيار المنتج المناسب! 🛍 أخبرنا بما تحتاجه وسنوجهك.',
-    'مشكلة في الطلب':'نأسف لسماع ذلك! 😔 أرسل لنا رقم طلبك وسنحل الأمر فوراً.',
-    'دعم فني':'فريق الدعم جاهز! 🛠 اشرح لنا مشكلتك بالتفصيل.',
-    'أسعار وعروض':'لدينا عروض مميزة! 💰 تصفح الكوبونات في المتجر أو اسألنا عن عرض خاص.',
-  };
-  setTimeout(()=>{
-    addMsgToConv(activeChatId, replies[text]||'شكراً! سيرد فريقنا عليك قريباً 😊', 'agent', 'دعم Core Code');
-    renderVisitorChat();
-    saveChatSafe();
-  }, 900);
+  // Smart AI replies until staff joins
+  aiAutoReply(activeChatId);
 }
 
 function addMsgToConv(convId, text, from, senderName) {
@@ -10069,12 +10514,15 @@ let btnCustom = {};
 function renderBtnEditor() {
   const list = document.getElementById('btn-editor-list'); if(!list) return;
   list.innerHTML = BTN_DEFS.map(b => {
-    const saved = btnCustom[b.id] || {};
+    const saved   = btnCustom[b.id] || {};
     const curText = saved.text ?? b.defText;
-    const curBg   = saved.bg   ?? '';
-    const curColor= saved.color?? '';
-    // live preview
-    const previewStyle = `background:${curBg||'var(--grad)'};color:${curColor||'var(--silver2)'};border:1px solid ${curBg?curBg+'88':'var(--silver3)'};`;
+    const customBg    = saved.bg && saved.bg !== '';
+    const customColor = saved.color && saved.color !== '';
+    const curBg    = customBg    ? saved.bg    : (b.defBg    || '#1a1a1a');
+    const curColor = customColor ? saved.color : (b.defColor || '#e0e0e0');
+    const previewStyle = customBg
+      ? `background:${curBg};color:${curColor};border:1px solid ${curBg}88;`
+      : `background:var(--grad);color:${customColor?curColor:'var(--silver2)'};border:1px solid var(--silver3);`;
     return `
     <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:14px 16px;">
       <div style="font-size:12px;font-weight:700;color:var(--silver3);margin-bottom:10px;">
@@ -10082,47 +10530,68 @@ function renderBtnEditor() {
         ${b.label}
       </div>
       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-        <!-- preview -->
         <button style="${previewStyle}padding:8px 16px;border-radius:8px;cursor:default;font-family:'Cairo',sans-serif;font-size:13px;font-weight:700;min-width:80px;" id="btn-prev-${b.id}">${curText}</button>
-        <!-- text input -->
         <input type="text" value="${curText}" placeholder="${b.defText}" class="form-input" style="flex:1;min-width:140px;" id="btext-${b.id}" oninput="previewBtnChange('${b.id}')">
-        <!-- bg color -->
+        <!-- bg color with enable checkbox -->
         <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
-          <span style="font-size:9px;color:var(--text3);">خلفية</span>
-          <input type="color" value="${curBg||'#1a1a1a'}" style="height:32px;width:36px;cursor:pointer;border-radius:6px;border:1px solid var(--border3);" id="bbg-${b.id}" oninput="previewBtnChange('${b.id}')">
+          <label style="font-size:9px;color:var(--text3);display:flex;align-items:center;gap:3px;cursor:pointer;">
+            <input type="checkbox" id="bbg-on-${b.id}" ${customBg?'checked':''} onchange="previewBtnChange('${b.id}')" style="width:11px;height:11px;cursor:pointer;">
+            خلفية
+          </label>
+          <input type="color" value="${curBg}" style="height:30px;width:34px;cursor:pointer;border-radius:6px;border:1px solid var(--border3);" id="bbg-${b.id}" oninput="document.getElementById('bbg-on-${b.id}').checked=true;previewBtnChange('${b.id}')">
         </div>
-        <!-- text color -->
+        <!-- text color with enable checkbox -->
         <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
-          <span style="font-size:9px;color:var(--text3);">نص</span>
-          <input type="color" value="${curColor||'#e0e0e0'}" style="height:32px;width:36px;cursor:pointer;border-radius:6px;border:1px solid var(--border3);" id="bcolor-${b.id}" oninput="previewBtnChange('${b.id}')">
+          <label style="font-size:9px;color:var(--text3);display:flex;align-items:center;gap:3px;cursor:pointer;">
+            <input type="checkbox" id="bcolor-on-${b.id}" ${customColor?'checked':''} onchange="previewBtnChange('${b.id}')" style="width:11px;height:11px;cursor:pointer;">
+            نص
+          </label>
+          <input type="color" value="${curColor}" style="height:30px;width:34px;cursor:pointer;border-radius:6px;border:1px solid var(--border3);" id="bcolor-${b.id}" oninput="document.getElementById('bcolor-on-${b.id}').checked=true;previewBtnChange('${b.id}')">
         </div>
-        <!-- reset this btn -->
-        <button onclick="resetSingleBtn('${b.id}')" style="background:none;border:1px solid var(--border3);color:var(--text3);padding:6px 10px;border-radius:6px;cursor:pointer;font-size:11px;">↺</button>
+        <button onclick="resetSingleBtn('${b.id}')" style="background:none;border:1px solid var(--border3);color:var(--text3);padding:6px 10px;border-radius:6px;cursor:pointer;font-size:11px;" title="استعادة الافتراضي">↺</button>
       </div>
     </div>`;
   }).join('');
 }
 
 function previewBtnChange(id) {
-  const text  = document.getElementById(`btext-${id}`)?.value || '';
-  const bg    = document.getElementById(`bbg-${id}`)?.value || '';
-  const color = document.getElementById(`bcolor-${id}`)?.value || '';
-  const prev  = document.getElementById(`btn-prev-${id}`);
+  const text   = document.getElementById(`btext-${id}`)?.value || '';
+  const bgOn   = document.getElementById(`bbg-on-${id}`)?.checked;
+  const colorOn = document.getElementById(`bcolor-on-${id}`)?.checked;
+  const bg     = document.getElementById(`bbg-${id}`)?.value || '';
+  const color  = document.getElementById(`bcolor-${id}`)?.value || '';
+  const prev   = document.getElementById(`btn-prev-${id}`);
   if(prev) {
     prev.textContent = text;
-    prev.style.background = bg;
-    prev.style.color = color;
-    prev.style.borderColor = bg + '88';
+    if(bgOn) {
+      prev.style.background  = bg;
+      prev.style.borderColor = bg + '88';
+    } else {
+      prev.style.background  = 'var(--grad)';
+      prev.style.borderColor = 'var(--silver3)';
+    }
+    prev.style.color = colorOn ? color : 'var(--silver2)';
   }
 }
 
 function saveBtnCustom() {
   BTN_DEFS.forEach(b => {
-    btnCustom[b.id] = {
-      text:  document.getElementById(`btext-${b.id}`)?.value.trim() || b.defText,
-      bg:    document.getElementById(`bbg-${b.id}`)?.value || '',
-      color: document.getElementById(`bcolor-${b.id}`)?.value || '',
-    };
+    const text    = document.getElementById(`btext-${b.id}`)?.value.trim() || b.defText;
+    const bgOn    = document.getElementById(`bbg-on-${b.id}`)?.checked;
+    const colorOn = document.getElementById(`bcolor-on-${b.id}`)?.checked;
+    const bg      = document.getElementById(`bbg-${b.id}`)?.value || '';
+    const color   = document.getElementById(`bcolor-${b.id}`)?.value || '';
+    const textChanged = text !== b.defText;
+    // Only save what's actually customized
+    if(!textChanged && !bgOn && !colorOn) {
+      delete btnCustom[b.id];
+    } else {
+      btnCustom[b.id] = {
+        text:  textChanged ? text : null,
+        bg:    bgOn ? bg : '',
+        color: colorOn ? color : '',
+      };
+    }
   });
   applyBtnCustom();
   saveAllData();
@@ -10132,41 +10601,68 @@ function saveBtnCustom() {
 function resetSingleBtn(id) {
   const b = BTN_DEFS.find(x=>x.id===id); if(!b) return;
   delete btnCustom[id];
+  // reset UI
   const ti = document.getElementById(`btext-${id}`); if(ti) ti.value = b.defText;
   const bi = document.getElementById(`bbg-${id}`); if(bi) bi.value = b.defBg||'#1a1a1a';
   const ci = document.getElementById(`bcolor-${id}`); if(ci) ci.value = b.defColor||'#e0e0e0';
+  const bOn = document.getElementById(`bbg-on-${id}`); if(bOn) bOn.checked = false;
+  const cOn = document.getElementById(`bcolor-on-${id}`); if(cOn) cOn.checked = false;
   previewBtnChange(id);
-  applyBtnCustom();
+  // restore the actual button by clearing inline styles
+  BTN_DEFS.find(x=>x.id===id) && document.querySelectorAll(b.sel).forEach(el => {
+    el.style.background  = '';
+    el.style.borderColor = '';
+    el.style.color       = '';
+  });
   saveAllData();
+  showNotif('↺ تم استعادة الزر للافتراضي','success');
 }
 
 function resetBtnCustom() {
-  btnCustom = {};
-  applyBtnCustom();
-  saveAllData();
-  renderBtnEditor();
-  showNotif('✓ تم استعادة الأزرار الافتراضية','success');
+  showConfirmBox('استعادة جميع الأزرار للحالة الافتراضية؟', () => {
+    btnCustom = {};
+    // Clear all inline styles on every customizable button
+    BTN_DEFS.forEach(b => {
+      document.querySelectorAll(b.sel).forEach(el => {
+        el.style.background  = '';
+        el.style.borderColor = '';
+        el.style.color       = '';
+      });
+    });
+    saveAllData();
+    renderBtnEditor();
+    showNotif('✓ تم استعادة جميع الأزرار للافتراضي','success');
+  });
 }
 
 function applyBtnCustom() {
   BTN_DEFS.forEach(b => {
     const c = btnCustom[b.id];
-    if(!c) return;
     document.querySelectorAll(b.sel).forEach(el => {
-      // preserve inner SVG/icons
-      const svgEl = el.querySelector('svg');
-      if(c.text) {
-        if(svgEl) {
-          el.childNodes.forEach(n=>{ if(n.nodeType===3) n.textContent = ' '+c.text; });
-        } else {
-          // keep first svg if exists
-          const firstSvg = el.innerHTML.match(/<svg[^>]*>.*?<\/svg>/s);
-          el.textContent = c.text;
-          if(firstSvg) el.innerHTML = firstSvg[0] + ' ' + c.text;
-        }
+      if(!c) {
+        // clear customization
+        el.style.background  = '';
+        el.style.borderColor = '';
+        el.style.color       = '';
+        return;
       }
-      if(c.bg)    { el.style.background = c.bg; el.style.borderColor = c.bg+'88'; }
+      // text — preserve inner SVG/icons
+      if(c.text) {
+        const svgMatch = el.innerHTML.match(/<svg[^>]*>[\s\S]*?<\/svg>/);
+        const svgHtml = svgMatch ? svgMatch[0] : '';
+        el.innerHTML = svgHtml ? svgHtml + ' ' + c.text : c.text;
+      }
+      // bg
+      if(c.bg) {
+        el.style.background  = c.bg;
+        el.style.borderColor = c.bg + '88';
+      } else {
+        el.style.background  = '';
+        el.style.borderColor = '';
+      }
+      // text color
       if(c.color) el.style.color = c.color;
+      else        el.style.color = '';
     });
   });
 }
@@ -11117,7 +11613,7 @@ function buildPayload() {
     products, orders, coupons, cats, adsData, teamList, staffList,
     contactList, featuresList, featuresSectionTitle,
     jobApplications, siteRatings, staffRatings,
-    chatConversations, deletedConvIds, sales, workSessions, contactMessages, promoBanner, heroBadgeText, joinBanner, siteCustom, advPage, paymentMethods, btnCustom, subsData, customRoles, adminPassword,
+    chatConversations, deletedConvIds, sales, workSessions, newsletterSubs, contactMessages, promoBanner, heroBadgeText, joinBanner, siteCustom, advPage, paymentMethods, btnCustom, subsData, customRoles, adminPassword,
     _ts: Date.now(), _v: '2.0'
   };
 }
@@ -11301,6 +11797,7 @@ function applyLoadedData(d) {
   if(d.siteRatings)             siteRatings          = d.siteRatings;
   if(d.staffRatings)            staffRatings         = d.staffRatings;
   if(d.workSessions)              workSessions = d.workSessions.filter?.(s=>s?.id) || [];
+  if(d.newsletterSubs)            newsletterSubs = Array.isArray(d.newsletterSubs) ? d.newsletterSubs : Object.values(d.newsletterSubs||{});
   if(d.deletedConvIds) {
     const remote = Array.isArray(d.deletedConvIds) ? d.deletedConvIds : Object.values(d.deletedConvIds||{});
     deletedConvIds = [...new Set([...deletedConvIds, ...remote])];
@@ -11621,6 +12118,14 @@ if(firebaseReady && db) db.ref('ccs_notifications').orderByChild('ts').startAt(D
     if(activePg?.id==='apg-orders') renderOrders();
     if(activePg?.id==='apg-dashboard') renderDashOrders();
   }
+  if(n.type === 'new_subscriber') {
+    const email = n.data?.email || '';
+    addAdminNotif('subscribe', `📬 مشترك جديد في النشرة`, email);
+    showNotif(`📬 مشترك جديد: ${email}`,'success');
+    sendBrowserNotif?.(`📬 مشترك جديد`, email);
+    const pg = document.querySelector('.admin-pg.active');
+    if(pg?.id === 'apg-newsletter') renderNewsletterAdmin();
+  }
   if(n.type === 'new_chat' && canPage('chat')) {
     const who = n.data?.name || 'زبون';
     const preview = n.data?.text ? `: ${n.data.text}` : '';
@@ -11689,6 +12194,7 @@ window.updateOrdersBadge = updateOrdersBadge;
 window.sendBrowserNotif = sendBrowserNotif;
 window.requestNotifPermission = requestNotifPermission;
 window.initClockWidget = initClockWidget;
+window.showSessionSummary = showSessionSummary;
 window.toggleClockWidget = toggleClockWidget;
 window.updateClockWidgetUI = updateClockWidgetUI;
 window.stopClockTick = stopClockTick;
@@ -11701,6 +12207,12 @@ window.clearWorkHours = clearWorkHours;
 window.renderStaffClockCard = renderStaffClockCard;
 window.staffClockIn = staffClockIn;
 window.staffClockOut = staffClockOut;
+window.sendNewsletterEmail = sendNewsletterEmail;
+window.maybePromptNewsletter = maybePromptNewsletter;
+window.renderNewsletterAdmin = renderNewsletterAdmin;
+window.toggleNlSub = toggleNlSub;
+window.deleteNlSub = deleteNlSub;
+window.broadcastCustom = broadcastCustom;
 window.startPresenceTracking = startPresenceTracking;
 window.stopPresenceTracking = stopPresenceTracking;
 window.renderStaffPresence = renderStaffPresence;
@@ -11816,6 +12328,13 @@ window.toggleWL = toggleWL;
 window.renderWishlist = renderWishlist;
 window.showNotif = showNotif;
 window.copyPromo = copyPromo;
+window.copyEmail = copyEmail;
+window.sendSingleEmail = sendSingleEmail;
+window.copyAllEmails = copyAllEmails;
+window.exportSubsCSV = exportSubsCSV;
+window.clearAllSubs = clearAllSubs;
+window.aiAutoReply = aiAutoReply;
+window.detectIntent = detectIntent;
 window.subscribe = subscribe;
 window.sendContact = sendContact;
 window.doLogin = doLogin;
