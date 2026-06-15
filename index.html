@@ -4769,7 +4769,6 @@ function doLogin(){
     isAdminLoggedIn = true;
     applyRoleUI();
     startPresenceTracking(staff.id||staff.username);
-    recordWorkLogin();
     showPage('admin');
     // redirect to first allowed page
     const allowed = (customRoles[staff.role]?.pages) || [];
@@ -6662,11 +6661,11 @@ function initClockWidget() {
   const nameEl = document.getElementById('scw-name');
   if(nameEl) nameEl.textContent = currentUser.name;
 
-  // Check if already has active session
+  // Check if there's an active session for this user (resume after page reload)
   const sid = localStorage.getItem('ccs_active_session');
   if(sid) {
     const session = workSessions.find(s=>s.id===sid && !s.logoutAt);
-    if(session) {
+    if(session && session.staffId === (currentUser.id||currentUser.username||'admin')) {
       _clockStartTime = new Date(session.loginAt);
       _clockSessionId = sid;
       _clockActive    = true;
@@ -6676,25 +6675,26 @@ function initClockWidget() {
     }
   }
 
-  // Auto-start new session immediately on login
-  _clockStartTime = new Date();
-  _clockActive    = true;
-  recordWorkLogin();
-  _clockSessionId = localStorage.getItem('ccs_active_session');
-  startClockTick();
-  updateClockWidgetUI(true);
+  // No active session — show the start button (red dot)
+  updateClockWidgetUI(false);
 }
 
 function toggleClockWidget() {
   if(_clockActive) {
     // Clock out
     stopClockTick();
-    recordWorkLogout();
+    const session = recordWorkLogout();
     _clockActive    = false;
     _clockStartTime = null;
     _clockSessionId = null;
     updateClockWidgetUI(false);
-    showNotif('⏹ تم تسجيل خروجك — وردية ناجحة!','success');
+    if(session) {
+      const dur = fmtDur(session.durationMin);
+      const pay = parseFloat(session.pay).toFixed(2);
+      showNotif(`⏹ تم تسجيل الخروج — ${dur} • $${pay}`,'success');
+    } else {
+      showNotif('⏹ تم تسجيل خروجك','success');
+    }
   } else {
     // Clock in
     _clockStartTime = new Date();
@@ -6846,11 +6846,17 @@ function recordWorkLogout() {
   const session = workSessions.find(s=>s.id===sid);
   if(!session || session.logoutAt) return;
   const now = new Date();
+  const diffMs  = now - new Date(session.loginAt);
+  const diffMin = diffMs / 60000;
   session.logoutAt    = now.toISOString();
-  session.durationMin = Math.round((now - new Date(session.loginAt)) / 60000);
-  session.pay         = parseFloat(((session.durationMin / 60) * session.hourlyRate).toFixed(2));
+  session.durationMin = parseFloat(diffMin.toFixed(4));         // precise minutes (with fractions)
+  session.pay         = parseFloat(((diffMin / 60) * (session.hourlyRate||0)).toFixed(4));
   localStorage.removeItem('ccs_active_session');
   saveAllData();
+  // refresh report if open
+  const pg = document.querySelector('.admin-pg.active');
+  if(pg?.id === 'apg-workhours') renderWorkHoursReport();
+  return session;
 }
 
 // Staff sees: their own hours & clock status
