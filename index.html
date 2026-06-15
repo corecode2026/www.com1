@@ -8512,15 +8512,20 @@ function hasHumanAgentJoined(conv) {
 }
 
 // Main AI auto-reply trigger
-function aiAutoReply(convId) {
+function aiAutoReply(convId, visitorText) {
   const conv = chatConversations.find(c=>c.id===convId);
   if(!conv) return;
-  // Stop if a real human has joined
+  // Stop if a real human has joined this conversation (not the bot)
   if(hasHumanAgentJoined(conv)) return;
-  const lastMsg = conv.messages[conv.messages.length-1];
-  if(!lastMsg || lastMsg.from !== 'visitor') return;
-  // Generate reply
-  const intentReply = detectIntent(lastMsg.text);
+  if(!visitorText) {
+    // Fallback: read from last message
+    const lastMsg = conv.messages[conv.messages.length-1];
+    if(!lastMsg || lastMsg.from !== 'visitor') return;
+    visitorText = lastMsg.text;
+  }
+  if(!visitorText || !visitorText.trim()) return;
+  // Generate reply based on visitor's text
+  const intentReply = detectIntent(visitorText);
   const reply = intentReply || AI_FALLBACKS[Math.floor(Math.random()*AI_FALLBACKS.length)];
   // Typing delay (1-2.5s for realism)
   const delay = 800 + Math.min(reply.length * 12, 1800);
@@ -8529,7 +8534,8 @@ function aiAutoReply(convId) {
     const fresh = chatConversations.find(c=>c.id===convId);
     if(!fresh) return;
     const lastNow = fresh.messages[fresh.messages.length-1];
-    if(lastNow?.from === 'agent') return; // someone replied, skip
+    // Only skip if a HUMAN replied (not the bot itself)
+    if(lastNow?.from === 'agent' && lastNow?.senderName !== AI_AGENT_NAME) return;
     addMsgToConv(convId, reply, 'agent', AI_AGENT_NAME);
     renderVisitorChat();
     saveChatSafe();
@@ -8553,8 +8559,7 @@ function sendChatMsg() {
   saveChatSafe().then(()=>renderVisitorChat());
   notifyAdminNewMsg();
   notifyAdminFirebase('new_chat', { convId: activeChatId, name: chatVisitorName, text: text.slice(0,60) });
-  // Smart AI auto-reply (until human staff joins)
-  aiAutoReply(activeChatId);
+  aiAutoReply(activeChatId, text);
 }
 
 function sendQuick(text) {
@@ -8565,8 +8570,7 @@ function sendQuick(text) {
   saveChatSafe().then(()=>renderVisitorChat());
   notifyAdminNewMsg();
   notifyAdminFirebase('new_chat', { convId: activeChatId, name: chatVisitorName, text: text.slice(0,60) });
-  // Smart AI replies until staff joins
-  aiAutoReply(activeChatId);
+  aiAutoReply(activeChatId, text);
 }
 
 function addMsgToConv(convId, text, from, senderName) {
