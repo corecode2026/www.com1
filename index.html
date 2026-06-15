@@ -1750,8 +1750,20 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
       <div class="sb-item" onclick="showAdmin('jobs',this)"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg></span> طلبات التقديم</div>
       <div class="sb-item" onclick="showAdmin('team',this)"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span> فريق العمل</div>
       <div class="sb-item" onclick="showAdmin('roles',this)"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span> إدارة الرتب</div>
+      <div class="sb-item" onclick="showAdmin('workhours',this)"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg></span> ساعات العمل</div>
       <div class="sb-item" onclick="showAdmin('staff',this)"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span> الموظفون</div>
       <div class="sb-item" onclick="showAdmin('settings',this)"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span> الإعدادات</div>
+      <!-- Clock In/Out widget -->
+      <div id="sidebar-clock-widget" style="margin:8px 10px;background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:10px 12px;">
+        <div style="font-size:10px;color:var(--text3);margin-bottom:6px;">⏱ تسجيل الحضور</div>
+        <div id="scw-name" style="font-size:12px;font-weight:700;color:var(--silver2);margin-bottom:6px;"></div>
+        <div id="scw-timer" style="font-size:20px;font-weight:900;color:var(--silver2);font-family:monospace;margin-bottom:8px;display:none;">00:00:00</div>
+        <div id="scw-since" style="font-size:10px;color:var(--text3);margin-bottom:8px;display:none;"></div>
+        <button id="scw-btn" onclick="toggleClockWidget()" style="width:100%;padding:8px;border-radius:8px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:12px;font-weight:700;border:none;background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.3);color:#22c55e;transition:.2s;">
+          ▶ ابدأ الوردية
+        </button>
+      </div>
+
       <div class="sb-item" onclick="logout()"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span> تسجيل الخروج</div>
 
       <!-- Mini Ratings Summary above settings -->
@@ -2628,6 +2640,49 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
         </div>
       </div>
 
+      <!-- WORK HOURS REPORT -->
+      <div class="admin-pg" id="apg-workhours">
+        <div class="admin-pg-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:8px;vertical-align:middle;"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+          تقرير ساعات العمل
+        </div>
+
+        <!-- Filters -->
+        <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:16px;margin-bottom:1.2rem;display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;">
+          <div class="form-group" style="margin:0;flex:1;min-width:130px;">
+            <label class="form-label">من تاريخ</label>
+            <input type="date" class="form-input" id="wh-from">
+          </div>
+          <div class="form-group" style="margin:0;flex:1;min-width:130px;">
+            <label class="form-label">إلى تاريخ</label>
+            <input type="date" class="form-input" id="wh-to">
+          </div>
+          <div class="form-group" style="margin:0;flex:1;min-width:130px;">
+            <label class="form-label">الموظف</label>
+            <select class="form-select" id="wh-staff"><option value="">الكل</option></select>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn-silver" style="padding:10px 20px;" onclick="renderWorkHoursReport()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-left:4px;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              بحث
+            </button>
+            <button class="btn-outline" style="padding:10px 14px;color:var(--red);border-color:rgba(200,60,60,.25);font-size:12px;" onclick="clearWorkHours()">🗑</button>
+          </div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div id="wh-summary" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:1.2rem;"></div>
+
+        <!-- Sessions Table -->
+        <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:14px;overflow:hidden;">
+          <div style="padding:14px 18px;border-bottom:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-size:14px;font-weight:700;color:var(--silver2);">سجل الجلسات</span>
+            <span id="wh-count" style="font-size:11px;color:var(--text3);"></span>
+          </div>
+          <div id="wh-cards" style="padding:12px;display:flex;flex-direction:column;gap:8px;"></div>
+        </div>
+      </div>
+
       <div class="admin-pg" id="apg-staff">
         <div class="admin-pg-title">👨‍💼 إدارة الموظفين</div>
 
@@ -2667,6 +2722,10 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
             <div class="form-group">
               <label class="form-label">البريد الإلكتروني</label>
               <input type="email" class="form-input" id="sf-email" placeholder="اختياري">
+            </div>
+            <div class="form-group">
+              <label class="form-label">الراتب بالساعة <span style="color:var(--text3);font-size:10px;">(بالدولار — يراه المدير فقط)</span></label>
+              <input type="number" class="form-input" id="sf-hourly" placeholder="مثال: 5" min="0" step="0.5">
             </div>
             <div class="form-group">
               <label class="form-label">الحالة</label>
@@ -3743,6 +3802,8 @@ function updateCatQuickBtns() {
   renderHomeCats();
 }
 function playCartSound() {
+  // Only play for logged-in admin/staff — never for visitors/customers
+  if(!isAdminLoggedIn) return;
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     const now = ctx.currentTime;
@@ -3778,6 +3839,23 @@ function playCartSound() {
       gain.connect(ctx.destination);
       osc.start(now + start);
       osc.stop(now + start + dur + 0.05);
+    });
+  } catch(e) {}
+}
+
+// Short ding for visitors adding to cart (no admin gate)
+function playAddToCartSound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const now = ctx.currentTime;
+    [880, 1100].forEach((freq, i) => {
+      const osc = ctx.createOscillator(), gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now + i*0.1);
+      gain.gain.setValueAtTime(0.18, now + i*0.1);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + i*0.1 + 0.2);
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(now + i*0.1); osc.stop(now + i*0.1 + 0.25);
     });
   } catch(e) {}
 }
@@ -3896,7 +3974,7 @@ function addToCart(id) {
   if(!p) return;
   cart.push({...p, uid:Date.now()});
   updateCartUI();
-  playCartSound();
+  playAddToCartSound();
   showNotif(`✓ أُضيف "${p.name}" للسلة`,'success');
 }
 function removeFromCart(uid) {
@@ -4670,6 +4748,8 @@ function doLogin(){
     currentUser = {username:'admin', role:'admin', name:'المدير'};
     isAdminLoggedIn = true;
     applyRoleUI(); showPage('admin');
+    startPresenceTracking('admin');
+    setTimeout(initClockWidget, 300);
     showNotif('أهلاً بك في لوحة التحكم 👋','success');
     updateNotifBell();
     requestNotifPermission();
@@ -4686,6 +4766,8 @@ function doLogin(){
     currentUser = {username:staff.username, role:staff.role, name:staff.name, id:staff.id};
     isAdminLoggedIn = true;
     applyRoleUI();
+    startPresenceTracking(staff.id||staff.username);
+    recordWorkLogin();
     showPage('admin');
     // redirect to first allowed page
     const allowed = (customRoles[staff.role]?.pages) || [];
@@ -4727,6 +4809,7 @@ const ALL_PAGES = [
   { id:'btneditor',    label:'تعديل الأزرار' },
   { id:'subs',         label:'الاشتراكات' },
   { id:'roles',        label:'إدارة الرتب' },
+  { id:'workhours',    label:'ساعات العمل' },
 ];
 
 // Custom roles — starts with defaults, admin can add/edit/delete
@@ -6567,6 +6650,378 @@ function updateStaffRoleSelects() {
   ).join('');
 }
 
+// ── Sidebar Clock Widget ──
+let _clockInterval  = null;
+let _clockStartTime = null;
+let _clockActive    = false;
+let _clockSessionId = null;
+
+function initClockWidget() {
+  const nameEl = document.getElementById('scw-name');
+  if(nameEl) nameEl.textContent = currentUser.name;
+
+  // Check if already has active session
+  const sid = localStorage.getItem('ccs_active_session');
+  if(sid) {
+    const session = workSessions.find(s=>s.id===sid && !s.logoutAt);
+    if(session) {
+      _clockStartTime = new Date(session.loginAt);
+      _clockSessionId = sid;
+      _clockActive    = true;
+      startClockTick();
+      updateClockWidgetUI(true);
+      return;
+    }
+  }
+
+  // Auto-start new session immediately on login
+  _clockStartTime = new Date();
+  _clockActive    = true;
+  recordWorkLogin();
+  _clockSessionId = localStorage.getItem('ccs_active_session');
+  startClockTick();
+  updateClockWidgetUI(true);
+}
+
+function toggleClockWidget() {
+  if(_clockActive) {
+    // Clock out
+    stopClockTick();
+    recordWorkLogout();
+    _clockActive    = false;
+    _clockStartTime = null;
+    _clockSessionId = null;
+    updateClockWidgetUI(false);
+    showNotif('⏹ تم تسجيل خروجك — وردية ناجحة!','success');
+  } else {
+    // Clock in
+    _clockStartTime = new Date();
+    _clockActive    = true;
+    recordWorkLogin();
+    _clockSessionId = localStorage.getItem('ccs_active_session');
+    startClockTick();
+    updateClockWidgetUI(true);
+    showNotif('▶ بدأت الوردية!','success');
+  }
+}
+
+function startClockTick() {
+  if(_clockInterval) clearInterval(_clockInterval);
+  updateClockDisplay();
+  _clockInterval = setInterval(() => {
+    updateClockDisplay();
+    // Update session every second in memory + Firebase every 10s
+    if(_clockSessionId && _clockStartTime) {
+      const session = workSessions.find(s=>s.id===_clockSessionId);
+      if(session && !session.logoutAt) {
+        const nowMs = Date.now();
+        const diffMin = (nowMs - _clockStartTime.getTime()) / 60000;
+        session.durationMin = parseFloat(diffMin.toFixed(4));
+        session.pay = parseFloat(((diffMin / 60) * (session.hourlyRate||0)).toFixed(4));
+        session.lastSeen = nowMs;
+        // Update live cards in the report
+        const durEl = document.getElementById(`whs-dur-${_clockSessionId}`);
+        const payEl = document.getElementById(`whs-pay-${_clockSessionId}`);
+        if(durEl) durEl.textContent = fmtDur(session.durationMin);
+        if(payEl) payEl.textContent = `$${parseFloat(session.pay||0).toFixed(3)}`;
+        // Render full report if open
+        const pg = document.querySelector('.admin-pg.active');
+        if(pg?.id === 'apg-workhours') {
+          // update summary cards only (avoid full re-render jitter)
+          const summary = document.getElementById('wh-summary');
+          if(summary && currentUser.role==='admin') {
+            const totalPay = workSessions.reduce((a,s)=>a+(s.pay||0),0);
+            const totalMin = workSessions.reduce((a,s)=>a+(s.durationMin||0),0);
+            // just update the values inside existing cards
+            const vals = summary.querySelectorAll('[style*="font-family:monospace"]');
+            if(vals[0]) vals[0].textContent = fmtDur(totalMin);
+            if(vals[1]) vals[1].textContent = `$${totalPay.toFixed(2)}`;
+          }
+        }
+        // Save to Firebase every 10 seconds (not every tick to avoid rate limits)
+        if(Math.floor((nowMs - _clockStartTime.getTime()) / 1000) % 10 === 0) {
+          if(firebaseReady && db) {
+            try { db.ref(FB_PATH + '/workSessions').set(workSessions); } catch(e){}
+          }
+        }
+      }
+    }
+  }, 1000);
+}
+
+function stopClockTick() {
+  if(_clockInterval) { clearInterval(_clockInterval); _clockInterval = null; }
+}
+
+function updateClockDisplay() {
+  if(!_clockStartTime) return;
+  const diff  = Math.floor((Date.now() - _clockStartTime.getTime()) / 1000);
+  const h     = Math.floor(diff / 3600);
+  const m     = Math.floor((diff % 3600) / 60);
+  const s     = diff % 60;
+  const fmt   = v => String(v).padStart(2,'0');
+  const timer = document.getElementById('scw-timer');
+  if(timer) timer.textContent = `${fmt(h)}:${fmt(m)}:${fmt(s)}`;
+}
+
+function updateClockWidgetUI(active) {
+  const btn    = document.getElementById('scw-btn');
+  const timer  = document.getElementById('scw-timer');
+  const since  = document.getElementById('scw-since');
+  if(!btn) return;
+  if(active) {
+    btn.textContent    = '⏹ إنهاء الوردية';
+    btn.style.background    = 'rgba(239,68,68,.15)';
+    btn.style.border        = '1px solid rgba(239,68,68,.3)';
+    btn.style.color         = '#ef4444';
+    if(timer) timer.style.display = 'block';
+    if(since && _clockStartTime) {
+      since.style.display = 'block';
+      since.textContent = 'منذ: ' + _clockStartTime.toLocaleTimeString('ar',{hour:'2-digit',minute:'2-digit'});
+    }
+  } else {
+    btn.textContent         = '▶ ابدأ الوردية';
+    btn.style.background    = 'rgba(34,197,94,.15)';
+    btn.style.border        = '1px solid rgba(34,197,94,.3)';
+    btn.style.color         = '#22c55e';
+    if(timer) timer.style.display = 'none';
+    if(since) since.style.display = 'none';
+  }
+}
+
+// ====== WORK HOURS SYSTEM ======
+let workSessions = []; // {id, staffId, staffName, loginAt, logoutAt, durationMin, hourlyRate, pay}
+
+// Called when staff logs in
+function recordWorkLogin() {
+  if(!isAdminLoggedIn) return;
+  const sid   = currentUser.id || currentUser.username || 'admin';
+  const staff = staffList.find(s=>(s.id||s.username) === sid);
+  const rate  = parseFloat(staff?.hourlyRate || currentUser.hourlyRate || 0);
+  const session = {
+    id:          'ws_' + Date.now(),
+    staffId:     sid,
+    staffName:   currentUser.name,
+    staffRole:   currentUser.role,
+    hourlyRate:  rate,
+    loginAt:     new Date().toISOString(),
+    logoutAt:    null,
+    durationMin: 0,
+    pay:         0,
+  };
+  workSessions.unshift(session);
+  localStorage.setItem('ccs_active_session', session.id);
+  saveAllData();
+}
+
+// Called when staff logs out
+function recordWorkLogout() {
+  const sid = localStorage.getItem('ccs_active_session');
+  if(!sid) return;
+  const session = workSessions.find(s=>s.id===sid);
+  if(!session || session.logoutAt) return;
+  const now = new Date();
+  session.logoutAt    = now.toISOString();
+  session.durationMin = Math.round((now - new Date(session.loginAt)) / 60000);
+  session.pay         = parseFloat(((session.durationMin / 60) * session.hourlyRate).toFixed(2));
+  localStorage.removeItem('ccs_active_session');
+  saveAllData();
+}
+
+// Staff sees: their own hours & clock status
+// Admin sees: everyone + pay
+
+function renderWorkHoursAdmin() {
+  // Fill staff filter
+  const sel = document.getElementById('wh-staff');
+  if(sel) {
+    const opts = staffList.map(s=>`<option value="${s.id||s.username}">${s.name}</option>`).join('');
+    sel.innerHTML = '<option value="">الكل</option>' + opts;
+  }
+  // Set default dates (this month)
+  const today = new Date();
+  const firstDay = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().slice(0,10);
+  const f = document.getElementById('wh-from');
+  const t = document.getElementById('wh-to');
+  if(f && !f.value) f.value = firstDay;
+  if(t && !t.value) t.value = today.toISOString().slice(0,10);
+  renderWorkHoursReport();
+}
+
+function renderWorkHoursReport() {
+  const from        = document.getElementById('wh-from')?.value;
+  const to          = document.getElementById('wh-to')?.value;
+  const staffFilter = document.getElementById('wh-staff')?.value;
+  const isAdmin     = currentUser.role === 'admin';
+
+  let sessions = [...workSessions];
+  if(from) sessions = sessions.filter(s=>s.loginAt>=from);
+  if(to)   sessions = sessions.filter(s=>s.loginAt.slice(0,10)<=to);
+  if(staffFilter) sessions = sessions.filter(s=>s.staffId===staffFilter);
+  // newest first
+  sessions.sort((a,b)=>new Date(b.loginAt)-new Date(a.loginAt));
+
+  const cards  = document.getElementById('wh-cards');
+  const summary = document.getElementById('wh-summary');
+  const count  = document.getElementById('wh-count');
+
+  if(count) count.textContent = `${sessions.length} جلسة`;
+
+  // ── Summary cards (admin only) ──
+  if(summary && isAdmin) {
+    const totalSec  = sessions.reduce((a,s)=>{
+      if(!s.durationMin) return a;
+      return a + s.durationMin*60;
+    },0);
+    const totalPay  = sessions.reduce((a,s)=>a+(s.pay||0),0);
+    const staffCount= [...new Set(sessions.map(s=>s.staffId))].length;
+    const running   = sessions.filter(s=>!s.logoutAt).length;
+    const cards4 = [
+      { icon:'⏱', label:'إجمالي الساعات', val: fmtDur(totalSec/60), color:'#a78bfa' },
+      { icon:'💰', label:'إجمالي الأجور', val: `$${totalPay.toFixed(2)}`, color:'#22c55e' },
+      { icon:'👥', label:'الموظفون', val: staffCount, color:'#f5c518' },
+      { icon:'🟢', label:'نشط الآن', val: running, color:'#22c55e' },
+    ];
+    summary.innerHTML = cards4.map(c=>`
+      <div style="background:var(--bg2);border:1px solid ${c.color}25;border-radius:14px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+        <div style="width:44px;height:44px;border-radius:12px;background:${c.color}15;border:1px solid ${c.color}30;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">${c.icon}</div>
+        <div>
+          <div style="font-size:20px;font-weight:900;color:${c.color};font-family:monospace;">${c.val}</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:2px;">${c.label}</div>
+        </div>
+      </div>`).join('');
+  }
+
+  // ── Session cards ──
+  if(!cards) return;
+  if(!sessions.length) {
+    cards.innerHTML = '<div style="text-align:center;padding:2.5rem;color:var(--text3);">لا توجد جلسات في هذه الفترة</div>';
+    return;
+  }
+
+  cards.innerHTML = sessions.map(s=>{
+    const isRunning = !s.logoutAt;
+    const login  = new Date(s.loginAt);
+    const inTime = login.toLocaleTimeString('ar',{hour:'2-digit',minute:'2-digit'});
+    const outTime = s.logoutAt ? new Date(s.logoutAt).toLocaleTimeString('ar',{hour:'2-digit',minute:'2-digit'}) : null;
+    const date   = login.toLocaleDateString('ar-SA',{weekday:'short',year:'numeric',month:'short',day:'numeric'});
+    const durStr = s.durationMin!=null ? fmtDur(s.durationMin) : '—';
+    const payStr = isAdmin && s.pay!=null ? `$${parseFloat(s.pay).toFixed(3)}` : null;
+    const role   = customRoles[s.staffRole]?.label || s.staffRole || '';
+    const roleColor = customRoles[s.staffRole]?.color || '#888';
+
+    return `
+    <div id="whs-${s.id}" style="background:var(--bg3);border:1px solid ${isRunning?'rgba(34,197,94,.25)':'var(--border2)'};border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;transition:.2s;${isRunning?'box-shadow:0 0 16px rgba(34,197,94,.08);':''}">
+      <!-- Status dot + name -->
+      <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:140px;">
+        <span style="width:10px;height:10px;border-radius:50%;flex-shrink:0;background:${isRunning?'#22c55e':'#555'};box-shadow:${isRunning?'0 0 8px #22c55e':'none'};${isRunning?'animation:pulse 1.5s infinite;':''}"></span>
+        <div>
+          <div style="font-weight:700;color:var(--silver2);font-size:13px;">${s.staffName}</div>
+          <div style="font-size:10px;color:${roleColor};margin-top:2px;">${role}</div>
+        </div>
+      </div>
+      <!-- Date -->
+      <div style="min-width:110px;text-align:center;">
+        <div style="font-size:10px;color:rgba(180,160,255,.7);font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px;">التاريخ</div>
+        <div style="font-size:12px;color:var(--silver2);font-weight:600;">${date}</div>
+      </div>
+      <!-- In/Out -->
+      <div style="min-width:110px;text-align:center;">
+        <div style="font-size:10px;color:rgba(180,160,255,.7);font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px;">دخول ← خروج</div>
+        <div style="font-size:12px;color:var(--silver2);font-family:monospace;font-weight:700;">${inTime} <span style="color:var(--text3);">←</span> ${outTime ? outTime : '<span style="color:#22c55e;font-weight:700;">نشط ●</span>'}</div>
+      </div>
+      <!-- Duration -->
+      <div style="min-width:90px;text-align:center;">
+        <div style="font-size:10px;color:rgba(180,160,255,.7);font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px;">المدة</div>
+        <div id="whs-dur-${s.id}" style="font-size:15px;font-weight:900;color:var(--silver2);font-family:monospace;">${durStr}</div>
+      </div>
+      <!-- Pay (admin only) -->
+      ${isAdmin ? `
+      <div style="min-width:80px;text-align:center;">
+        <div style="font-size:10px;color:rgba(180,160,255,.7);font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px;">الأجر</div>
+        <div id="whs-pay-${s.id}" style="font-size:15px;font-weight:900;color:#22c55e;font-family:monospace;">${payStr||'$0.000'}</div>
+      </div>` : ''}
+      <!-- Delete -->
+      ${isAdmin ? `<button onclick="deleteWorkSession('${s.id}')" style="background:none;border:1px solid rgba(200,60,60,.25);color:var(--red);width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:14px;flex-shrink:0;display:flex;align-items:center;justify-content:center;">✕</button>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function fmtDur(min) {
+  if(!min && min!==0) return '—';
+  const totalSec = Math.floor(min * 60);
+  const h = Math.floor(totalSec/3600);
+  const m = Math.floor((totalSec%3600)/60);
+  const s = totalSec%60;
+  if(h>0) return `${h}س ${m}د ${s}ث`;
+  if(m>0) return `${m}د ${s}ث`;
+  return `${s}ث`;
+}
+
+function deleteWorkSession(id) {
+  showConfirmBox('حذف هذه الجلسة؟', () => {
+    workSessions = workSessions.filter(s=>s.id!==id);
+    saveAllData(); renderWorkHoursReport();
+    showNotif('🗑 تم الحذف','error');
+  });
+}
+
+function clearWorkHours() {
+  showConfirmBox('⚠ مسح كل سجل الساعات؟', () => {
+    workSessions = [];
+    saveAllData(); renderWorkHoursReport();
+    showNotif('🗑 تم مسح السجل','error');
+  });
+}
+
+// Staff portal: show their own clock status
+function renderStaffClockCard() {
+  const sid = currentUser.id || currentUser.username;
+  const activeId = localStorage.getItem('ccs_active_session');
+  const active = activeId ? workSessions.find(s=>s.id===activeId) : null;
+  const myToday = workSessions.filter(s=>s.staffId===sid && s.loginAt.startsWith(new Date().toISOString().slice(0,10)));
+  const totalMin = myToday.filter(s=>s.durationMin).reduce((a,s)=>a+s.durationMin,0);
+
+  const card = document.getElementById('staff-clock-card');
+  if(!card) return;
+  card.innerHTML = `
+    <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:18px;margin-bottom:1rem;">
+      <div style="font-size:14px;font-weight:700;color:var(--silver2);margin-bottom:12px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-left:6px;"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+        ساعات عملي اليوم
+      </div>
+      ${active ? `
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+          <span style="width:10px;height:10px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px #22c55e;display:inline-block;animation:pulse 1.5s infinite;"></span>
+          <span style="font-size:13px;color:#22c55e;font-weight:600;">متصل — منذ ${new Date(active.loginAt).toLocaleTimeString('ar',{hour:'2-digit',minute:'2-digit'})}</span>
+        </div>
+        <button class="btn-outline" style="color:var(--red);border-color:rgba(200,60,60,.3);width:100%;margin-bottom:8px;" onclick="staffClockOut()">
+          ⏹ تسجيل خروج (إنهاء الوردية)
+        </button>
+      ` : `
+        <div style="font-size:12px;color:var(--text3);margin-bottom:10px;">لم تسجل دخولك بعد</div>
+        <button class="btn-silver" style="width:100%;margin-bottom:8px;" onclick="staffClockIn()">
+          ▶ تسجيل دخول (بدء الوردية)
+        </button>
+      `}
+      <div style="background:var(--bg3);border-radius:8px;padding:10px;font-size:12px;color:var(--text2);">
+        إجمالي اليوم: <strong style="color:var(--silver2);">${Math.floor(totalMin/60)}س ${totalMin%60}د</strong> (${myToday.length} جلسة)
+      </div>
+    </div>`;
+}
+
+function staffClockIn() {
+  recordWorkLogin();
+  renderStaffClockCard();
+  showNotif('▶ بدأت الوردية — حظاً موفقاً!','success');
+}
+
+function staffClockOut() {
+  recordWorkLogout();
+  renderStaffClockCard();
+  showNotif('⏹ تم تسجيل الخروج — وردية ناجحة!','success');
+}
+
 // ====== STAFF MANAGEMENT ======
 let staffList = [];
 let currentUser = {username:'admin', role:'admin', name:'المدير'};
@@ -6583,8 +7038,14 @@ function renderStaff() {
   (document.getElementById(('staff-count'))||{}).textContent = staffList.length;
   (document.getElementById(('staff-tbody'))||{}).innerHTML = staffList.map(s => {
     const r = roleLabels[s.role] || roleLabels.support;
+    const presenceKey = s.id || s.username;
     return `<tr>
-      <td style="font-weight:600;color:var(--silver2);">${s.name}</td>
+      <td style="font-weight:600;color:var(--silver2);">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span id="presence-${presenceKey}" style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#ef4444;box-shadow:0 0 4px #ef444466;flex-shrink:0;transition:.4s;" title="غير متواجد"></span>
+          ${s.name}
+        </div>
+      </td>
       <td style="font-family:monospace;color:var(--text2);">${s.username}</td>
       <td><span style="background:${r.bg};border:1px solid ${r.border};color:${r.color};padding:3px 10px;border-radius:5px;font-size:11px;font-weight:700;">${r.label}</span></td>
       <td style="font-family:monospace;font-size:12px;color:var(--text3);">${s.idnum ? `<span style="background:var(--bg4);padding:2px 8px;border-radius:5px;border:1px solid var(--border3);">${s.idnum}</span>` : '—'}</td>
@@ -7737,7 +8198,6 @@ function notifyAdminNewChat(conv) {
   if(isAdminLoggedIn) {
     renderAdminChatList();
     showNotif(`💬 محادثة جديدة من ${conv.visitorName}`,'success');
-    playCartSound();
     addAdminNotif('chat', `💬 محادثة جديدة — ${conv.visitorName}`, 'اضغط لعرض المحادثة والرد');
     playMsgSound();
   }
@@ -8550,7 +9010,7 @@ function addAdvPkgToCart(pkgIndex) {
   };
   cart.push(fakeProduct);
   updateCartUI();
-  playCartSound?.();
+  playAddToCartSound();
   showNotif(`✓ أُضيفت "${pkg.name}" للسلة 🛒`, 'success');
   // open cart
   setTimeout(() => {
@@ -10188,6 +10648,90 @@ function sendBrowserNotif(title, body) {
 // Request permission automatically when staff logs in
 const _origApplyRoleUI = typeof applyRoleUI === 'function' ? applyRoleUI : null;
 
+// ── Online Presence System ──
+let _presenceRef   = null;
+let _presenceTimer = null;
+const PRESENCE_PATH = 'ccs_presence';
+
+function startPresenceTracking(uid) {
+  if(!firebaseReady || !db) { setTimeout(()=>startPresenceTracking(uid), 1000); return; }
+  const ref = db.ref(`${PRESENCE_PATH}/${uid}`);
+  _presenceRef = ref;
+  const payload = { name: currentUser.name, role: currentUser.role, online: true, lastSeen: Date.now() };
+  ref.set(payload);
+  ref.onDisconnect().update({ online: false, lastSeen: Date.now() });
+
+  // ── Auto-logout on connection loss ──
+  let _connectedReady = false;
+  setTimeout(() => { _connectedReady = true; }, 5000); // ignore first 5s (initial Firebase handshake)
+
+  db.ref('.info/connected').on('value', snap => {
+    const connected = snap.val();
+    if(!_connectedReady) return; // ignore false during initial load
+    if(connected === false && isAdminLoggedIn) {
+      // Connection lost — show warning
+      if(!document.getElementById('_net_warn')) {
+        const w = document.createElement('div');
+        w.id = '_net_warn';
+        w.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:#ef4444;color:#fff;text-align:center;padding:10px;font-family:Cairo,sans-serif;font-size:13px;font-weight:700;';
+        w.textContent = '⚠ انقطع الاتصال بالإنترنت — سيتم تسجيل الخروج خلال 30 ثانية...';
+        document.body.prepend(w);
+      }
+      // Auto-logout after 30s of no connection
+      _disconnectTimer = setTimeout(() => {
+        if(!navigator.onLine && isAdminLoggedIn) {
+          adminLogout();
+          showNotif('⚠ تم تسجيل خروجك بسبب انقطاع الاتصال', 'error');
+        }
+      }, 30000);
+    } else if(connected === true) {
+      // Reconnected — cancel logout and remove warning
+      clearTimeout(_disconnectTimer);
+      const w = document.getElementById('_net_warn');
+      if(w) w.remove();
+      if(isAdminLoggedIn) ref.update({ online: true, lastSeen: Date.now() });
+    }
+  });
+
+  // Heartbeat every 30s
+  _presenceTimer = setInterval(() => {
+    if(isAdminLoggedIn) ref.update({ online: true, lastSeen: Date.now() });
+  }, 30000);
+
+  // Listen to all staff presence
+  db.ref(PRESENCE_PATH).on('value', snap => {
+    _onlineStaff = snap.val() || {};
+    renderStaffPresence();
+  });
+}
+
+let _disconnectTimer = null;
+
+function stopPresenceTracking() {
+  clearTimeout(_disconnectTimer);
+  if(_presenceRef) { _presenceRef.update({ online: false, lastSeen: Date.now() }); _presenceRef = null; }
+  if(_presenceTimer) { clearInterval(_presenceTimer); _presenceTimer = null; }
+  const w = document.getElementById('_net_warn'); if(w) w.remove();
+}
+
+let _onlineStaff = {};
+
+// Update presence dots in the staff table
+function renderStaffPresence() {
+  staffList.forEach(s => {
+    const key = s.id || s.username;
+    const dot = document.getElementById(`presence-${key}`);
+    if(!dot) return;
+    const isOnline = _onlineStaff[key]?.online === true;
+    const last = _onlineStaff[key]?.lastSeen;
+    const recentlyOnline = last && (Date.now() - last) < 90000; // 90s grace
+    const online = isOnline || recentlyOnline;
+    dot.style.background     = online ? '#22c55e' : '#ef4444';
+    dot.style.boxShadow      = online ? '0 0 8px #22c55e,0 0 16px #22c55e66' : '0 0 4px #ef444466';
+    dot.title = online ? 'متواجد الآن' : ('آخر ظهور: ' + (last ? new Date(last).toLocaleTimeString('ar') : 'غير معروف'));
+  });
+}
+
 // ── Shared API translator: Google (fast) → MyMemory (fallback) ──
 async function apiTranslate(text) {
   if(_tCache[text] && !hasArabic(_tCache[text])) return _tCache[text];
@@ -10542,7 +11086,7 @@ function buildPayload() {
     products, orders, coupons, cats, adsData, teamList, staffList,
     contactList, featuresList, featuresSectionTitle,
     jobApplications, siteRatings, staffRatings,
-    chatConversations, deletedConvIds, sales, contactMessages, promoBanner, heroBadgeText, joinBanner, siteCustom, advPage, paymentMethods, btnCustom, subsData, customRoles, adminPassword,
+    chatConversations, deletedConvIds, sales, workSessions, contactMessages, promoBanner, heroBadgeText, joinBanner, siteCustom, advPage, paymentMethods, btnCustom, subsData, customRoles, adminPassword,
     _ts: Date.now(), _v: '2.0'
   };
 }
@@ -10725,6 +11269,7 @@ function applyLoadedData(d) {
   if(d.jobApplications)         jobApplications      = d.jobApplications;
   if(d.siteRatings)             siteRatings          = d.siteRatings;
   if(d.staffRatings)            staffRatings         = d.staffRatings;
+  if(d.workSessions)              workSessions = d.workSessions.filter?.(s=>s?.id) || [];
   if(d.deletedConvIds) {
     const remote = Array.isArray(d.deletedConvIds) ? d.deletedConvIds : Object.values(d.deletedConvIds||{});
     deletedConvIds = [...new Set([...deletedConvIds, ...remote])];
@@ -11107,6 +11652,7 @@ window.editTierFull = editTierFull;
 window.restoreVisitorConvs = restoreVisitorConvs;
 window.saveChatSafe = saveChatSafe;
 window.mergeChatConversations = mergeChatConversations;
+window.playAddToCartSound = playAddToCartSound;
 window.playMsgSound = playMsgSound;
 window.setTierLogoImg = setTierLogoImg;
 window.editTierImg = editTierImg;
@@ -11128,6 +11674,22 @@ window.toggleCustDetail = toggleCustDetail;
 window.updateOrdersBadge = updateOrdersBadge;
 window.sendBrowserNotif = sendBrowserNotif;
 window.requestNotifPermission = requestNotifPermission;
+window.initClockWidget = initClockWidget;
+window.toggleClockWidget = toggleClockWidget;
+window.updateClockWidgetUI = updateClockWidgetUI;
+window.stopClockTick = stopClockTick;
+window.recordWorkLogin = recordWorkLogin;
+window.recordWorkLogout = recordWorkLogout;
+window.renderWorkHoursAdmin = renderWorkHoursAdmin;
+window.renderWorkHoursReport = renderWorkHoursReport;
+window.deleteWorkSession = deleteWorkSession;
+window.clearWorkHours = clearWorkHours;
+window.renderStaffClockCard = renderStaffClockCard;
+window.staffClockIn = staffClockIn;
+window.staffClockOut = staffClockOut;
+window.startPresenceTracking = startPresenceTracking;
+window.stopPresenceTracking = stopPresenceTracking;
+window.renderStaffPresence = renderStaffPresence;
 window.renderFooterSocial = renderFooterSocial;
 window.togglePmBgType = togglePmBgType;
 window.togglePmNameType = togglePmNameType;
