@@ -514,10 +514,22 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
 @media(max-width:600px){.hero-tagline-text{white-space:normal;font-size:12px;}.hero-tagline{gap:8px;}}
 
 @keyframes tickerScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-.ticker-item{display:inline-flex;align-items:center;gap:10px;padding:0 28px;border-right:1px solid var(--border2);height:52px;flex-shrink:0;}
-.ticker-stars{color:#f5c518;font-size:12px;letter-spacing:1px;}
-.ticker-text{font-size:12px;color:var(--text2);max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.ticker-name{font-size:11px;color:var(--text3);}
+@keyframes orb1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-20px,15px) scale(1.1)}}
+@keyframes orb2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(15px,-10px) scale(1.15)}}
+@keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
+@keyframes starGlow{0%,100%{filter:drop-shadow(0 0 2px rgba(245,197,24,.4))}50%{filter:drop-shadow(0 0 6px rgba(245,197,24,.8))}}
+
+.ticker-item{display:inline-flex;align-items:center;gap:14px;padding:8px 24px;margin:0 8px;height:58px;flex-shrink:0;background:linear-gradient(135deg,rgba(40,40,55,.4),rgba(25,25,40,.5));border:1px solid rgba(245,197,24,.18);border-radius:14px;transition:all .35s cubic-bezier(.22,.61,.36,1);position:relative;overflow:hidden;}
+.ticker-item::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(245,197,24,.05),transparent);transition:left .6s ease;}
+.ticker-item:hover::before{left:100%;}
+.ticker-item:hover{border-color:rgba(245,197,24,.4);box-shadow:0 4px 20px rgba(245,197,24,.12);transform:translateY(-2px);}
+.ticker-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#f5c518,#b8860b);display:flex;align-items:center;justify-content:center;color:#000;font-weight:900;font-size:14px;flex-shrink:0;box-shadow:0 2px 8px rgba(245,197,24,.3);}
+.ticker-quote{font-size:18px;color:rgba(245,197,24,.3);line-height:1;}
+.ticker-stars{display:flex;gap:1px;align-items:center;animation:starGlow 2s ease-in-out infinite;}
+.ticker-stars svg{width:11px!important;height:11px!important;}
+.ticker-text{font-size:13px;color:#e8e8e8;font-weight:500;max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:.2px;}
+.ticker-name{font-size:11px;color:#a78bfa;font-weight:600;}
+.ticker-divider{width:1px;height:32px;background:linear-gradient(to bottom,transparent,rgba(245,197,24,.2),transparent);margin:0 4px;}
 
 @keyframes bellRing{0%{transform:rotate(0)}20%{transform:rotate(15deg)}40%{transform:rotate(-15deg)}60%{transform:rotate(10deg)}80%{transform:rotate(-10deg)}100%{transform:rotate(0)}}
 
@@ -591,6 +603,151 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
   .hero{padding:3rem 1.2rem 2rem;min-height:auto;}
   .hero-btns{flex-direction:column;gap:8px;align-items:stretch;}
   .hero-btns button{width:100%;justify-content:center;}
+}
+
+/* ===== ENHANCED MOBILE EXPERIENCE ===== */
+@media(max-width:768px){
+  /* Body & general */
+  body{font-size:14px;}
+  h1{font-size:1.8rem !important;}
+  h2{font-size:1.4rem !important;}
+  h3{font-size:1.1rem !important;}
+
+  /* Nav */
+  nav{padding:10px 14px !important;}
+  .logo{font-size:1.1rem !important;}
+  .topbar-right{gap:6px !important;}
+  .admin-topbtn{font-size:11px !important;padding:6px 10px !important;}
+
+  /* Hero hero-title-h1 */
+  #hero-title-h1{font-size:1.8rem !important;line-height:1.3;}
+  .hero-tagline{flex-direction:column;gap:6px;}
+  .hero-tagline-line{display:none;}
+
+  /* Section titles */
+  .sec-head{padding:0 1rem;flex-wrap:wrap;}
+  .sec-title{font-size:15px !important;}
+
+  /* Products grid */
+  .prod-grid{grid-template-columns:repeat(2,1fr) !important;gap:10px !important;padding:0 0.8rem;}
+  .prod-card{padding:10px !important;}
+  .prod-img{height:120px !important;}
+  .prod-name{font-size:13px !important;}
+  .prod-price{font-size:15px !important;}
+  .add-btn{width:34px !important;height:34px !important;}
+
+  /* Categories */
+  .cat-grid{grid-template-columns:repeat(2,1fr) !important;gap:10px !important;padding:0 0.8rem;}
+  .cat-card{padding:14px 10px !important;}
+  .cat-icon{font-size:24px !important;}
+  .cat-name{font-size:12px !important;}
+
+  /* Features grid */
+  .features-grid{grid-template-columns:1fr 1fr !important;gap:10px !important;padding:0 0.8rem !important;}
+  .feature-card{padding:14px !important;}
+  .feature-icon{width:42px !important;height:42px !important;margin-bottom:10px !important;}
+  .feature-icon svg{width:22px !important;height:22px !important;}
+  .feature-title{font-size:13px !important;}
+  .feature-desc{font-size:11px !important;}
+
+  /* Team */
+  .team-grid{grid-template-columns:repeat(2,1fr) !important;gap:10px !important;padding:0 0.8rem;}
+  .team-avatar{width:60px !important;height:60px !important;}
+  .team-name{font-size:13px !important;}
+  .team-role{font-size:11px !important;}
+
+  /* Reviews */
+  .reviews-grid{grid-template-columns:1fr !important;gap:12px !important;padding:0 0.8rem;}
+  .review-card{padding:14px !important;}
+  .review-text{font-size:12px !important;}
+
+  /* Cart */
+  .cart-drawer{width:100% !important;max-width:100vw !important;}
+  .cart-item{padding:8px !important;}
+  .cart-item-img{width:52px !important;height:52px !important;}
+
+  /* Order form */
+  #page-order{padding:1rem !important;}
+  #page-order .form-card{padding:1.2rem !important;}
+
+  /* Contact */
+  .contact-grid{grid-template-columns:1fr !important;gap:10px !important;padding:0 0.8rem;}
+
+  /* Footer */
+  footer{padding:1.5rem 1rem !important;}
+  .footer-grid{grid-template-columns:1fr !important;gap:1.2rem !important;}
+  .footer-brand p{font-size:12px;}
+  .footer-social{justify-content:center;}
+
+  /* Newsletter */
+  .newsletter{padding:2rem 1rem !important;}
+  .newsletter h3{font-size:15px;}
+  .newsletter p{font-size:12px;}
+  .newsletter-form{flex-direction:column;gap:8px;}
+  .newsletter-input,.newsletter-btn{width:100% !important;}
+
+  /* Chat widget */
+  #chat-window{width:calc(100vw - 24px) !important;right:12px !important;bottom:80px !important;height:480px !important;max-height:80vh;}
+  #chat-toggle{bottom:18px !important;right:18px !important;}
+
+  /* Subs page cards */
+  .subs-card{font-size:13px !important;}
+
+  /* Reviews ticker */
+  #reviews-ticker-wrap{height:auto !important;}
+  .ticker-item{padding:6px 14px !important;height:auto !important;margin:0 4px !important;gap:10px !important;}
+  .ticker-text{font-size:11px !important;max-width:180px !important;}
+  .ticker-avatar{width:30px !important;height:30px !important;font-size:12px !important;}
+  .ticker-name{font-size:10px !important;}
+
+  /* Payment methods bar */
+  #payment-methods-bar{flex-wrap:wrap;gap:6px !important;padding:0 0.8rem;}
+
+  /* Forms */
+  .form-input,.form-select,.form-textarea{font-size:14px !important;padding:10px 12px !important;}
+  .form-label{font-size:12px !important;}
+  .form-actions{flex-direction:column;}
+  .form-actions button{width:100%;}
+
+  /* Buttons */
+  .btn-silver,.btn-outline{font-size:13px;padding:10px 16px;}
+
+  /* Notifications */
+  #notif-container{left:10px !important;right:10px !important;top:70px !important;}
+  #notif-container > div{max-width:100% !important;}
+
+  /* Admin panel */
+  .admin-pg{padding:1rem !important;}
+  .admin-pg-title{font-size:16px !important;}
+  .admin-tbl{font-size:11px;}
+  .admin-tbl th,.admin-tbl td{padding:8px 6px !important;}
+  .tbl-box{overflow-x:auto;}
+
+  /* Sidebar items */
+  .sb-item{padding:10px 14px !important;font-size:13px !important;}
+  .sb-group-title{padding:8px 14px !important;font-size:11px !important;}
+
+  /* Sidebar clock widget */
+  #sidebar-clock-widget{margin:8px !important;}
+
+  /* Modals */
+  [style*="position:fixed"][style*="inset:0"] > div{max-width:96vw !important;padding:1.3rem !important;max-height:90vh !important;overflow-y:auto !important;}
+
+  /* Hide things that clutter mobile */
+  .hide-mobile{display:none !important;}
+}
+
+/* Extra small phones */
+@media(max-width:420px){
+  .prod-grid{grid-template-columns:1fr !important;}
+  .cat-grid{grid-template-columns:repeat(2,1fr) !important;}
+  .features-grid{grid-template-columns:1fr !important;}
+  .team-grid{grid-template-columns:1fr !important;}
+  .stats-bar{grid-template-columns:1fr !important;}
+  .stat-num{font-size:1.6rem !important;}
+  .hero{padding:2rem 1rem 1.5rem !important;}
+  #hero-title-h1{font-size:1.5rem !important;}
+  .sec-title{font-size:14px !important;}
 }
 </style>
 <!-- ====== CROP MODAL ====== -->
@@ -1455,16 +1612,19 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
     <div id="home-reviews" style="display:none;" class="reviews-grid"></div>
   </div>
 
-  <!-- REVIEWS TICKER (moving banner at bottom) -->
-  <div id="reviews-ticker-wrap" style="background:var(--bg2);border-top:1px solid var(--border2);border-bottom:1px solid var(--border2);padding:0;overflow:hidden;position:relative;margin-bottom:0;">
-    <div style="display:flex;align-items:center;gap:0;overflow:hidden;height:52px;">
-      <!-- scrolling track -->
-      <div id="reviews-ticker" style="display:flex;gap:0;white-space:nowrap;animation:tickerScroll 30s linear infinite;will-change:transform;"></div>
-      <div id="reviews-ticker-clone" style="display:flex;gap:0;white-space:nowrap;animation:tickerScroll 30s linear infinite;will-change:transform;" aria-hidden="true"></div>
+  <!-- REVIEWS TICKER — Premium Animated Banner -->
+  <div id="reviews-ticker-wrap" style="background:linear-gradient(135deg, rgba(15,15,20,.6) 0%, rgba(25,25,35,.8) 50%, rgba(15,15,20,.6) 100%);border-top:1px solid rgba(245,197,24,.15);border-bottom:1px solid rgba(245,197,24,.15);padding:0;overflow:hidden;position:relative;margin-bottom:0;backdrop-filter:blur(8px);">
+    <!-- Decorative glow orbs -->
+    <div style="position:absolute;top:-30px;right:10%;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle, rgba(245,197,24,.08), transparent 70%);pointer-events:none;animation:orb1 8s ease-in-out infinite;"></div>
+    <div style="position:absolute;bottom:-30px;left:15%;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle, rgba(167,139,250,.08), transparent 70%);pointer-events:none;animation:orb2 10s ease-in-out infinite;"></div>
+
+    <div style="display:flex;align-items:center;gap:0;overflow:hidden;height:80px;position:relative;z-index:2;">
+      <div id="reviews-ticker" style="display:flex;gap:0;white-space:nowrap;animation:tickerScroll 50s linear infinite;will-change:transform;"></div>
+      <div id="reviews-ticker-clone" style="display:flex;gap:0;white-space:nowrap;animation:tickerScroll 50s linear infinite;will-change:transform;" aria-hidden="true"></div>
     </div>
-    <!-- fade edges -->
-    <div style="position:absolute;left:0;top:0;bottom:0;width:60px;background:linear-gradient(to right,var(--bg2),transparent);pointer-events:none;z-index:1;"></div>
-    <div style="position:absolute;right:0;top:0;bottom:0;width:60px;background:linear-gradient(to left,var(--bg2),transparent);pointer-events:none;z-index:1;"></div>
+    <!-- Fade edges (more pronounced) -->
+    <div style="position:absolute;left:0;top:0;bottom:0;width:100px;background:linear-gradient(to right, rgba(15,15,20,1), transparent);pointer-events:none;z-index:3;"></div>
+    <div style="position:absolute;right:0;top:0;bottom:0;width:100px;background:linear-gradient(to left, rgba(15,15,20,1), transparent);pointer-events:none;z-index:3;"></div>
   </div>
 
   <!-- PAYMENT METHODS BANNER -->
@@ -2675,15 +2835,64 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
           </div>
         </div>
 
-        <!-- Action bar -->
-        <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:14px;margin-bottom:1rem;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-          <button class="btn-silver" onclick="broadcastCustom()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-left:5px;"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg>
-            إرسال نشرة مخصصة لجميع المشتركين
-          </button>
-          <button class="btn-outline" onclick="copyAllEmails()">📋 نسخ كل الإيميلات</button>
-          <button class="btn-outline" onclick="exportSubsCSV()">⬇ تصدير CSV</button>
-          <button class="btn-outline" style="color:var(--red);border-color:rgba(200,60,60,.25);margin-right:auto;" onclick="clearAllSubs()">🗑 مسح الكل</button>
+        <!-- Email Composer -->
+        <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:18px;margin-bottom:1rem;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f5c518" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg>
+            <span style="font-size:14px;font-weight:700;color:var(--silver2);">إرسال رسالة بريدية</span>
+          </div>
+
+          <!-- Recipient selector -->
+          <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;background:var(--bg3);border:1px solid var(--border3);border-radius:10px;padding:8px 14px;font-size:12px;color:var(--text2);transition:.2s;">
+              <input type="radio" name="nl-target" value="all" checked onchange="updateRecipients()" style="cursor:pointer;accent-color:#f5c518;">
+              <span>إرسال للجميع <span id="nl-target-count" style="color:#f5c518;font-weight:700;">(0)</span></span>
+            </label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;background:var(--bg3);border:1px solid var(--border3);border-radius:10px;padding:8px 14px;font-size:12px;color:var(--text2);transition:.2s;">
+              <input type="radio" name="nl-target" value="single" onchange="updateRecipients()" style="cursor:pointer;accent-color:#f5c518;">
+              <span>إرسال لزبون واحد</span>
+            </label>
+          </div>
+
+          <!-- Single email picker -->
+          <div id="nl-single-picker" style="display:none;margin-bottom:12px;">
+            <label class="form-label">اختر المشترك</label>
+            <select class="form-select" id="nl-single-email"></select>
+          </div>
+
+          <!-- Subject -->
+          <div class="form-group" style="margin-bottom:10px;">
+            <label class="form-label">عنوان الرسالة</label>
+            <input type="text" class="form-input" id="nl-subject" placeholder="مثال: 🎉 عرض حصري على منتجاتنا!">
+          </div>
+
+          <!-- Quick templates -->
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">
+            <button class="btn-outline" style="font-size:11px;padding:5px 12px;" onclick="loadTemplate('offer')">💰 قالب عرض</button>
+            <button class="btn-outline" style="font-size:11px;padding:5px 12px;" onclick="loadTemplate('product')">🆕 قالب منتج جديد</button>
+            <button class="btn-outline" style="font-size:11px;padding:5px 12px;" onclick="loadTemplate('thanks')">🌟 قالب شكر</button>
+            <button class="btn-outline" style="font-size:11px;padding:5px 12px;" onclick="loadTemplate('update')">📢 قالب تحديث</button>
+          </div>
+
+          <!-- Body -->
+          <div class="form-group" style="margin-bottom:14px;">
+            <label class="form-label">محتوى الرسالة</label>
+            <textarea class="form-textarea" id="nl-body" rows="7" placeholder="اكتب محتوى الرسالة هنا..."></textarea>
+          </div>
+
+          <!-- Action buttons -->
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="btn-silver" onclick="sendBroadcast()" style="padding:11px 20px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-left:5px;"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg>
+              <span id="nl-send-label">إرسال للجميع</span>
+            </button>
+            <button class="btn-outline" onclick="previewBroadcast()">👁 معاينة</button>
+            <div style="margin-right:auto;display:flex;gap:6px;">
+              <button class="btn-outline" onclick="copyAllEmails()" style="font-size:11px;">📋 نسخ الإيميلات</button>
+              <button class="btn-outline" onclick="exportSubsCSV()" style="font-size:11px;">⬇ CSV</button>
+              <button class="btn-outline" style="color:var(--red);border-color:rgba(200,60,60,.25);font-size:11px;" onclick="clearAllSubs()">🗑</button>
+            </div>
+          </div>
         </div>
 
         <!-- Subscribers list -->
@@ -4895,6 +5104,7 @@ function renderNewsletterAdmin() {
     }).length;
     monthly.textContent = thisMonth;
   }
+  updateRecipients();
   const list = document.getElementById('nl-subs-list');
   if(!list) return;
   if(!newsletterSubs.length) {
@@ -5004,18 +5214,185 @@ function deleteNlSub(id) {
   });
 }
 
-function broadcastCustom() {
-  const subject = prompt('عنوان الإيميل:');
-  if(!subject) return;
-  const body = prompt('محتوى الإيميل:');
-  if(!body) return;
+// ── Composer state ──
+function updateRecipients() {
+  const target = document.querySelector('input[name="nl-target"]:checked')?.value;
+  const single = document.getElementById('nl-single-picker');
+  const sendLabel = document.getElementById('nl-send-label');
+  const targetCount = document.getElementById('nl-target-count');
   const active = newsletterSubs.filter(s=>s.active);
-  if(!active.length) { showNotif('لا يوجد مشتركون نشطون','error'); return; }
-  const bcc = active.map(s=>s.email).join(',');
-  const mailto = `mailto:?bcc=${encodeURIComponent(bcc)}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body+'\n\n— فريق Core Code Store')}`;
-  window.open(mailto, '_blank');
-  showNotif(`📧 جاهز للإرسال إلى ${active.length} مشترك`,'success');
+  if(targetCount) targetCount.textContent = `(${active.length})`;
+  if(target === 'single') {
+    if(single) single.style.display = 'block';
+    const sel = document.getElementById('nl-single-email');
+    if(sel) {
+      sel.innerHTML = '<option value="">— اختر —</option>' + active.map(s=>`<option value="${s.email}">${s.email}</option>`).join('');
+    }
+    if(sendLabel) sendLabel.textContent = 'إرسال للزبون المختار';
+  } else {
+    if(single) single.style.display = 'none';
+    if(sendLabel) sendLabel.textContent = `إرسال للجميع (${active.length})`;
+  }
 }
+
+function loadTemplate(type) {
+  const subj = document.getElementById('nl-subject');
+  const body = document.getElementById('nl-body');
+  const templates = {
+    offer: {
+      subject: '🎉 عرض حصري لك من Core Code Store!',
+      body: `مرحباً 👋
+
+يسعدنا أن نقدم لك عرضاً حصرياً!
+
+🎁 خصم 30% على جميع المنتجات
+⏰ صالح حتى نهاية الأسبوع
+🔑 استخدم الكود: SAVE30
+
+تصفح موقعنا الآن: https://corecodeweb.store
+
+— فريق Core Code Store`,
+    },
+    product: {
+      subject: '🆕 منتج جديد متاح الآن!',
+      body: `مرحباً 👋
+
+أطلقنا منتجاً جديداً نعتقد أنه سيعجبك!
+
+📦 [اسم المنتج]
+💵 السعر: $XX
+✨ المميزات:
+  • [ميزة 1]
+  • [ميزة 2]
+  • [ميزة 3]
+
+🔗 شاهده الآن: https://corecodeweb.store
+
+— فريق Core Code Store`,
+    },
+    thanks: {
+      subject: '🌟 شكراً لاشتراكك معنا!',
+      body: `مرحباً 👋
+
+شكراً لانضمامك إلى عائلة Core Code Store!
+
+سنحرص على إرسال:
+✓ آخر المنتجات والعروض الحصرية
+✓ نصائح تقنية مفيدة
+✓ خصومات خاصة بالمشتركين فقط
+
+نقدّر ثقتك بنا.
+
+— فريق Core Code Store`,
+    },
+    update: {
+      subject: '📢 تحديث مهم من Core Code Store',
+      body: `مرحباً 👋
+
+لدينا تحديث مهم نود مشاركته معك:
+
+[اكتب التحديث هنا]
+
+لمزيد من التفاصيل قم بزيارة موقعنا: https://corecodeweb.store
+
+— فريق Core Code Store`,
+    },
+  };
+  const t = templates[type];
+  if(t) {
+    if(subj) subj.value = t.subject;
+    if(body) body.value = t.body;
+    showNotif('✓ تم تحميل القالب','success');
+  }
+}
+
+function getStoreEmail() {
+  // Find admin email from contactList
+  const emailContact = (typeof contactList !== 'undefined' ? contactList : []).find(c=>c.type==='email');
+  if(emailContact) return emailContact.value || (emailContact.link||'').replace('mailto:','');
+  // Fallback to settings
+  return document.getElementById('set-email')?.value?.trim() || '';
+}
+
+function previewBroadcast() {
+  const subject = document.getElementById('nl-subject')?.value.trim();
+  const body    = document.getElementById('nl-body')?.value.trim();
+  if(!subject && !body) { showNotif('اكتب رسالة أولاً','error'); return; }
+  const target = document.querySelector('input[name="nl-target"]:checked')?.value;
+  const recipients = target==='single'
+    ? [document.getElementById('nl-single-email')?.value].filter(Boolean)
+    : newsletterSubs.filter(s=>s.active).map(s=>s.email);
+  const fromEmail = getStoreEmail() || 'no-reply@corecodeweb.store';
+  const modal = document.createElement('div');
+  modal.style.cssText='position:fixed;inset:0;z-index:99998;background:rgba(0,0,0,.88);display:flex;align-items:center;justify-content:center;padding:1rem;';
+  modal.innerHTML=`
+  <div style="background:#fff;color:#222;border-radius:14px;width:min(560px,96vw);max-height:88vh;overflow:hidden;display:flex;flex-direction:column;font-family:Arial,sans-serif;">
+    <div style="background:#f5f5f5;padding:14px 18px;border-bottom:1px solid #ddd;display:flex;justify-content:space-between;align-items:center;">
+      <span style="font-size:13px;font-weight:700;">معاينة الرسالة</span>
+      <button onclick="this.closest('[style*=fixed]').remove()" style="background:#e0e0e0;border:none;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px;">✕</button>
+    </div>
+    <div style="padding:18px;overflow-y:auto;flex:1;">
+      <div style="font-size:12px;color:#666;margin-bottom:4px;">من:</div>
+      <div style="font-size:13px;font-weight:700;color:#222;margin-bottom:10px;">${fromEmail}</div>
+      <div style="font-size:12px;color:#666;margin-bottom:4px;">إلى:</div>
+      <div style="font-size:13px;color:#222;margin-bottom:10px;">${recipients.length} مستلم</div>
+      <div style="font-size:12px;color:#666;margin-bottom:4px;">الموضوع:</div>
+      <div style="font-size:15px;font-weight:700;color:#222;margin-bottom:18px;border-bottom:1px solid #eee;padding-bottom:14px;">${subject||'(بدون موضوع)'}</div>
+      <div style="font-size:14px;color:#333;line-height:1.7;white-space:pre-wrap;">${body||'(بدون محتوى)'}</div>
+    </div>
+    <div style="background:#f5f5f5;padding:12px 18px;border-top:1px solid #ddd;text-align:left;">
+      <button onclick="this.closest('[style*=fixed]').remove()" style="background:#4f46e5;color:#fff;border:none;padding:8px 18px;border-radius:6px;cursor:pointer;font-family:Cairo,sans-serif;font-size:13px;">حسناً</button>
+    </div>
+  </div>`;
+  document.body.appendChild(modal);
+}
+
+function sendBroadcast() {
+  const subject = document.getElementById('nl-subject')?.value.trim();
+  const body    = document.getElementById('nl-body')?.value.trim();
+  if(!subject) { showNotif('اكتب عنوان الرسالة','error'); return; }
+  if(!body)    { showNotif('اكتب محتوى الرسالة','error'); return; }
+
+  const target = document.querySelector('input[name="nl-target"]:checked')?.value;
+  let recipients = [];
+  if(target === 'single') {
+    const email = document.getElementById('nl-single-email')?.value;
+    if(!email) { showNotif('اختر زبوناً للإرسال','error'); return; }
+    recipients = [email];
+  } else {
+    recipients = newsletterSubs.filter(s=>s.active).map(s=>s.email);
+    if(!recipients.length) { showNotif('لا يوجد مشتركون نشطون','error'); return; }
+  }
+
+  // Build mailto link: store email as FROM (default in mail client), all recipients as BCC for privacy
+  const fromEmail = getStoreEmail();
+  const fullBody = body + '\n\n— فريق Core Code Store\nhttps://corecodeweb.store';
+  let mailto;
+  if(recipients.length === 1) {
+    // Single recipient — use "to" field
+    mailto = `mailto:${recipients[0]}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(fullBody)}`;
+  } else {
+    // Multiple — BCC to keep emails private
+    mailto = `mailto:${fromEmail||''}?bcc=${encodeURIComponent(recipients.join(','))}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(fullBody)}`;
+  }
+
+  // Try to open mail client
+  const opened = window.open(mailto, '_blank');
+  setTimeout(() => {
+    showNotif(`📧 جاهز للإرسال إلى ${recipients.length} ${recipients.length===1?'مستلم':'مستلم. تم فتح برنامج الإيميل عندك'}`,'success');
+  }, 300);
+
+  // Optional: clear composer
+  setTimeout(() => {
+    if(confirm(`هل تم الإرسال بنجاح؟\n\nاضغط "موافق" لمسح حقول الرسالة.`)) {
+      document.getElementById('nl-subject').value = '';
+      document.getElementById('nl-body').value = '';
+    }
+  }, 2000);
+}
+
+// Keep old broadcastCustom for compatibility
+function broadcastCustom() { sendBroadcast(); }
 function sendContact(){showNotif('✓ تم إرسال رسالتك، سنرد قريباً','success');}
 
 // ====== ADMIN ======
@@ -8211,19 +8588,25 @@ function renderReviews() {
   const ticker = document.getElementById('reviews-ticker');
   const clone  = document.getElementById('reviews-ticker-clone');
   if(!ticker) return;
-  const tickerHtml = allReviews.map(r=>`
-    <div class="ticker-item">
-      <div>
+  const tickerHtml = allReviews.map(r=>{
+    const initial = (r.name||'؟').charAt(0).toUpperCase();
+    return `<div class="ticker-item">
+      <div class="ticker-avatar">${initial}</div>
+      <div style="display:flex;flex-direction:column;gap:3px;">
         <div class="ticker-stars">${svgStars(r.stars)}</div>
         <div class="ticker-name">${r.name}</div>
       </div>
+      <span class="ticker-quote">❝</span>
       <div class="ticker-text">${r.comment}</div>
-    </div>`).join('');
+      <span class="ticker-quote">❞</span>
+      <div class="ticker-divider"></div>
+    </div>`;
+  }).join('');
   ticker.innerHTML = tickerHtml;
   clone.innerHTML  = tickerHtml;
 
   // adjust animation speed based on count
-  const duration = Math.max(15, allReviews.length * 5) + 's';
+  const duration = Math.max(25, allReviews.length * 6) + 's';
   ticker.style.animationDuration = duration;
   clone.style.animationDuration  = duration;
 }
@@ -12343,6 +12726,11 @@ window.exportSubsCSV = exportSubsCSV;
 window.clearAllSubs = clearAllSubs;
 window.aiAutoReply = aiAutoReply;
 window.detectIntent = detectIntent;
+window.updateRecipients = updateRecipients;
+window.loadTemplate = loadTemplate;
+window.previewBroadcast = previewBroadcast;
+window.sendBroadcast = sendBroadcast;
+window.getStoreEmail = getStoreEmail;
 window.subscribe = subscribe;
 window.sendContact = sendContact;
 window.doLogin = doLogin;
