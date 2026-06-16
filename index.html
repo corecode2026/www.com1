@@ -115,6 +115,7 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-h
 .page{display:none;}
 .page.active{display:block;animation:fadeIn .25s ease;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes bounce{0%,100%{transform:scale(1)}30%{transform:scale(1.3)}60%{transform:scale(0.9)}}
 
 /* ===== HERO ===== */
 .hero{position:relative;padding:5rem 2rem 4rem;text-align:center;overflow:hidden;}
@@ -749,6 +750,163 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
   #hero-title-h1{font-size:1.5rem !important;}
   .sec-title{font-size:14px !important;}
 }
+
+/* ═══ LIGHT THEME OVERRIDES — White everything, black text ═══ */
+body.light-theme,
+body.light-theme nav,
+body.light-theme .topbar,
+body.light-theme footer,
+body.light-theme .hero,
+body.light-theme .newsletter,
+body.light-theme #reviews-ticker-wrap{background:#ffffff !important;color:#000 !important;}
+
+body.light-theme *:not(svg):not(path):not(circle):not(rect):not(polygon):not(line):not(polyline){
+  color:#0a0a0a;
+}
+body.light-theme .text2,body.light-theme [style*="var(--text2)"]{color:#222 !important;}
+body.light-theme .text3,body.light-theme [style*="var(--text3)"]{color:#555 !important;}
+
+/* Cards & panels */
+body.light-theme .prod-card,
+body.light-theme .cat-card,
+body.light-theme .feature-card,
+body.light-theme .team-card,
+body.light-theme .review-card,
+body.light-theme .form-card,
+body.light-theme .tbl-box,
+body.light-theme .admin-pg,
+body.light-theme .sidebar,
+body.light-theme .cart-drawer,
+body.light-theme .promo,
+body.light-theme .ads-section,
+body.light-theme .ad-slide,
+body.light-theme .subs-card,
+body.light-theme .ticker-item,
+body.light-theme .stats-bar,
+body.light-theme .stat-item{
+  background:#f8f9fb !important;
+  border-color:#d8dce2 !important;
+  color:#0a0a0a !important;
+}
+
+/* Reviews ticker */
+body.light-theme #reviews-ticker-wrap{background:linear-gradient(135deg, #fafbfc 0%, #f0f2f5 50%, #fafbfc 100%) !important;}
+body.light-theme .ticker-text,
+body.light-theme .ticker-name{color:#0a0a0a !important;}
+
+/* Stats bar */
+body.light-theme .stat-num{background:linear-gradient(135deg,#000,#333) !important;-webkit-background-clip:text !important;background-clip:text !important;}
+body.light-theme .stat-label{color:rgba(120,80,0,.85) !important;}
+
+/* Top header / nav */
+body.light-theme .logo,
+body.light-theme .nav-link,
+body.light-theme h1,body.light-theme h2,body.light-theme h3,
+body.light-theme .sec-title,
+body.light-theme .prod-name,
+body.light-theme .cat-name,
+body.light-theme .feature-title,
+body.light-theme .team-name,
+body.light-theme .review-text,
+body.light-theme .review-name,
+body.light-theme .admin-pg-title,
+body.light-theme .form-label,
+body.light-theme .form-card-title{color:#0a0a0a !important;}
+
+body.light-theme .nav-link.active,
+body.light-theme .nav-link:hover{background:#e8eaef !important;color:#000 !important;}
+
+/* Form inputs */
+body.light-theme .form-input,
+body.light-theme .form-select,
+body.light-theme .form-textarea,
+body.light-theme .newsletter-input,
+body.light-theme input[type=text],
+body.light-theme input[type=email],
+body.light-theme input[type=password],
+body.light-theme input[type=number],
+body.light-theme input[type=date],
+body.light-theme input[type=tel],
+body.light-theme textarea,
+body.light-theme select{
+  background:#fff !important;
+  border-color:#c5cad1 !important;
+  color:#0a0a0a !important;
+}
+body.light-theme .form-input:focus,
+body.light-theme .form-select:focus,
+body.light-theme .form-textarea:focus{border-color:#666 !important;}
+body.light-theme ::placeholder{color:#888 !important;}
+
+/* Buttons */
+body.light-theme .btn-silver,
+body.light-theme .newsletter-btn,
+body.light-theme .add-btn{background:linear-gradient(135deg,#1a1a1a,#000) !important;color:#fff !important;border-color:#000 !important;}
+body.light-theme .btn-outline{background:transparent !important;border:1px solid #c5cad1 !important;color:#0a0a0a !important;}
+body.light-theme .btn-outline:hover{background:#f0f2f5 !important;}
+
+/* Tables */
+body.light-theme .admin-tbl{background:#fff !important;}
+body.light-theme .admin-tbl th{background:#f0f2f5 !important;color:#0a0a0a !important;border-color:#d8dce2 !important;}
+body.light-theme .admin-tbl td{color:#0a0a0a !important;border-color:#e8eaef !important;}
+body.light-theme .admin-tbl tr:hover{background:#f8f9fb !important;}
+
+/* Sidebar */
+body.light-theme .sb-item{color:#222 !important;}
+body.light-theme .sb-item.active,
+body.light-theme .sb-item:hover{background:#e8eaef !important;color:#000 !important;}
+body.light-theme .sb-group-title{color:#666 !important;}
+
+/* Topbar/notifications */
+body.light-theme .icon-btn,
+body.light-theme .admin-topbtn{background:#f0f2f5 !important;border-color:#d8dce2 !important;color:#0a0a0a !important;}
+body.light-theme .icon-btn:hover{background:#e8eaef !important;}
+
+/* Chat widget */
+body.light-theme #chat-window,
+body.light-theme #chat-header,
+body.light-theme #chat-msgs,
+body.light-theme #chat-input-area{background:#fff !important;border-color:#d8dce2 !important;color:#0a0a0a !important;}
+body.light-theme .chat-msg-user{background:linear-gradient(135deg,#dcf8c6,#c5e8b3) !important;border-color:#a8d894 !important;color:#000 !important;}
+body.light-theme .chat-msg-user div{color:#000 !important;}
+body.light-theme #chat-input{background:#f8f9fb !important;color:#000 !important;border-color:#c5cad1 !important;}
+
+/* Promo banner */
+body.light-theme .promo{background:linear-gradient(135deg,#fff8e1,#fff3c4) !important;border-color:#f5c518 !important;color:#000 !important;}
+body.light-theme .promo *{color:#000 !important;}
+body.light-theme .promo-code{background:#000 !important;color:#fff !important;}
+
+/* Footer */
+body.light-theme footer{background:#f0f2f5 !important;border-color:#d8dce2 !important;}
+body.light-theme .footer-brand strong,
+body.light-theme .footer-brand p,
+body.light-theme footer h4,
+body.light-theme footer a,
+body.light-theme footer span{color:#0a0a0a !important;}
+
+/* Modals */
+body.light-theme [style*="position:fixed"][style*="inset:0"] > div{background:#fff !important;color:#0a0a0a !important;border-color:#d8dce2 !important;}
+body.light-theme [style*="background:var(--bg2)"]{background:#f8f9fb !important;}
+body.light-theme [style*="background:var(--bg3)"]{background:#f0f2f5 !important;}
+body.light-theme [style*="background:var(--bg4)"]{background:#e8eaef !important;}
+
+/* Hero gradient bg should stay branded */
+body.light-theme .hero{background:linear-gradient(135deg,#fafbfc 0%,#f0f2f5 100%) !important;}
+
+/* Scrollbar */
+body.light-theme ::-webkit-scrollbar{background:#f0f2f5;}
+body.light-theme ::-webkit-scrollbar-thumb{background:#c5cad1;}
+body.light-theme ::-webkit-scrollbar-thumb:hover{background:#a0a8b3;}
+
+/* Sidebar clock widget */
+body.light-theme #sidebar-clock-widget{background:#f0f2f5 !important;border-color:#d8dce2 !important;}
+body.light-theme #sidebar-clock-widget *{color:#0a0a0a !important;}
+
+/* Notifications */
+body.light-theme #notif-container > div{background:#fff !important;border-color:#d8dce2 !important;color:#0a0a0a !important;box-shadow:0 4px 12px rgba(0,0,0,.1) !important;}
+
+/* SVG icons inherit currentColor → text becomes dark */
+body.light-theme svg{stroke:currentColor;}
 </style>
 <!-- ====== CROP MODAL ====== -->
 <div id="crop-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);align-items:center;justify-content:center;">
@@ -2913,21 +3071,18 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
         <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:16px;margin-bottom:1.2rem;display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;">
           <div class="form-group" style="margin:0;flex:1;min-width:130px;">
             <label class="form-label">من تاريخ</label>
-            <input type="date" class="form-input" id="wh-from">
+            <input type="date" class="form-input" id="wh-from" onchange="renderWorkHoursReport()">
           </div>
           <div class="form-group" style="margin:0;flex:1;min-width:130px;">
             <label class="form-label">إلى تاريخ</label>
-            <input type="date" class="form-input" id="wh-to">
+            <input type="date" class="form-input" id="wh-to" onchange="renderWorkHoursReport()">
           </div>
           <div class="form-group" style="margin:0;flex:1;min-width:130px;">
             <label class="form-label">الموظف</label>
-            <select class="form-select" id="wh-staff"><option value="">الكل</option></select>
+            <select class="form-select" id="wh-staff" onchange="renderWorkHoursReport()"><option value="">الكل</option></select>
           </div>
           <div style="display:flex;gap:8px;">
-            <button class="btn-silver" style="padding:10px 20px;" onclick="renderWorkHoursReport()">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-left:4px;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-              بحث
-            </button>
+            <button class="btn-outline" style="padding:10px 14px;" onclick="resetWhFilters()" title="إعادة تعيين الفلاتر">↻</button>
             <button class="btn-outline" style="padding:10px 14px;color:var(--red);border-color:rgba(200,60,60,.25);font-size:12px;" onclick="clearWorkHours()">🗑</button>
           </div>
         </div>
@@ -2937,11 +3092,30 @@ footer{background:var(--bg2);border-top:1px solid var(--border2);padding:2.5rem 
 
         <!-- Sessions Table -->
         <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:14px;overflow:hidden;">
-          <div style="padding:14px 18px;border-bottom:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between;">
-            <span style="font-size:14px;font-weight:700;color:var(--silver2);">سجل الجلسات</span>
-            <span id="wh-count" style="font-size:11px;color:var(--text3);"></span>
+          <div style="padding:14px 18px;border-bottom:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+            <span style="font-size:14px;font-weight:700;color:var(--silver2);">📊 سجل الجلسات</span>
+            <span style="font-size:11px;color:var(--text3);display:flex;align-items:center;gap:6px;">
+              <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#22c55e;animation:pulse 1.5s infinite;"></span>
+              <span>تحديث مباشر</span> · <span id="wh-count">0 جلسة</span>
+            </span>
           </div>
-          <div id="wh-cards" style="padding:12px;display:flex;flex-direction:column;gap:8px;"></div>
+          <div style="overflow-x:auto;">
+            <table class="admin-tbl wh-table" id="wh-table" style="margin:0;width:100%;">
+              <thead>
+                <tr>
+                  <th style="text-align:right;width:40px;">#</th>
+                  <th style="text-align:right;">الموظف</th>
+                  <th style="text-align:right;">التاريخ واليوم</th>
+                  <th style="text-align:right;">دخول</th>
+                  <th style="text-align:right;">خروج</th>
+                  <th style="text-align:right;">المدة</th>
+                  <th id="wh-th-pay" style="text-align:right;">الأجر</th>
+                  <th style="text-align:right;width:50px;"></th>
+                </tr>
+              </thead>
+              <tbody id="wh-tbody"></tbody>
+            </table>
+          </div>
         </div>
       </div>
 
@@ -3813,13 +3987,76 @@ function renderShop() {
   if(count) count.textContent = p.length+' منتج';
 }
 
+// ====== AI IMAGE GENERATION (Pollinations.ai - free, no API key) ======
+// Generates a unique realistic AI image for each product based on its name/category
+
+function buildAIPrompt(p) {
+  const name = (p.name || '').toLowerCase();
+  const cat  = (p.cat  || '').toLowerCase();
+  const desc = (p.desc || '').toLowerCase();
+  const all  = `${name} ${cat} ${desc}`;
+
+  // Detect product type and build a tailored prompt
+  let visual = 'professional product mockup, modern minimalist design';
+
+  if(all.match(/سكريبت|script|code|كود|برمج/i))
+    visual = 'modern code editor screen with colorful syntax highlighting, dark theme, floating around a glowing laptop, holographic effect, premium tech aesthetic';
+  else if(all.match(/موقع|website|web|site/i))
+    visual = 'modern website mockup on multiple devices laptop and phone, sleek UI design, vibrant gradient background, professional product shot';
+  else if(all.match(/تطبيق|app|application|موبايل/i))
+    visual = 'smartphone with beautiful colorful app interface, 3d isometric view, premium glass effect, gradient background';
+  else if(all.match(/قالب|template|design|تصميم/i))
+    visual = 'elegant website template showcase, multiple design layouts floating, premium portfolio aesthetic, soft shadows';
+  else if(all.match(/لوحة|dashboard|admin|إدارة|تحكم/i))
+    visual = 'modern dashboard interface with colorful charts and graphs, dark mode UI, glassmorphism design, professional analytics';
+  else if(all.match(/بوت|bot|chatbot|ذكاء|ai/i))
+    visual = 'friendly futuristic robot mascot, glowing neon accents, cyberpunk aesthetic, professional tech product';
+  else if(all.match(/لعبة|game|gaming/i))
+    visual = 'epic game screenshot with vibrant colors, action-packed scene, premium gaming aesthetic, cinematic lighting';
+  else if(all.match(/api|integration/i))
+    visual = 'abstract data network with glowing connection lines and nodes, blue and purple gradient, tech minimalist style';
+  else if(all.match(/plugin|wordpress|extension|إضافة/i))
+    visual = 'colorful puzzle pieces connecting, modern flat design, gradient background, premium software aesthetic';
+  else if(all.match(/متجر|shop|ecommerce|تجارة/i))
+    visual = 'modern e-commerce store on screen with products, premium shopping aesthetic, vibrant clean design';
+  else if(all.match(/مالي|finance|محاسبة|accounting/i))
+    visual = 'financial dashboard with charts and money icons, professional fintech design, premium gold and dark blue';
+
+  // Pollinations.ai prompt — combine product name + visual + brand style
+  return `${p.name}, ${visual}, no text, no watermark, premium quality, 4k, professional product image, high detail`;
+}
+
+function generateAIImageURL(p, opts = {}) {
+  const prompt = buildAIPrompt(p);
+  const encoded = encodeURIComponent(prompt);
+  const seed = p.id || Math.floor(Math.random() * 99999);
+  const w = opts.width || 600;
+  const h = opts.height || 400;
+  // Pollinations.ai — free AI image generation, no API key needed
+  return `https://image.pollinations.ai/prompt/${encoded}?width=${w}&height=${h}&seed=${seed}&nologo=true&enhance=true`;
+}
+
+// Replaces SVG generator with real AI image
+function generateProductSVG(p) {
+  const imgUrl = generateAIImageURL(p);
+  return `<div style="width:100%;height:100%;position:relative;background:linear-gradient(135deg,#1a1a1a,#0a0a0a);overflow:hidden;">
+    <img src="${imgUrl}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+    <!-- Fallback if AI fails to load -->
+    <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;flex-direction:column;color:#888;font-size:36px;">📦<div style="font-size:13px;margin-top:8px;">${p.cat||''}</div></div>
+    <!-- Core Code Store watermark badge -->
+    <div style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.7);backdrop-filter:blur(4px);border:1px solid rgba(245,197,24,.4);border-radius:10px;padding:3px 10px;font-size:10px;font-weight:700;color:#fff;letter-spacing:.5px;white-space:nowrap;">Core Code Store</div>
+    <!-- Category tag -->
+    ${p.cat ? `<div style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);border-radius:8px;padding:3px 10px;font-size:10px;color:#fff;font-weight:600;">${p.cat}</div>` : ''}
+  </div>`;
+}
+
 function renderProdCard(p) {
   const inWL = wishlist.includes(p.id);
   const thumbContent = p.image
     ? `<img src="${p.image}" style="width:100%;height:100%;object-fit:cover;">`
-    : p.icon;
+    : generateProductSVG(p);
   return `<div class="prod-card">
-    <div class="prod-thumb" style="${p.image?'padding:0;overflow:hidden;':''}">${thumbContent}</div>
+    <div class="prod-thumb" style="padding:0;overflow:hidden;">${thumbContent}</div>
     <div class="prod-body">
       <div class="prod-tags">
         ${p.badge==='new'?'<span class="tag tag-new">جديد</span>':''}
@@ -4415,8 +4652,105 @@ function submitOrder(){
     updateAdminCounts();
   }
 
-  // show track order modal to customer
-  showMyOrders();
+  // show forced rating modal first, then track orders
+  showForceRatingModal(orders[0].id);
+}
+
+// Force user to rate the site before they can dismiss
+function showForceRatingModal(orderId) {
+  // Don't show if already rated today
+  const ratedKey = 'ccs_rated_' + new Date().toISOString().slice(0,10);
+  if(localStorage.getItem(ratedKey)) {
+    showMyOrders();
+    return;
+  }
+  // Remove if already exists
+  document.getElementById('force-rate-modal')?.remove();
+
+  const modal = document.createElement('div');
+  modal.id = 'force-rate-modal';
+  modal.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(8px);animation:fadeIn .4s ease;';
+  modal.innerHTML = `
+    <div style="background:linear-gradient(135deg,#0d0d0f,#13131a);border:1px solid rgba(245,197,24,.3);border-radius:20px;width:min(450px,96vw);padding:2rem;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.7);position:relative;">
+      <!-- celebratory icon -->
+      <div style="font-size:46px;margin-bottom:10px;animation:bounce .8s ease;">🎉</div>
+      <div style="font-size:18px;font-weight:900;color:#22c55e;margin-bottom:6px;">تم استلام طلبك بنجاح!</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.6);margin-bottom:18px;">رقم الطلب: <strong style="color:#f5c518;">${orderId}</strong></div>
+
+      <!-- divider -->
+      <div style="height:1px;background:linear-gradient(to right,transparent,rgba(245,197,24,.3),transparent);margin:18px 0;"></div>
+
+      <div style="font-size:15px;font-weight:700;color:#f5c518;margin-bottom:8px;">⭐ قيّم تجربتك معنا</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.5);margin-bottom:18px;">رأيك يهمنا — كيف وجدت الموقع؟</div>
+
+      <!-- 5 stars -->
+      <div id="force-rate-stars" style="display:flex;justify-content:center;gap:6px;margin-bottom:14px;">
+        ${[1,2,3,4,5].map(n=>`
+          <svg onclick="setForceRate(${n})" onmouseover="hoverForceRate(${n})" onmouseout="hoverForceRate(0)" id="frs-${n}" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="cursor:pointer;transition:.2s;">
+            <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
+          </svg>
+        `).join('')}
+      </div>
+
+      <!-- Optional comment -->
+      <textarea id="force-rate-comment" rows="2" placeholder="شاركنا رأيك (اختياري)..." style="width:100%;padding:10px 12px;background:rgba(255,255,255,.04);border:1px solid rgba(245,197,24,.2);border-radius:10px;color:#fff;font-family:Cairo,sans-serif;font-size:13px;resize:none;outline:none;margin-bottom:14px;"></textarea>
+
+      <button onclick="submitForceRate('${orderId}')" id="force-rate-submit" disabled style="width:100%;padding:13px;background:#444;border:none;border-radius:10px;color:#888;font-weight:900;font-family:Cairo,sans-serif;font-size:14px;cursor:not-allowed;transition:.3s;">
+        اختر تقييماً أولاً
+      </button>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}
+
+let _forceRateValue = 0;
+function setForceRate(n) {
+  _forceRateValue = n;
+  hoverForceRate(n);
+  const btn = document.getElementById('force-rate-submit');
+  if(btn) {
+    btn.disabled = false;
+    btn.style.cursor = 'pointer';
+    btn.style.background = 'linear-gradient(135deg,#f5c518,#b8860b)';
+    btn.style.color = '#000';
+    btn.textContent = '✓ إرسال التقييم';
+  }
+}
+function hoverForceRate(n) {
+  for(let i=1;i<=5;i++) {
+    const el = document.getElementById('frs-'+i);
+    if(!el) continue;
+    const filled = i <= (n || _forceRateValue);
+    el.setAttribute('fill', filled ? '#f5c518' : 'none');
+    el.setAttribute('stroke', filled ? '#f5c518' : '#888');
+    el.style.transform = filled ? 'scale(1.15)' : 'scale(1)';
+    el.style.filter = filled ? 'drop-shadow(0 0 8px rgba(245,197,24,.5))' : 'none';
+  }
+}
+function submitForceRate(orderId) {
+  if(!_forceRateValue) return;
+  const comment = document.getElementById('force-rate-comment')?.value.trim() || '';
+  // Save rating to siteRatings
+  if(typeof siteRatings !== 'undefined') {
+    siteRatings.unshift({
+      name:    'زبون',
+      stars:   _forceRateValue,
+      comment: comment || 'تقييم رائع!',
+      date:    new Date().toISOString().slice(0,10),
+      orderId,
+    });
+    saveAllData?.();
+    renderReviews?.();
+  }
+  // Mark as rated today
+  localStorage.setItem('ccs_rated_'+new Date().toISOString().slice(0,10), '1');
+  // Notify admin
+  notifyAdminFirebase?.('new_rating', { stars: _forceRateValue, comment: comment.slice(0,80) });
+  // Close and show orders
+  document.getElementById('force-rate-modal')?.remove();
+  showNotif?.('🌟 شكراً لتقييمك!', 'success');
+  _forceRateValue = 0;
+  setTimeout(()=>showMyOrders?.(), 400);
 }
 
 function openTrackSearch() {
@@ -7362,14 +7696,19 @@ function toggleClockWidget() {
 
 // ── Detailed summary modal shown after clocking out ──
 function showSessionSummary(s) {
+  const isAdmin = currentUser.role === 'admin';
+  // Staff get only a simple notif — no modal, no details about pay
+  if(!isAdmin) {
+    showNotif?.('⏹ تم تسجيل خروجك — شكراً لجهودك!','success');
+    return;
+  }
+  // Admin sees the full earnings modal
   const login   = new Date(s.loginAt);
   const logout  = new Date(s.logoutAt);
   const date    = login.toLocaleDateString('ar-SA',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
   const inTime  = login.toLocaleTimeString('ar',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
   const outTime = logout.toLocaleTimeString('ar',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
   const dur     = fmtDur(s.durationMin);
-  const pay     = parseFloat(s.pay).toFixed(3);
-  const rate    = parseFloat(s.hourlyRate||0).toFixed(2);
 
   const modal = document.createElement('div');
   modal.style.cssText = 'position:fixed;inset:0;z-index:99998;background:rgba(0,0,0,.88);display:flex;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(6px);';
@@ -7379,14 +7718,12 @@ function showSessionSummary(s) {
       <div style="font-size:18px;font-weight:900;color:#22c55e;margin-bottom:4px;">تم تسجيل خروجك بنجاح</div>
       <div style="font-size:12px;color:rgba(255,255,255,.5);margin-bottom:22px;">شكراً لك ${s.staffName} — وردية ناجحة 💪</div>
 
-      <!-- Summary -->
       <div style="background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.2);border-radius:14px;padding:16px;margin-bottom:14px;">
         <div style="font-size:11px;color:rgba(180,160,255,.7);font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px;">💰 ربحك من هذه الوردية</div>
-        <div style="font-size:36px;font-weight:900;color:#22c55e;font-family:monospace;letter-spacing:-1px;">$${pay}</div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">معدل: $${rate} / ساعة</div>
+        <div style="font-size:36px;font-weight:900;color:#22c55e;font-family:monospace;letter-spacing:-1px;">$${parseFloat(s.pay).toFixed(3)}</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">معدل: $${parseFloat(s.hourlyRate||0).toFixed(2)} / ساعة</div>
       </div>
 
-      <!-- Details grid -->
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;text-align:right;">
         <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:11px;">
           <div style="font-size:10px;color:var(--text3);margin-bottom:4px;">📅 التاريخ</div>
@@ -7409,7 +7746,6 @@ function showSessionSummary(s) {
       <button onclick="this.closest('[style*=fixed]').remove()" style="margin-top:18px;width:100%;padding:12px;background:linear-gradient(135deg,#22c55e,#16a34a);border:none;border-radius:10px;color:#fff;font-weight:900;font-family:Cairo,sans-serif;font-size:14px;cursor:pointer;">إغلاق ←</button>
     </div>`;
   document.body.appendChild(modal);
-  // Auto-close after 15s
   setTimeout(()=>{ if(modal.parentNode) modal.remove(); }, 15000);
 }
 
@@ -7598,92 +7934,133 @@ function renderWorkHoursReport() {
   // newest first
   sessions.sort((a,b)=>new Date(b.loginAt)-new Date(a.loginAt));
 
-  const cards  = document.getElementById('wh-cards');
+  const tbody   = document.getElementById('wh-tbody');
   const summary = document.getElementById('wh-summary');
-  const count  = document.getElementById('wh-count');
+  const count   = document.getElementById('wh-count');
 
   if(count) count.textContent = `${sessions.length} جلسة`;
 
   // ── Summary cards (admin only) ──
-  if(summary && isAdmin) {
-    const totalSec  = sessions.reduce((a,s)=>{
-      if(!s.durationMin) return a;
-      return a + s.durationMin*60;
-    },0);
-    const totalPay  = sessions.reduce((a,s)=>a+(s.pay||0),0);
-    const staffCount= [...new Set(sessions.map(s=>s.staffId))].length;
-    const running   = sessions.filter(s=>!s.logoutAt).length;
-    const cards4 = [
-      { icon:'⏱', label:'إجمالي الساعات', val: fmtDur(totalSec/60), color:'#a78bfa' },
-      { icon:'💰', label:'إجمالي الأجور', val: `$${totalPay.toFixed(2)}`, color:'#22c55e' },
-      { icon:'👥', label:'الموظفون', val: staffCount, color:'#f5c518' },
-      { icon:'🟢', label:'نشط الآن', val: running, color:'#22c55e' },
-    ];
-    summary.innerHTML = cards4.map(c=>`
-      <div style="background:var(--bg2);border:1px solid ${c.color}25;border-radius:14px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
-        <div style="width:44px;height:44px;border-radius:12px;background:${c.color}15;border:1px solid ${c.color}30;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">${c.icon}</div>
-        <div>
-          <div style="font-size:20px;font-weight:900;color:${c.color};font-family:monospace;">${c.val}</div>
-          <div style="font-size:11px;color:var(--text3);margin-top:2px;">${c.label}</div>
-        </div>
-      </div>`).join('');
+  if(summary) {
+    if(!isAdmin) {
+      summary.innerHTML = '';
+    } else {
+      const totalMin  = sessions.reduce((a,s)=>a+(s.durationMin||0),0);
+      const totalPay  = sessions.reduce((a,s)=>a+(s.pay||0),0);
+      const staffCount= [...new Set(sessions.map(s=>s.staffId))].length;
+      const running   = sessions.filter(s=>!s.logoutAt).length;
+      summary.innerHTML = [
+        { icon:'⏱', label:'إجمالي الساعات', val: fmtDur(totalMin), color:'#a78bfa' },
+        { icon:'💰', label:'إجمالي الأجور', val: `$${totalPay.toFixed(2)}`, color:'#22c55e' },
+        { icon:'👥', label:'الموظفون', val: staffCount, color:'#f5c518' },
+        { icon:'🟢', label:'نشط الآن', val: running, color:'#22c55e' },
+      ].map(c=>`
+        <div style="background:var(--bg2);border:1px solid ${c.color}25;border-radius:14px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+          <div style="width:44px;height:44px;border-radius:12px;background:${c.color}15;border:1px solid ${c.color}30;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">${c.icon}</div>
+          <div>
+            <div style="font-size:20px;font-weight:900;color:${c.color};font-family:monospace;">${c.val}</div>
+            <div style="font-size:11px;color:var(--text3);margin-top:2px;">${c.label}</div>
+          </div>
+        </div>`).join('');
+    }
   }
 
-  // ── Session cards ──
-  if(!cards) return;
+  // Hide pay column for non-admin
+  const thPay = document.getElementById('wh-th-pay');
+  if(thPay) thPay.style.display = isAdmin ? '' : 'none';
+
+  // ── Table rows ──
+  if(!tbody) return;
   if(!sessions.length) {
-    cards.innerHTML = '<div style="text-align:center;padding:2.5rem;color:var(--text3);">لا توجد جلسات في هذه الفترة</div>';
+    tbody.innerHTML = `<tr><td colspan="${isAdmin?8:7}" style="text-align:center;padding:2.5rem;color:var(--text3);">لا توجد جلسات في هذه الفترة</td></tr>`;
     return;
   }
 
-  cards.innerHTML = sessions.map(s=>{
+  tbody.innerHTML = sessions.map((s,i)=>{
     const isRunning = !s.logoutAt;
-    const login  = new Date(s.loginAt);
-    const inTime = login.toLocaleTimeString('ar',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-    const outTime = s.logoutAt ? new Date(s.logoutAt).toLocaleTimeString('ar',{hour:'2-digit',minute:'2-digit',second:'2-digit'}) : null;
-    const dayName = login.toLocaleDateString('ar-SA',{weekday:'long'});
-    const date    = login.toLocaleDateString('ar-SA',{year:'numeric',month:'short',day:'numeric'});
-    const durStr  = s.durationMin!=null ? fmtDur(s.durationMin) : '—';
-    const payStr  = isAdmin && s.pay!=null ? `$${parseFloat(s.pay).toFixed(3)}` : null;
-    const role    = customRoles[s.staffRole]?.label || s.staffRole || '';
+    const login    = new Date(s.loginAt);
+    const inTime   = login.toLocaleTimeString('ar',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    const outTime  = s.logoutAt ? new Date(s.logoutAt).toLocaleTimeString('ar',{hour:'2-digit',minute:'2-digit',second:'2-digit'}) : null;
+    const dayName  = login.toLocaleDateString('ar-SA',{weekday:'long'});
+    const date     = login.toLocaleDateString('ar-SA',{year:'numeric',month:'short',day:'numeric'});
+    const durStr   = s.durationMin!=null ? fmtDur(s.durationMin) : '—';
+    const payStr   = isAdmin && s.pay!=null ? `$${parseFloat(s.pay).toFixed(3)}` : '—';
+    const rate     = parseFloat(s.hourlyRate||0).toFixed(2);
+    const role     = customRoles[s.staffRole]?.label || s.staffRole || '';
     const roleColor = customRoles[s.staffRole]?.color || '#888';
+    const rowBg    = isRunning ? 'background:rgba(34,197,94,.05);' : '';
 
-    return `
-    <div id="whs-${s.id}" style="background:var(--bg3);border:1px solid ${isRunning?'rgba(34,197,94,.25)':'var(--border2)'};border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;transition:.2s;${isRunning?'box-shadow:0 0 16px rgba(34,197,94,.08);':''}">
-      <!-- Status dot + name -->
-      <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:140px;">
-        <span style="width:10px;height:10px;border-radius:50%;flex-shrink:0;background:${isRunning?'#22c55e':'#555'};box-shadow:${isRunning?'0 0 8px #22c55e':'none'};${isRunning?'animation:pulse 1.5s infinite;':''}"></span>
-        <div>
-          <div style="font-weight:700;color:var(--silver2);font-size:13px;">${s.staffName}</div>
-          <div style="font-size:10px;color:${roleColor};margin-top:2px;">${role}</div>
+    return `<tr style="${rowBg}" id="whrow-${s.id}">
+      <td style="color:var(--text3);font-weight:700;font-size:12px;">${i+1}</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px;">
+          ${isRunning ? '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px #22c55e;animation:pulse 1.5s infinite;flex-shrink:0;"></span>' : '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#555;flex-shrink:0;"></span>'}
+          <div>
+            <div style="color:var(--silver2);font-weight:700;font-size:13px;">${s.staffName}</div>
+            <div style="font-size:10px;color:${roleColor};margin-top:2px;font-weight:600;">${role}</div>
+          </div>
         </div>
-      </div>
-      <!-- Date + Day -->
-      <div style="min-width:130px;text-align:center;">
-        <div style="font-size:10px;color:rgba(180,160,255,.7);font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px;">التاريخ</div>
-        <div style="font-size:12px;color:var(--silver2);font-weight:700;">${date}</div>
-        <div style="font-size:10px;color:#f5c518;margin-top:2px;">${dayName}</div>
-      </div>
-      <!-- In/Out -->
-      <div style="min-width:110px;text-align:center;">
-        <div style="font-size:10px;color:rgba(180,160,255,.7);font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px;">دخول ← خروج</div>
-        <div style="font-size:12px;color:var(--silver2);font-family:monospace;font-weight:700;">${inTime} <span style="color:var(--text3);">←</span> ${outTime ? outTime : '<span style="color:#22c55e;font-weight:700;">نشط ●</span>'}</div>
-      </div>
-      <!-- Duration -->
-      <div style="min-width:90px;text-align:center;">
-        <div style="font-size:10px;color:rgba(180,160,255,.7);font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px;">المدة</div>
-        <div id="whs-dur-${s.id}" style="font-size:15px;font-weight:900;color:var(--silver2);font-family:monospace;">${durStr}</div>
-      </div>
-      <!-- Pay (admin only) -->
-      ${isAdmin ? `
-      <div style="min-width:80px;text-align:center;">
-        <div style="font-size:10px;color:rgba(180,160,255,.7);font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px;">الأجر</div>
-        <div id="whs-pay-${s.id}" style="font-size:15px;font-weight:900;color:#22c55e;font-family:monospace;">${payStr||'$0.000'}</div>
-      </div>` : ''}
-      <!-- Delete -->
-      ${isAdmin ? `<button onclick="deleteWorkSession('${s.id}')" style="background:none;border:1px solid rgba(200,60,60,.25);color:var(--red);width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:14px;flex-shrink:0;display:flex;align-items:center;justify-content:center;">✕</button>` : ''}
-    </div>`;
+      </td>
+      <td>
+        <div style="color:var(--silver2);font-size:12px;font-weight:600;">${date}</div>
+        <div style="color:#f5c518;font-size:10px;margin-top:2px;font-weight:600;">${dayName}</div>
+      </td>
+      <td style="color:#22c55e;font-family:monospace;font-size:12px;font-weight:700;">${inTime}</td>
+      <td style="font-family:monospace;font-size:12px;font-weight:700;">
+        ${outTime ? `<span style="color:#ef4444;">${outTime}</span>` : '<span style="color:#22c55e;display:inline-flex;align-items:center;gap:4px;">⏱ نشط</span>'}
+      </td>
+      <td id="whs-dur-${s.id}" style="color:var(--silver2);font-family:monospace;font-weight:800;font-size:13px;">${durStr}</td>
+      ${isAdmin ? `<td>
+        <div id="whs-pay-${s.id}" style="color:#22c55e;font-family:monospace;font-weight:900;font-size:14px;">${payStr}</div>
+        <div style="font-size:9px;color:var(--text3);margin-top:1px;">$${rate}/س</div>
+      </td>` : ''}
+      <td>${isAdmin ? `<button onclick="deleteWorkSession('${s.id}')" style="background:none;border:1px solid rgba(200,60,60,.25);color:var(--red);width:26px;height:26px;border-radius:6px;cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;">✕</button>` : ''}</td>
+    </tr>`;
   }).join('');
+}
+
+function resetWhFilters() {
+  const f = document.getElementById('wh-from'); if(f) f.value = '';
+  const t = document.getElementById('wh-to');   if(t) t.value = '';
+  const s = document.getElementById('wh-staff'); if(s) s.value = '';
+  renderWorkHoursReport();
+}
+
+// Auto-refresh the report every second when the page is open
+let _whAutoRefresh = null;
+function startWhAutoRefresh() {
+  if(_whAutoRefresh) return;
+  _whAutoRefresh = setInterval(() => {
+    const pg = document.querySelector('.admin-pg.active');
+    if(pg?.id !== 'apg-workhours') {
+      clearInterval(_whAutoRefresh);
+      _whAutoRefresh = null;
+      return;
+    }
+    // Update all running sessions in real-time
+    const now = Date.now();
+    workSessions.forEach(s => {
+      if(!s.logoutAt && s.loginAt) {
+        const diffMin = (now - new Date(s.loginAt).getTime()) / 60000;
+        s.durationMin = parseFloat(diffMin.toFixed(4));
+        s.pay = parseFloat(((diffMin / 60) * (s.hourlyRate||0)).toFixed(4));
+        // Update DOM directly (faster than re-rendering whole table)
+        const durEl = document.getElementById(`whs-dur-${s.id}`);
+        const payEl = document.getElementById(`whs-pay-${s.id}`);
+        if(durEl) durEl.textContent = fmtDur(s.durationMin);
+        if(payEl) payEl.textContent = currentUser.role==='admin' ? `$${s.pay.toFixed(3)}` : '—';
+      }
+    });
+    // Update summary totals (smooth)
+    const summary = document.getElementById('wh-summary');
+    if(summary && currentUser.role === 'admin') {
+      const totalMin  = workSessions.reduce((a,s)=>a+(s.durationMin||0),0);
+      const totalPay  = workSessions.reduce((a,s)=>a+(s.pay||0),0);
+      const vals = summary.querySelectorAll('div[style*="font-family:monospace"]');
+      if(vals[0]) vals[0].textContent = fmtDur(totalMin);
+      if(vals[1]) vals[1].textContent = `$${totalPay.toFixed(2)}`;
+    }
+  }, 1000);
 }
 
 function fmtDur(min) {
@@ -10108,27 +10485,37 @@ let isLightTheme = false;
 
 function applyLightTheme() {
   const root = document.documentElement;
-  root.style.setProperty('--bg',      '#f0f2f5');
-  root.style.setProperty('--bg2',     '#ffffff');
-  root.style.setProperty('--bg3',     '#f7f8fa');
-  root.style.setProperty('--bg4',     '#edf0f4');
-  root.style.setProperty('--bg5',     '#e4e8ee');
-  root.style.setProperty('--text',    '#1e2432');
-  root.style.setProperty('--text2',   '#4a5568');
-  root.style.setProperty('--text3',   '#8899aa');
-  root.style.setProperty('--silver',  '#2d3748');
-  root.style.setProperty('--silver2', '#1a202c');
-  root.style.setProperty('--silver3', '#4a5568');
-  root.style.setProperty('--silver4', '#718096');
-  root.style.setProperty('--border',  '#e2e8f0');
-  root.style.setProperty('--border2', '#e8edf4');
-  root.style.setProperty('--border3', '#d0d8e4');
-  root.style.setProperty('--grad',    'linear-gradient(135deg,#f7f8fa 0%,#edf0f4 100%)');
-  root.style.setProperty('--green',   '#38a169');
-  root.style.setProperty('--red',     '#e53e3e');
-  document.body.style.background = '#f0f2f5';
-  document.getElementById('theme-icon-moon').style.display = 'none';
-  document.getElementById('theme-icon-sun').style.display  = 'block';
+  root.style.setProperty('--bg',      '#ffffff');
+  root.style.setProperty('--bg2',     '#f8f9fb');
+  root.style.setProperty('--bg3',     '#f0f2f5');
+  root.style.setProperty('--bg4',     '#e8eaef');
+  root.style.setProperty('--bg5',     '#dfe2e7');
+  root.style.setProperty('--text',    '#0a0a0a');
+  root.style.setProperty('--text2',   '#222');
+  root.style.setProperty('--text3',   '#555');
+  root.style.setProperty('--silver',  '#0a0a0a');
+  root.style.setProperty('--silver2', '#000');
+  root.style.setProperty('--silver3', '#333');
+  root.style.setProperty('--silver4', '#666');
+  root.style.setProperty('--border',  '#e0e3e8');
+  root.style.setProperty('--border2', '#d8dce2');
+  root.style.setProperty('--border3', '#c5cad1');
+  root.style.setProperty('--grad',    'linear-gradient(135deg,#f8f9fb 0%,#e8eaef 100%)');
+  root.style.setProperty('--green',   '#15803d');
+  root.style.setProperty('--red',     '#dc2626');
+  document.body.classList.add('light-theme');
+  document.body.style.background = '#ffffff';
+  const moon = document.getElementById('theme-icon-moon'); if(moon) moon.style.display = 'none';
+  const sun  = document.getElementById('theme-icon-sun');  if(sun)  sun.style.display  = 'block';
+  // Re-render dynamic content that uses hardcoded colors
+  setTimeout(() => {
+    renderHomeCats?.();
+    renderFeatured?.();
+    renderFeaturesDisplay?.();
+    renderTeamDisplay?.();
+    renderReviews?.();
+    renderPaymentBar?.();
+  }, 100);
 }
 
 function applyDarkTheme() {
@@ -10136,10 +10523,20 @@ function applyDarkTheme() {
   ['--bg','--bg2','--bg3','--bg4','--bg5','--text','--text2','--text3',
    '--silver','--silver2','--silver3','--silver4','--border','--border2','--border3',
    '--grad','--green','--red'].forEach(v => root.style.removeProperty(v));
+  document.body.classList.remove('light-theme');
   document.body.style.background = '';
   if(siteCustom && siteCustom.bg !== DEFAULT_CUSTOM.bg) applySiteCustom(false);
-  document.getElementById('theme-icon-moon').style.display = 'block';
-  document.getElementById('theme-icon-sun').style.display  = 'none';
+  const moon = document.getElementById('theme-icon-moon'); if(moon) moon.style.display = 'block';
+  const sun  = document.getElementById('theme-icon-sun');  if(sun)  sun.style.display  = 'none';
+  // Re-render dynamic content
+  setTimeout(() => {
+    renderHomeCats?.();
+    renderFeatured?.();
+    renderFeaturesDisplay?.();
+    renderTeamDisplay?.();
+    renderReviews?.();
+    renderPaymentBar?.();
+  }, 100);
 }
 
 function toggleTheme() {
@@ -12592,6 +12989,8 @@ window.stopClockTick = stopClockTick;
 window.recordWorkLogin = recordWorkLogin;
 window.recordWorkLogout = recordWorkLogout;
 window.renderWorkHoursAdmin = renderWorkHoursAdmin;
+window.resetWhFilters = resetWhFilters;
+window.startWhAutoRefresh = startWhAutoRefresh;
 window.renderWorkHoursReport = renderWorkHoursReport;
 window.deleteWorkSession = deleteWorkSession;
 window.clearWorkHours = clearWorkHours;
@@ -12731,6 +13130,10 @@ window.loadTemplate = loadTemplate;
 window.previewBroadcast = previewBroadcast;
 window.sendBroadcast = sendBroadcast;
 window.getStoreEmail = getStoreEmail;
+window.showForceRatingModal = showForceRatingModal;
+window.setForceRate = setForceRate;
+window.hoverForceRate = hoverForceRate;
+window.submitForceRate = submitForceRate;
 window.subscribe = subscribe;
 window.sendContact = sendContact;
 window.doLogin = doLogin;
