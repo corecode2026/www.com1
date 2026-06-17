@@ -4124,7 +4124,7 @@ function openModal(id) {
     </div>
     <div class="modal-features">
       <h3>✅ المميزات المتضمنة</h3>
-      <ul class="feat-list">${p.features.map(f=>`<li>${f}</li>`).join('')}</ul>
+      <ul class="feat-list">${(p.features||[]).map(f=>`<li>${f}</li>`).join('')}</ul>
     </div>`;
   document.getElementById('prod-modal').classList.add('open');
 }
@@ -10073,14 +10073,14 @@ function renderAdvPage() {
   </div>
 
   <!-- ═══ FEATURES ═══ -->
-  ${p.features.length ? `
+  ${(p.features||[]).length ? `
   <div style="padding:4rem 2rem;">
     <div style="text-align:center;margin-bottom:2.5rem;">
       <div style="font-size:12px;color:rgba(180,120,255,.8);letter-spacing:2px;margin-bottom:8px;">لماذا نحن</div>
       <h2 style="font-size:1.6rem;font-weight:800;color:var(--silver2);">مميزات الإعلان معنا</h2>
     </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1rem;max-width:900px;margin:0 auto;">
-      ${p.features.map((f,i)=>`
+      ${(p.features||[]).map((f,i)=>`
         <div class="adv-feat-hover" style="background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:1.6rem;text-align:center;animation:advFadeUp .6s ease ${i*.1}s both;">
           <div style="font-size:36px;margin-bottom:10px;animation:advFloat ${4+i*.5}s ease infinite;">${f.icon}</div>
           <div style="font-weight:700;color:var(--silver2);margin-bottom:6px;">${f.title}</div>
@@ -10654,7 +10654,7 @@ function renderTiersList() {
     <!-- info -->
     <div style="flex:1;min-width:120px;">
       <div style="font-size:13px;font-weight:700;color:${p.color};">${p.badgeLabel||p.name}</div>
-      <div style="font-size:12px;color:var(--text3);">${p.currency}${p.price} / ${p.period} • ${p.features?.length || 0} مزايا</div>
+      <div style="font-size:12px;color:var(--text3);">${p.currency}${p.price} / ${p.period} • ${(p.features||[]).length} مزايا</div>
     </div>
     <!-- edit fields inline -->
     <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
@@ -10749,6 +10749,10 @@ function editTierFull(i) {
     </div>
 
     <div class="form-grid" style="margin-bottom:12px;">
+      <div class="form-group">
+        <label class="form-label" style="font-size:11px;color:#22c55e;font-weight:700;">💰 السعر</label>
+        <input type="text" value="${p.price}" class="form-input" style="border-color:rgba(34,197,94,.3);font-weight:700;" onchange="updSubsPlan(${i},'price',this.value)" placeholder="مثال: 29.99">
+      </div>
       <div class="form-group"><label class="form-label" style="font-size:11px;">العملة</label><input type="text" value="${p.currency}" class="form-input" onchange="updSubsPlan(${i},'currency',this.value)"></div>
       <div class="form-group"><label class="form-label" style="font-size:11px;">الفترة</label><input type="text" value="${p.period}" class="form-input" onchange="updSubsPlan(${i},'period',this.value)"></div>
       <div class="form-group"><label class="form-label" style="font-size:11px;">شارة مميزة</label><input type="text" value="${p.badge||''}" class="form-input" onchange="updSubsPlan(${i},'badge',this.value)"></div>
@@ -10758,7 +10762,7 @@ function editTierFull(i) {
     </div>
     <div class="form-group" style="margin-bottom:12px;">
       <label class="form-label" style="font-size:11px;">المميزات (سطر لكل ميزة)</label>
-      <textarea class="form-textarea" style="min-height:100px;" onchange="updSubsPlan(${i},'features',this.value.split('\\n').filter(x=>x.trim()))">${p.features.join('\n')}</textarea>
+      <textarea class="form-textarea" style="min-height:100px;" onchange="updSubsPlan(${i},'features',this.value.split('\\n').filter(x=>x.trim()))">${(p.features||[]).join('\n')}</textarea>
     </div>
     <div class="form-group" style="margin-bottom:12px;">
       <label class="form-label" style="font-size:11px;">صورة الباقة <span style="color:rgba(180,120,255,.7);font-size:10px;">📐 600×300 px</span></label>
@@ -11000,12 +11004,12 @@ function renderSubsPage() {
             <span style="font-size:12px;color:var(--text3);">/ ${p.period}</span>
           </div>
           <!-- features preview (first 3) -->
-          ${p.features.slice(0,3).map(f=>`
+          ${(p.features||[]).slice(0,3).map(f=>`
           <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--border);">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="${p.color}" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
             <span style="font-size:12px;color:var(--text2);">${f}</span>
           </div>`).join('')}
-          ${p.features.length>3?`<div style="font-size:11px;color:var(--text3);margin-top:8px;text-align:center;">+${p.features.length-3} مزايا أخرى ←</div>`:''}
+          ${(p.features||[]).length>3?`<div style="font-size:11px;color:var(--text3);margin-top:8px;text-align:center;">+${(p.features||[]).length-3} مزايا أخرى ←</div>`:''}
 
           <!-- CTA -->
           <button onclick="event.stopPropagation();subsSubscribe(${i})" style="width:100%;margin-top:1rem;background:${p.color}22;border:1px solid ${p.color}55;color:${p.color};padding:11px;border-radius:10px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:13px;font-weight:800;transition:.2s;" onmouseover="this.style.background='${p.color}44'" onmouseout="this.style.background='${p.color}22'">${s.ctaText}</button>
