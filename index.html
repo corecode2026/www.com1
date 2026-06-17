@@ -3220,6 +3220,53 @@ body.light-theme svg{stroke:currentColor;}
       <div class="admin-pg" id="apg-settings">
         <div class="admin-pg-title">⚙ إعدادات المتجر</div>
 
+        <!-- ═══ QR CODE CARD ═══ -->
+        <div class="form-card" style="max-width:100%;margin-bottom:1.5rem;">
+          <div class="form-card-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-left:6px;"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM18 14h3M14 18v3M18 21h3M21 14v3M21 18v3"/></svg>
+            رمز QR للموقع
+          </div>
+          <div style="font-size:12px;color:var(--text3);margin-bottom:16px;">يمكنك طباعة هذا الرمز ووضعه على البطاقات أو الإعلانات. عند مسحه يفتح موقعك مباشرة.</div>
+
+          <div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;">
+            <!-- QR Display -->
+            <div id="qr-display-box" style="background:#fff;padding:18px;border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:10px;border:1px solid var(--border3);box-shadow:0 4px 20px rgba(0,0,0,.2);">
+              <div id="qr-image-wrap" style="width:200px;height:200px;display:flex;align-items:center;justify-content:center;"></div>
+              <div style="font-size:11px;color:#666;font-weight:700;letter-spacing:1px;">Core Code Store</div>
+              <div id="qr-url-display" style="font-size:10px;color:#999;direction:ltr;"></div>
+            </div>
+
+            <!-- Controls -->
+            <div style="flex:1;min-width:240px;display:flex;flex-direction:column;gap:10px;">
+              <div class="form-group">
+                <label class="form-label">رابط الموقع</label>
+                <input type="text" id="qr-url-input" class="form-input" value="https://corecodeweb.store" placeholder="https://...">
+              </div>
+              <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                <div class="form-group" style="flex:1;min-width:120px;">
+                  <label class="form-label">لون الرمز</label>
+                  <input type="color" id="qr-color" value="#000000" style="height:38px;width:100%;cursor:pointer;border-radius:8px;border:1px solid var(--border3);">
+                </div>
+                <div class="form-group" style="flex:1;min-width:120px;">
+                  <label class="form-label">لون الخلفية</label>
+                  <input type="color" id="qr-bg" value="#ffffff" style="height:38px;width:100%;cursor:pointer;border-radius:8px;border:1px solid var(--border3);">
+                </div>
+              </div>
+              <button class="btn-silver" onclick="updateQRCode()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-left:4px;"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+                توليد QR
+              </button>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <button class="btn-outline" onclick="downloadQR()" style="flex:1;">⬇ تحميل PNG</button>
+                <button class="btn-outline" onclick="printQR()" style="flex:1;">🖨 طباعة</button>
+              </div>
+              <div style="background:rgba(245,197,24,.06);border:1px solid rgba(245,197,24,.2);border-radius:8px;padding:10px;font-size:11px;color:var(--text2);">
+                💡 لطباعة احترافية: استخدم الأبيض والأسود الكلاسيكي مع جودة 300 DPI على ورق مقوى.
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- BRANDING CARD -->
         <div class="form-card" style="max-width:100%;">
           <div class="form-card-title">🎨 الهوية البصرية للموقع</div>
@@ -5921,7 +5968,7 @@ function showAdmin(p, el) {
   document.querySelectorAll('.sb-item').forEach(x=>x.classList.remove('active'));
   if(el) el.classList.add('active');
   if(p==='dashboard'){renderDashOrders();updateSalesDash();buildChart('sales-chart',salesData);}
-  if(p==='settings'){renderSalesList();loadPromoSettings();loadStoreInfo();loadJoinBannerSettings();loadSiteCustomFields();}
+  if(p==='settings'){renderSalesList();loadPromoSettings();loadStoreInfo();loadJoinBannerSettings();loadSiteCustomFields();initQRCode();}
   if(p==='ads'){renderAdsAdmin();}
   if(p==='staff'){renderStaff();}
   if(p==='team'){renderTeamAdmin();}
@@ -10548,6 +10595,127 @@ function toggleTheme() {
 // restore theme on load
 if(localStorage.getItem('ccs_theme') === 'light') { isLightTheme = true; }
 
+// ====== QR CODE GENERATOR (via QR Server API — no library needed) ======
+let _qrCanvas = null;
+let _qrImgEl  = null;
+
+function updateQRCode() {
+  const url   = document.getElementById('qr-url-input')?.value.trim() || 'https://corecodeweb.store';
+  const color = (document.getElementById('qr-color')?.value || '#000000').replace('#','');
+  const bg    = (document.getElementById('qr-bg')?.value    || '#ffffff').replace('#','');
+  const wrap  = document.getElementById('qr-image-wrap');
+  const urlDisplay = document.getElementById('qr-url-display');
+  if(!wrap) return;
+  if(urlDisplay) urlDisplay.textContent = url;
+
+  // Primary: api.qrserver.com — fallback: quickchart.io
+  const primary  = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(url)}&color=${color}&bgcolor=${bg}&qzone=1&ecc=H&format=png`;
+  const fallback = `https://quickchart.io/qr?text=${encodeURIComponent(url)}&size=400&dark=%23${color}&light=%23${bg}&ecLevel=H&margin=1`;
+
+  wrap.innerHTML = `<img id="qr-img-el" src="${primary}" referrerpolicy="no-referrer" style="width:200px;height:200px;border-radius:6px;display:block;" onload="onQRLoaded()" onerror="this.onerror=null;this.src='${fallback}';">`;
+  _qrImgEl = document.getElementById('qr-img-el');
+}
+
+function onQRLoaded() {
+  // Convert to canvas for download
+  try {
+    const img = _qrImgEl;
+    const canvas = document.createElement('canvas');
+    canvas.width = 400; canvas.height = 400;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, 400, 400);
+    _qrCanvas = canvas;
+  } catch(e) { console.warn('canvas convert failed:', e); }
+}
+
+function onQRError() {
+  const wrap = document.getElementById('qr-image-wrap');
+  if(wrap) wrap.innerHTML = '<div style="color:#999;font-size:12px;text-align:center;">⚠ فشل تحميل QR<br><small>تحقق من الاتصال</small></div>';
+}
+
+function downloadQR() {
+  const url = document.getElementById('qr-url-input')?.value.trim() || 'https://corecodeweb.store';
+  const color = (document.getElementById('qr-color')?.value || '#000000').replace('#','');
+  const bg    = (document.getElementById('qr-bg')?.value    || '#ffffff').replace('#','');
+  // Direct download via fetching the image
+  const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?size=800x800&data=${encodeURIComponent(url)}&color=${color}&bgcolor=${bg}&qzone=2&ecc=H&format=png`;
+  fetch(qrSrc).then(r=>r.blob()).then(blob=>{
+    const link = document.createElement('a');
+    link.download = 'core-code-store-qr.png';
+    link.href = URL.createObjectURL(blob);
+    link.click();
+    showNotif('⬇ تم تحميل الصورة','success');
+  }).catch(()=>{
+    // Fallback: just open in new tab
+    window.open(qrSrc, '_blank');
+  });
+}
+
+function printQR() {
+  const url = document.getElementById('qr-url-input')?.value.trim() || 'https://corecodeweb.store';
+  const color = (document.getElementById('qr-color')?.value || '#000000').replace('#','');
+  const bg    = (document.getElementById('qr-bg')?.value    || '#ffffff').replace('#','');
+  const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?size=800x800&data=${encodeURIComponent(url)}&color=${color}&bgcolor=${bg}&qzone=2&ecc=H&format=png`;
+
+  // Remove any existing print iframe
+  document.getElementById('_qr-print-frame')?.remove();
+
+  // Create hidden iframe to print from (no popup blocker)
+  const iframe = document.createElement('iframe');
+  iframe.id = '_qr-print-frame';
+  iframe.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden;';
+  document.body.appendChild(iframe);
+
+  const doc = iframe.contentDocument || iframe.contentWindow.document;
+  doc.open();
+  doc.write(`<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head><meta charset="UTF-8"><title>Core Code Store — QR</title>
+<style>
+  body{margin:0;padding:30px;font-family:Arial,sans-serif;display:flex;align-items:center;justify-content:center;min-height:90vh;background:#fff;color:#000;}
+  .qr-card{text-align:center;border:2px solid #000;border-radius:20px;padding:40px;max-width:500px;}
+  .qr-card h1{font-size:32px;margin:0 0 8px;letter-spacing:1px;color:#000;}
+  .qr-card p{font-size:14px;color:#444;margin:0 0 20px;}
+  .qr-card img{width:340px;height:340px;display:block;margin:0 auto 16px;}
+  .qr-card .url{font-size:13px;color:#666;direction:ltr;font-family:monospace;border-top:1px dashed #ccc;padding-top:14px;margin-top:14px;}
+  .qr-card .scan{font-size:14px;font-weight:700;color:#000;margin-bottom:16px;}
+  @media print { .qr-card{border-width:1px;page-break-inside:avoid;} }
+</style>
+</head>
+<body>
+  <div class="qr-card">
+    <h1>Core Code Store</h1>
+    <p>متجر البرمجيات والسكريبتات الجاهزة</p>
+    <p class="scan">📱 امسح الرمز لزيارة الموقع</p>
+    <img id="qrImg" src="${qrSrc}" alt="QR Code">
+    <div class="url">${url}</div>
+  </div>
+</body></html>`);
+  doc.close();
+
+  // Wait for image to load, then print
+  const img = doc.getElementById('qrImg');
+  const triggerPrint = () => {
+    setTimeout(() => {
+      try {
+        iframe.contentWindow.focus();
+        iframe.contentWindow.print();
+        setTimeout(() => iframe.remove(), 2000);
+      } catch(e) {
+        showNotif('فشل فتح نافذة الطباعة','error');
+        iframe.remove();
+      }
+    }, 500);
+  };
+  if(img.complete) triggerPrint();
+  else { img.onload = triggerPrint; img.onerror = triggerPrint; }
+  showNotif('🖨 جارٍ تجهيز الطباعة...','success');
+}
+
+function initQRCode() {
+  setTimeout(updateQRCode, 200);
+}
+
 // ====== SUBSCRIPTIONS / TIERS ======
 let subsData = {
   title: 'باقات الاشتراك',
@@ -13138,6 +13306,12 @@ window.showForceRatingModal = showForceRatingModal;
 window.setForceRate = setForceRate;
 window.hoverForceRate = hoverForceRate;
 window.submitForceRate = submitForceRate;
+window.updateQRCode = updateQRCode;
+window.downloadQR = downloadQR;
+window.printQR = printQR;
+window.initQRCode = initQRCode;
+window.onQRLoaded = onQRLoaded;
+window.onQRError = onQRError;
 window.subscribe = subscribe;
 window.sendContact = sendContact;
 window.doLogin = doLogin;
