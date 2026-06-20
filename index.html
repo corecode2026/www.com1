@@ -1016,6 +1016,10 @@ body.light-theme svg{stroke:currentColor;}
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
       من نحن
     </button>
+    <button class="nav-link" id="nl-portfolio" onclick="showPage('portfolio')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><polyline points="16 3 12 7 8 3"/></svg>
+      أعمالنا
+    </button>
     <button class="nav-link" id="nl-contact" onclick="showPage('contact')">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
       تواصل معنا
@@ -1083,6 +1087,10 @@ body.light-theme svg{stroke:currentColor;}
   <button class="nav-link" id="ml-about" onclick="showPage('about');closeMobileNav()">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
     من نحن
+  </button>
+  <button class="nav-link" id="ml-portfolio" onclick="showPage('portfolio');closeMobileNav()">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><polyline points="16 3 12 7 8 3"/></svg>
+    أعمالنا
   </button>
   <button class="nav-link" id="ml-contact" onclick="showPage('contact');closeMobileNav()">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
@@ -1939,6 +1947,29 @@ body.light-theme svg{stroke:currentColor;}
   </footer>
 </div>
 
+<!-- ================================================ PORTFOLIO PAGE ================================================ -->
+<div class="page" id="page-portfolio">
+  <div class="sec" style="max-width:1200px;margin:0 auto;padding-top:3rem;">
+    <!-- Header -->
+    <div style="text-align:center;margin-bottom:2.5rem;">
+      <h2 id="portfolio-title" style="font-size:2.2rem;font-weight:900;color:var(--silver2);margin-bottom:8px;">أعمالنا</h2>
+      <p id="portfolio-desc" style="font-size:14px;color:var(--text2);max-width:620px;margin:0 auto;line-height:1.7;">نفخر بمشاريعنا التي أنجزناها لعملائنا — تصفح أعمالنا واطلع على ما يمكننا تقديمه لك</p>
+    </div>
+
+    <!-- Portfolio grid -->
+    <div id="portfolio-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;"></div>
+
+    <div id="portfolio-empty" style="display:none;text-align:center;padding:4rem 1rem;color:var(--text3);">
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto 14px;opacity:.5;display:block;"><rect x="2" y="7" width="20" height="14" rx="2"/><polyline points="16 3 12 7 8 3"/></svg>
+      <div style="font-size:15px;">لم تتم إضافة أعمال بعد</div>
+    </div>
+  </div>
+
+  <footer style="background:var(--bg2);border-top:1px solid var(--border2);padding:1.5rem 2rem;text-align:center;margin-top:3rem;">
+    <span class="footer-copy">© 2025 Core Code Store</span>
+  </footer>
+</div>
+
 <!-- ================================================ CONTACT PAGE ================================================ -->
 <div class="page" id="page-contact">
   <div class="sec" style="max-width:700px;margin:0 auto;padding-top:3rem;">
@@ -2068,6 +2099,7 @@ body.light-theme svg{stroke:currentColor;}
       <div class="sb-item" onclick="showAdmin('jobs',this)"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg></span> طلبات التقديم</div>
       <div class="sb-item" onclick="showAdmin('team',this)"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span> فريق العمل</div>
       <div class="sb-item" onclick="showAdmin('roles',this)"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span> إدارة الرتب</div>
+      <div class="sb-item" onclick="showAdmin('portfolio',this)"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><polyline points="16 3 12 7 8 3"/></svg></span> أعمالنا</div>
       <div class="sb-item" onclick="showAdmin('newsletter',this)"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span> النشرة البريدية</div>
       <div class="sb-item" onclick="showAdmin('workhours',this)"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg></span> ساعات العمل</div>
       <div class="sb-item" onclick="showAdmin('staff',this)"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span> الموظفون</div>
@@ -2958,6 +2990,101 @@ body.light-theme svg{stroke:currentColor;}
         <div class="tbl-box">
           <div class="tbl-head"><span class="tbl-head-title">الرتب الحالية</span></div>
           <div id="roles-list" style="padding:16px;display:flex;flex-direction:column;gap:10px;"></div>
+        </div>
+      </div>
+
+      <!-- PORTFOLIO MANAGEMENT -->
+      <div class="admin-pg" id="apg-portfolio">
+        <div class="admin-pg-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:8px;vertical-align:middle;"><rect x="2" y="7" width="20" height="14" rx="2"/><polyline points="16 3 12 7 8 3"/></svg>
+          إدارة أعمالنا
+        </div>
+
+        <!-- Section settings -->
+        <div class="form-card" style="max-width:100%;margin-bottom:1rem;">
+          <div class="form-card-title">⚙ إعدادات القسم</div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">عنوان الصفحة</label>
+              <input type="text" id="pf-title" class="form-input" placeholder="أعمالنا" oninput="updatePortfolioSettings()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">شكل البطاقات</label>
+              <select id="pf-layout" class="form-select" onchange="updatePortfolioSettings()">
+                <option value="grid">شبكي (Grid)</option>
+                <option value="list">قائمة عمودية</option>
+                <option value="masonry">مرتب (Masonry)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">وصف القسم</label>
+            <textarea id="pf-desc" class="form-textarea" rows="2" placeholder="نفخر بمشاريعنا..." oninput="updatePortfolioSettings()"></textarea>
+          </div>
+        </div>
+
+        <!-- Add new work form -->
+        <div class="form-card" style="max-width:100%;margin-bottom:1rem;">
+          <div class="form-card-title" id="pf-form-title">➕ إضافة عمل جديد</div>
+          <input type="hidden" id="pf-edit-id">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">عنوان العمل</label>
+              <input type="text" id="pf-w-title" class="form-input" placeholder="مثال: متجر إلكتروني لشركة...">
+            </div>
+            <div class="form-group">
+              <label class="form-label">النوع</label>
+              <select id="pf-w-type" class="form-select" onchange="togglePortfolioFields()">
+                <option value="image">🖼 صورة</option>
+                <option value="video">🎬 فيديو</option>
+                <option value="link">🔗 رابط موقع</option>
+                <option value="youtube">▶ يوتيوب</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">الوصف</label>
+            <textarea id="pf-w-desc" class="form-textarea" rows="2" placeholder="وصف مختصر للعمل..."></textarea>
+          </div>
+          <div class="form-group" id="pf-image-field">
+            <label class="form-label">الوسائط <span style="font-size:10px;color:var(--text3);">(صور متعددة • فيديو • روابط)</span></label>
+            <input type="text" id="pf-w-image" class="form-input" placeholder="https://... أو الصق رابط فيديو يوتيوب" style="margin-bottom:6px;">
+            <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:8px;">
+              <label class="btn-outline" style="font-size:11px;padding:8px 12px;margin:0;cursor:pointer;display:inline-flex;align-items:center;gap:5px;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                ارفع صور (متعدد)
+                <input type="file" id="pf-w-image-file" accept="image/*" multiple onchange="readPortfolioImages(this)" style="display:none;">
+              </label>
+              <label class="btn-outline" style="font-size:11px;padding:8px 12px;margin:0;cursor:pointer;display:inline-flex;align-items:center;gap:5px;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+                ارفع فيديو من الجهاز
+                <input type="file" id="pf-w-video-file" accept="video/*" onchange="readPortfolioVideo(this)" style="display:none;">
+              </label>
+              <span id="pf-upload-status" style="font-size:10px;color:var(--text3);"></span>
+            </div>
+            <!-- Gallery preview -->
+            <div id="pf-gallery-preview" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">رابط الزر (اختياري)</label>
+            <input type="text" id="pf-w-link" class="form-input" placeholder="https://...">
+          </div>
+          <div class="form-group">
+            <label class="form-label">نص الزر</label>
+            <input type="text" id="pf-w-cta" class="form-input" placeholder="مثال: شاهد الموقع" value="عرض">
+          </div>
+          <div class="form-actions">
+            <button class="btn-silver" onclick="savePortfolioWork()" id="pf-save-btn">حفظ ➕</button>
+            <button class="btn-outline" onclick="cancelPortfolioEdit()" id="pf-cancel-btn" style="display:none;">إلغاء</button>
+          </div>
+        </div>
+
+        <!-- Existing works list -->
+        <div class="tbl-box">
+          <div class="tbl-head">
+            <span class="tbl-head-title">الأعمال الحالية (<span id="pf-count">0</span>)</span>
+          </div>
+          <div id="pf-list" style="padding:14px;display:flex;flex-direction:column;gap:10px;"></div>
         </div>
       </div>
 
@@ -5846,6 +5973,7 @@ const ALL_PAGES = [
   { id:'roles',        label:'إدارة الرتب' },
   { id:'workhours',    label:'ساعات العمل' },
   { id:'newsletter',   label:'النشرة البريدية' },
+  { id:'portfolio',    label:'أعمالنا' },
 ];
 
 // Custom roles — starts with defaults, admin can add/edit/delete
@@ -6456,12 +6584,14 @@ function renderFeaturesAdmin() {
       showConfirmBox(`هل تريد حذف "${f?.title}"؟`, ()=>{
         featuresList = featuresList.filter(x=>x.id!==id);
         renderFeaturesAdmin(); renderFeaturesDisplay();
+renderPortfolioDisplay();
         saveAllData();
         showNotif('🗑 تم حذف الميزة','error');
       });
     };
   });
   renderFeaturesDisplay();
+renderPortfolioDisplay();
 }
 
 function renderFeaturesDisplay() {
@@ -6481,6 +6611,7 @@ function saveFeaturesTitle() {
   if(!val){ showNotif('أدخل العنوان','error'); return; }
   featuresSectionTitle = val;
   renderFeaturesDisplay();
+renderPortfolioDisplay();
   saveAllData();
   showNotif('✓ تم حفظ العنوان','success');
 }
@@ -10595,6 +10726,686 @@ function toggleTheme() {
 // restore theme on load
 if(localStorage.getItem('ccs_theme') === 'light') { isLightTheme = true; }
 
+// ====== PORTFOLIO / OUR WORKS SYSTEM ======
+let portfolioData = {
+  title: 'أعمالنا',
+  desc:  'نفخر بمشاريعنا التي أنجزناها لعملائنا — تصفح أعمالنا واطلع على ما يمكننا تقديمه لك',
+  layout: 'grid',
+  works: [],
+};
+
+function renderPortfolioDisplay() {
+  const titleEl = document.getElementById('portfolio-title');
+  const descEl  = document.getElementById('portfolio-desc');
+  const grid    = document.getElementById('portfolio-grid');
+  const empty   = document.getElementById('portfolio-empty');
+  if(titleEl) titleEl.textContent = portfolioData.title;
+  if(descEl)  descEl.textContent  = portfolioData.desc;
+
+  if(!grid) return;
+
+  // Layout
+  if(portfolioData.layout === 'list') {
+    grid.style.gridTemplateColumns = '1fr';
+  } else if(portfolioData.layout === 'masonry') {
+    grid.style.gridTemplateColumns = 'repeat(auto-fit,minmax(240px,1fr))';
+  } else {
+    grid.style.gridTemplateColumns = 'repeat(auto-fit,minmax(280px,1fr))';
+  }
+
+  if(!portfolioData.works.length) {
+    grid.innerHTML = '';
+    if(empty) empty.style.display = 'block';
+    return;
+  }
+  if(empty) empty.style.display = 'none';
+
+  grid.innerHTML = portfolioData.works.map(w => {
+    let media = '';
+    // The "go to" URL: always prefer the link field, fallback to image URL only for link-type
+    let clickUrl = w.link || (w.type === 'link' ? w.image : '') || '';
+    // Normalize URL — add https:// if missing
+    if(clickUrl && !/^https?:\/\//i.test(clickUrl) && !clickUrl.startsWith('data:')) {
+      clickUrl = 'https://' + clickUrl;
+    }
+
+    if(w.type === 'youtube') {
+      const ytMatch = (w.image||w.link||'').match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=))([^&?]+)/);
+      const ytId = ytMatch ? ytMatch[1] : '';
+      media = ytId
+        ? `<iframe src="https://www.youtube.com/embed/${ytId}" style="width:100%;height:200px;border:none;display:block;" allowfullscreen></iframe>`
+        : `<div style="height:200px;background:#222;display:flex;align-items:center;justify-content:center;color:#666;">رابط يوتيوب غير صالح</div>`;
+    } else if(w.type === 'video') {
+      const videoSrc = w.image || '';
+      // Detect if it's a data URI (uploaded) or external URL
+      const isDataUri = videoSrc.startsWith('data:video');
+      const isMP4orWebM = /\.(mp4|webm|ogg|mov)(\?|$)/i.test(videoSrc);
+      // Maybe it's a YouTube URL placed in video field by mistake
+      const ytMatch = videoSrc.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=))([^&?]+)/);
+      if(ytMatch) {
+        // Switch to YouTube embed
+        media = `<iframe src="https://www.youtube.com/embed/${ytMatch[1]}" style="width:100%;height:200px;border:none;display:block;" allowfullscreen></iframe>`;
+      } else if(!videoSrc) {
+        media = `<div style="height:200px;background:linear-gradient(135deg,#1a1a2e,#16213e);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;color:#888;"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg><div style="font-size:12px;">لا يوجد فيديو</div></div>`;
+      } else {
+        media = `<video src="${videoSrc}" controls preload="metadata" style="width:100%;height:200px;object-fit:cover;background:#000;display:block;" onerror="this.outerHTML='<div style=\\'height:200px;background:linear-gradient(135deg,#1a1a2e,#16213e);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;color:#888;padding:20px;text-align:center;\\'><svg width=\\'40\\' height=\\'40\\' viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'1.5\\'><circle cx=\\'12\\' cy=\\'12\\' r=\\'10\\'/><line x1=\\'12\\' y1=\\'8\\' x2=\\'12\\' y2=\\'12\\'/><line x1=\\'12\\' y1=\\'16\\' x2=\\'12.01\\' y2=\\'16\\'/></svg><div style=\\'font-size:12px;\\'>صيغة الفيديو غير مدعومة</div><div style=\\'font-size:10px;color:#666;\\'>استخدم MP4 أو WebM</div></div>'"></video>`;
+      }
+    } else if(w.type === 'link' && !w.image) {
+      // Website preview using screenshot service
+      const targetUrl = w.link || w.image;
+      const cleanHost = targetUrl ? targetUrl.replace(/^https?:\/\//,'').replace(/\/.*/,'').slice(0,30) : '';
+      const screenshotUrl = targetUrl
+        ? `https://image.thum.io/get/width/600/${encodeURIComponent(targetUrl)}`
+        : '';
+      const fallbackHtml = `<div style='width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;color:#888;background:linear-gradient(135deg,#1a1a2e,#16213e);'><svg width='48' height='48' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5'><circle cx='12' cy='12' r='10'/><line x1='2' y1='12' x2='22' y2='12'/><path d='M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z'/></svg><div style='font-size:11px;direction:ltr;'>${cleanHost}</div></div>`;
+      media = targetUrl ? `
+        <div style="width:100%;height:200px;position:relative;overflow:hidden;background:linear-gradient(135deg,#1a1a2e,#16213e);">
+          <img src="${screenshotUrl}" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy" onerror="this.outerHTML=\`${fallbackHtml.replace(/`/g,'')}\`">
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.55),transparent 50%);display:flex;align-items:flex-end;padding:12px;pointer-events:none;">
+            <div style="font-size:11px;color:#fff;direction:ltr;background:rgba(0,0,0,.6);padding:4px 10px;border-radius:6px;backdrop-filter:blur(4px);">🌐 ${cleanHost}</div>
+          </div>
+        </div>` : '<div style="height:200px;background:#222;display:flex;align-items:center;justify-content:center;color:#666;">لا يوجد رابط</div>';
+    } else {
+      const img = w.image || `https://via.placeholder.com/600x400/1a1a1a/888?text=${encodeURIComponent(w.title||'Work')}`;
+      media = `<div style="width:100%;height:220px;background:#0a0a0a;overflow:hidden;position:relative;"><img src="${img}" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease;" loading="lazy" class="pf-card-img"></div>`;
+    }
+
+    const cardClick = `onclick="openWorkDetails('${w.id}')"`;
+    const typeBadge = ({image:'🖼 صورة',video:'🎬 فيديو',link:'🔗 موقع',youtube:'▶ يوتيوب'})[w.type] || '';
+    const galleryCount = (w.gallery?.length || 0) + (w.image ? 1 : 0);
+
+    return `
+    <div class="portfolio-card" ${cardClick} style="background:var(--bg2);border:1px solid var(--border2);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;cursor:pointer;height:100%;">
+      <!-- Media area (fixed height) -->
+      <div style="position:relative;">
+        ${media}
+        ${typeBadge ? `<div style="position:absolute;top:10px;right:10px;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);color:#fff;font-size:10px;padding:4px 9px;border-radius:6px;border:1px solid rgba(255,255,255,.1);font-weight:600;">${typeBadge}</div>` : ''}
+        ${galleryCount > 1 ? `<div style="position:absolute;top:10px;left:10px;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);color:#fff;font-size:10px;padding:4px 9px;border-radius:6px;border:1px solid rgba(255,255,255,.1);font-weight:600;display:flex;align-items:center;gap:4px;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> ${galleryCount}</div>` : ''}
+      </div>
+
+      <!-- Thumbnail strip (only if multiple media) -->
+      ${w.gallery && w.gallery.length ? `
+        <div style="display:flex;gap:5px;padding:10px 14px;background:var(--bg3);border-bottom:1px solid var(--border2);overflow-x:auto;">
+          ${w.gallery.slice(0,5).map((src,gi) => {
+            const isVideoG = (src||'').startsWith('data:video');
+            return `<div onclick="event.stopPropagation();openWorkDetails('${w.id}',${gi+1})" style="flex-shrink:0;width:42px;height:42px;border-radius:6px;overflow:hidden;cursor:pointer;border:1px solid var(--border3);position:relative;transition:.2s;">
+              ${isVideoG
+                ? `<video src="${src}" muted style="width:100%;height:100%;object-fit:cover;"></video><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.4);pointer-events:none;"><svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><polygon points="6,4 20,12 6,20"/></svg></div>`
+                : `<img src="${src}" style="width:100%;height:100%;object-fit:cover;display:block;">`
+              }
+            </div>`;
+          }).join('')}
+          ${w.gallery.length > 5 ? `<div style="flex-shrink:0;width:42px;height:42px;border-radius:6px;background:rgba(245,197,24,.1);border:1px solid rgba(245,197,24,.3);display:flex;align-items:center;justify-content:center;color:#f5c518;font-size:11px;font-weight:700;">+${w.gallery.length-5}</div>` : ''}
+        </div>
+      ` : ''}
+
+      <!-- Body (unified spacing) -->
+      <div style="padding:16px 18px 18px;flex:1;display:flex;flex-direction:column;gap:10px;">
+        <h3 style="font-size:16px;font-weight:900;color:var(--silver2);margin:0;letter-spacing:-0.3px;text-align:right;line-height:1.4;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;">${w.title}</h3>
+        <p style="font-size:12.5px;color:var(--text2);line-height:1.65;margin:0;flex:1;text-align:right;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em;">${w.desc || '\u200B'}</p>
+        <button onclick="event.stopPropagation();openWorkDetails('${w.id}')" class="pf-cta" style="background:rgba(245,197,24,.08);color:#f5c518;border:1px solid rgba(245,197,24,.25);padding:10px 14px;border-radius:10px;cursor:pointer;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;font-family:Cairo,sans-serif;transition:.2s;width:100%;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/></svg>
+          عرض التفاصيل
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── Full work details modal ──
+function openWorkDetails(workId, startIdx) {
+  const w = portfolioData.works.find(x=>x.id===workId);
+  if(!w) return;
+
+  // Gather all media: main image + gallery
+  const allMedia = [];
+  if(w.image) allMedia.push(w.image);
+  if(w.gallery?.length) w.gallery.forEach(s => { if(!allMedia.includes(s)) allMedia.push(s); });
+
+  let currentIdx = startIdx || 0;
+
+  // Build main content based on work type
+  let mainHtml = '';
+  if(w.type === 'youtube') {
+    const ytMatch = (w.image||w.link||'').match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=))([^&?]+)/);
+    const ytId = ytMatch ? ytMatch[1] : '';
+    mainHtml = ytId
+      ? `<iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1" style="width:100%;height:100%;border:none;display:block;border-radius:12px;" allowfullscreen></iframe>`
+      : '<div style="color:#888;text-align:center;padding:2rem;">رابط يوتيوب غير صالح</div>';
+  } else if(w.type === 'link' && !allMedia.length && (w.link||w.image)) {
+    const url = w.link || w.image;
+    const cleanUrl = /^https?:\/\//i.test(url) ? url : 'https://'+url;
+    mainHtml = `<img src="https://image.thum.io/get/width/900/${encodeURIComponent(cleanUrl)}" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:12px;">`;
+  } else if(allMedia.length) {
+    const src = allMedia[currentIdx];
+    const isVideoData = (src||'').startsWith('data:video');
+    const isVideoUrl  = /\.(mp4|webm|mov|ogg)(\?|$)/i.test(src);
+    const isImageData = (src||'').startsWith('data:image');
+    const isImageUrl  = /\.(jpg|jpeg|png|gif|webp|svg|bmp)(\?|$)/i.test(src);
+    const isYouTube   = /youtube\.com|youtu\.be/i.test(src);
+
+    if(isYouTube) {
+      const ytMatch = src.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=))([^&?]+)/);
+      mainHtml = ytMatch
+        ? `<iframe src="https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1" style="width:100%;height:100%;border:none;border-radius:12px;" allowfullscreen></iframe>`
+        : `<div style="color:#888;padding:2rem;text-align:center;">رابط يوتيوب غير صالح</div>`;
+    } else if(isVideoData || isVideoUrl) {
+      mainHtml = `<video src="${src}" controls autoplay style="width:100%;height:100%;object-fit:contain;background:#000;border-radius:12px;" onerror="this.outerHTML='<div style=\\'display:flex;flex-direction:column;align-items:center;justify-content:center;color:#888;padding:2rem;text-align:center;gap:12px;\\'><svg width=\\'48\\' height=\\'48\\' viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'1.5\\'><circle cx=\\'12\\' cy=\\'12\\' r=\\'10\\'/><line x1=\\'12\\' y1=\\'8\\' x2=\\'12\\' y2=\\'12\\'/><line x1=\\'12\\' y1=\\'16\\' x2=\\'12.01\\' y2=\\'16\\'/></svg><div style=\\'font-size:14px;color:#fff;\\'>صيغة الفيديو غير مدعومة</div><div style=\\'font-size:11px;\\'>استخدم رابط مباشر بصيغة MP4 أو WebM</div></div>'"></video>`;
+    } else if(isImageData || isImageUrl || src.startsWith('http')) {
+      // Treat as image (fallback for unknown URLs — try as image)
+      mainHtml = `<img src="${src}" style="width:100%;height:100%;object-fit:contain;display:block;border-radius:12px;" onerror="this.outerHTML='<div style=\\'display:flex;flex-direction:column;align-items:center;justify-content:center;color:#888;padding:2rem;text-align:center;gap:12px;\\'><svg width=\\'48\\' height=\\'48\\' viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'1.5\\'><rect x=\\'3\\' y=\\'3\\' width=\\'18\\' height=\\'18\\' rx=\\'2\\'/><circle cx=\\'8.5\\' cy=\\'8.5\\' r=\\'1.5\\'/><polyline points=\\'21 15 16 10 5 21\\'/></svg><div style=\\'font-size:14px;color:#fff;\\'>تعذّر تحميل الصورة</div><div style=\\'font-size:11px;\\'>تحقق من صحة الرابط</div></div>'">`;
+    } else {
+      // Invalid/text input — show clear error
+      mainHtml = `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;color:#888;padding:2rem;text-align:center;gap:12px;"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><div style="font-size:14px;color:#fff;">المحتوى غير صالح</div><div style="font-size:11px;direction:ltr;">"${(src||'').slice(0,40)}"</div></div>`;
+    }
+  } else {
+    mainHtml = '<div style="color:#888;text-align:center;padding:2rem;">لا توجد وسائط</div>';
+  }
+
+  // Get final link URL
+  let finalUrl = w.link || (w.type==='link' ? w.image : '') || '';
+  if(finalUrl && !/^https?:\/\//i.test(finalUrl) && !finalUrl.startsWith('data:')) {
+    finalUrl = 'https://' + finalUrl;
+  }
+
+  document.getElementById('_work-details')?.remove();
+  const modal = document.createElement('div');
+  modal.id = '_work-details';
+  modal.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(8px);animation:fadeIn .3s ease;';
+  modal.innerHTML = `
+    <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:18px;width:min(900px,96vw);max-height:92vh;overflow:hidden;display:flex;flex-direction:column;">
+      <!-- Header -->
+      <div style="padding:16px 22px;border-bottom:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+        <div>
+          <h3 style="font-size:18px;font-weight:900;color:var(--silver2);margin:0;">${w.title}</h3>
+          ${w.type ? `<div style="font-size:11px;color:#f5c518;margin-top:3px;">${({image:'🖼 صورة',video:'🎬 فيديو',link:'🔗 رابط موقع',youtube:'▶ يوتيوب'})[w.type] || ''}</div>` : ''}
+        </div>
+        <button onclick="document.getElementById('_work-details').remove()" style="background:rgba(255,255,255,.06);border:1px solid var(--border3);color:var(--silver2);width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">✕</button>
+      </div>
+
+      <!-- Body -->
+      <div style="overflow-y:auto;flex:1;">
+        <!-- Main media -->
+        <div id="_wd-main" style="position:relative;background:#0a0a0a;min-height:300px;max-height:500px;display:flex;align-items:center;justify-content:center;padding:14px;">
+          ${mainHtml}
+          ${allMedia.length > 1 ? `
+            <button onclick="navWorkMedia('${workId}',-1)" style="position:absolute;right:18px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:18px;backdrop-filter:blur(6px);">←</button>
+            <button onclick="navWorkMedia('${workId}',1)" style="position:absolute;left:18px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:18px;backdrop-filter:blur(6px);">→</button>
+            <div id="_wd-counter" style="position:absolute;bottom:18px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.7);color:#fff;padding:5px 14px;border-radius:20px;font-size:12px;backdrop-filter:blur(6px);">${currentIdx+1} / ${allMedia.length}</div>
+          ` : ''}
+        </div>
+
+        <!-- Gallery thumbs -->
+        ${allMedia.length > 1 ? `
+          <div style="display:flex;gap:6px;padding:12px 22px;overflow-x:auto;background:var(--bg3);">
+            ${allMedia.map((src,gi) => {
+              const isV = (src||'').startsWith('data:video');
+              return `<div onclick="navWorkMediaTo('${workId}',${gi})" id="_wd-thumb-${gi}" style="flex-shrink:0;width:60px;height:60px;border-radius:8px;overflow:hidden;cursor:pointer;border:2px solid ${gi===currentIdx?'#f5c518':'transparent'};position:relative;transition:.2s;">
+                ${isV ? `<video src="${src}" muted style="width:100%;height:100%;object-fit:cover;"></video><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.4);pointer-events:none;"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><polygon points="6,4 20,12 6,20"/></svg></div>` : `<img src="${src}" style="width:100%;height:100%;object-fit:cover;display:block;">`}
+              </div>`;
+            }).join('')}
+          </div>` : ''}
+
+        <!-- Description & action -->
+        <div style="padding:20px 22px;">
+          ${w.desc ? `<div style="font-size:14px;color:var(--text);line-height:1.8;margin-bottom:18px;white-space:pre-wrap;">${w.desc}</div>` : ''}
+          ${finalUrl ? `
+            <a href="${finalUrl}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#f5c518,#b8860b);color:#000;border:none;padding:12px 24px;border-radius:10px;cursor:pointer;font-family:Cairo,sans-serif;font-size:14px;font-weight:900;text-decoration:none;transition:.2s;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              ${w.cta||'زيارة الموقع'}
+            </a>` : ''}
+        </div>
+      </div>
+    </div>
+  `;
+  modal.onclick = e => { if(e.target === modal) modal.remove(); };
+  document.body.appendChild(modal);
+
+  // Store state for nav
+  modal._workData = { workId, allMedia, currentIdx };
+}
+
+function navWorkMedia(workId, dir) {
+  const modal = document.getElementById('_work-details');
+  if(!modal?._workData) return;
+  const { allMedia, currentIdx } = modal._workData;
+  const newIdx = (currentIdx + dir + allMedia.length) % allMedia.length;
+  navWorkMediaTo(workId, newIdx);
+}
+
+function navWorkMediaTo(workId, idx) {
+  const modal = document.getElementById('_work-details');
+  if(!modal?._workData) return;
+  modal._workData.currentIdx = idx;
+  const src = modal._workData.allMedia[idx];
+  const isVideo = (src||'').startsWith('data:video') || /\.(mp4|webm|mov|ogg)(\?|$)/i.test(src);
+  const main = document.getElementById('_wd-main');
+  if(!main) return;
+  const overlays = main.querySelectorAll('button, #_wd-counter');
+  // Find the img/video element only (skip overlays)
+  const oldMedia = main.querySelector('img:not([style*="position:absolute"]), video, iframe');
+  if(oldMedia) oldMedia.remove();
+  const newEl = document.createElement(isVideo ? 'video' : 'img');
+  if(isVideo) {
+    newEl.src = src;
+    newEl.controls = true;
+    newEl.autoplay = true;
+    newEl.style.cssText = 'width:100%;height:100%;object-fit:contain;background:#000;border-radius:12px;';
+  } else {
+    newEl.src = src;
+    newEl.style.cssText = 'width:100%;height:100%;object-fit:contain;display:block;border-radius:12px;';
+  }
+  main.insertBefore(newEl, main.firstChild);
+  // Update counter
+  const counter = document.getElementById('_wd-counter');
+  if(counter) counter.textContent = `${idx+1} / ${modal._workData.allMedia.length}`;
+  // Update thumbs border
+  modal._workData.allMedia.forEach((_,gi) => {
+    const t = document.getElementById(`_wd-thumb-${gi}`);
+    if(t) t.style.borderColor = gi===idx ? '#f5c518' : 'transparent';
+  });
+}
+
+// ── Lightbox for gallery preview ──
+function openLightbox(workId, idx) {
+  const w = portfolioData.works.find(x=>x.id===workId);
+  if(!w || !w.gallery?.length) return;
+  const src = w.gallery[idx];
+  const isVideo = (src||'').startsWith('data:video');
+  document.getElementById('_lightbox')?.remove();
+  const lb = document.createElement('div');
+  lb.id = '_lightbox';
+  lb.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.95);display:flex;align-items:center;justify-content:center;padding:1rem;';
+  lb.innerHTML = `
+    <button onclick="document.getElementById('_lightbox').remove()" style="position:absolute;top:18px;left:18px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;">✕</button>
+    ${isVideo
+      ? `<video src="${src}" controls autoplay style="max-width:90vw;max-height:85vh;border-radius:12px;"></video>`
+      : `<img src="${src}" style="max-width:90vw;max-height:85vh;border-radius:12px;display:block;">`
+    }
+    <div style="position:absolute;bottom:18px;left:50%;transform:translateX(-50%);color:#fff;background:rgba(0,0,0,.6);padding:6px 14px;border-radius:20px;font-size:12px;">${idx+1} / ${w.gallery.length}</div>
+    ${idx>0 ? `<button onclick="event.stopPropagation();openLightbox('${workId}',${idx-1})" style="position:absolute;right:18px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:18px;">←</button>` : ''}
+    ${idx<w.gallery.length-1 ? `<button onclick="event.stopPropagation();openLightbox('${workId}',${idx+1})" style="position:absolute;left:18px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:18px;">→</button>` : ''}
+  `;
+  lb.onclick = e => { if(e.target === lb) lb.remove(); };
+  document.body.appendChild(lb);
+}
+
+// Hover effect for portfolio cards
+const _pfHoverStyle = document.createElement('style');
+_pfHoverStyle.textContent = `
+.portfolio-card{transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;}
+.portfolio-card:hover{transform:translateY(-4px);box-shadow:0 14px 40px rgba(0,0,0,.5);border-color:rgba(245,197,24,.35) !important;}
+.portfolio-card:hover .pf-card-img{transform:scale(1.06);}
+.portfolio-card:hover .pf-cta{background:rgba(245,197,24,.18) !important;color:#fff !important;border-color:rgba(245,197,24,.5) !important;}
+#portfolio-grid{align-items:stretch;}
+`;
+document.head.appendChild(_pfHoverStyle);
+
+function renderPortfolioAdmin() {
+  // Load settings
+  const t = document.getElementById('pf-title');     if(t) t.value = portfolioData.title;
+  const d = document.getElementById('pf-desc');      if(d) d.value = portfolioData.desc;
+  const l = document.getElementById('pf-layout');    if(l) l.value = portfolioData.layout;
+
+  const list  = document.getElementById('pf-list');
+  const count = document.getElementById('pf-count');
+  if(count) count.textContent = portfolioData.works.length;
+  if(!list) return;
+
+  if(!portfolioData.works.length) {
+    list.innerHTML = '<div style="text-align:center;padding:1.5rem;color:var(--text3);">لا يوجد أعمال بعد — أضف أول عمل ↑</div>';
+    return;
+  }
+  list.innerHTML = portfolioData.works.map((w,i) => {
+    const typeIcon = {image:'🖼',video:'🎬',link:'🔗',youtube:'▶'}[w.type] || '📁';
+    // Smarter thumbnails — real preview for links, SVG icons for empty states
+    let thumbHtml = '';
+    if(w.type === 'link' && (w.link || w.image)) {
+      const url = w.link || w.image;
+      const shotUrl = `https://image.thum.io/get/width/120/${encodeURIComponent(/^https?:\/\//i.test(url) ? url : 'https://'+url)}`;
+      thumbHtml = `<div style="width:60px;height:60px;border-radius:8px;overflow:hidden;background:linear-gradient(135deg,#1a1a2e,#16213e);position:relative;flex-shrink:0;">
+        <img src="${shotUrl}" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;color:#888;position:absolute;inset:0;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div>
+      </div>`;
+    } else if(w.type === 'youtube' && w.image) {
+      // Extract YT video ID for thumbnail
+      const ytMatch = w.image.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=))([^&?]+)/);
+      const ytId = ytMatch ? ytMatch[1] : '';
+      thumbHtml = ytId
+        ? `<div style="width:60px;height:60px;border-radius:8px;overflow:hidden;position:relative;flex-shrink:0;">
+            <img src="https://img.youtube.com/vi/${ytId}/mqdefault.jpg" style="width:100%;height:100%;object-fit:cover;display:block;">
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.3);"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff" stroke="none"><polygon points="6,4 20,12 6,20"/></svg></div>
+          </div>`
+        : `<div style="width:60px;height:60px;background:#ff0000;color:#fff;display:flex;align-items:center;justify-content:center;border-radius:8px;flex-shrink:0;"><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff" stroke="none"><polygon points="6,4 20,12 6,20"/></svg></div>`;
+    } else if(w.type === 'video' && w.image) {
+      thumbHtml = `<div style="width:60px;height:60px;border-radius:8px;overflow:hidden;position:relative;background:#000;flex-shrink:0;">
+        <video src="${w.image}" muted style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.3);"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff" stroke="none"><polygon points="6,4 20,12 6,20"/></svg></div>
+      </div>`;
+    } else if(w.image) {
+      thumbHtml = `<img src="${w.image}" style="width:60px;height:60px;object-fit:cover;border-radius:8px;flex-shrink:0;">`;
+    } else {
+      // Empty state — clean SVG icon
+      thumbHtml = `<div style="width:60px;height:60px;background:var(--bg4);border:1px dashed var(--border3);display:flex;align-items:center;justify-content:center;border-radius:8px;color:var(--text3);flex-shrink:0;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><polyline points="16 3 12 7 8 3"/></svg></div>`;
+    }
+    return `
+    <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:12px;display:flex;align-items:center;gap:12px;">
+      ${thumbHtml}
+      <div style="flex:1;min-width:0;">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+          <span style="font-size:10px;padding:2px 7px;border-radius:6px;background:rgba(245,197,24,.15);color:#f5c518;border:1px solid rgba(245,197,24,.3);">${typeIcon} ${w.type}</span>
+          <span style="font-size:13px;font-weight:700;color:var(--silver2);">${w.title}</span>
+        </div>
+        ${w.desc ? `<div style="font-size:11px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;">${w.desc}</div>` : ''}
+      </div>
+      <div style="display:flex;gap:5px;flex-shrink:0;">
+        ${i>0 ? `<button onclick="movePortfolio(${i},-1)" class="a-action a-action-edit" style="font-size:11px;" title="أعلى">↑</button>` : ''}
+        ${i<portfolioData.works.length-1 ? `<button onclick="movePortfolio(${i},1)" class="a-action a-action-edit" style="font-size:11px;" title="أسفل">↓</button>` : ''}
+        <button onclick="editPortfolioWork('${w.id}')" class="a-action a-action-edit">✏</button>
+        <button onclick="deletePortfolioWork('${w.id}')" class="a-action a-action-del">🗑</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function updatePortfolioSettings() {
+  portfolioData.title  = document.getElementById('pf-title')?.value.trim() || 'أعمالنا';
+  portfolioData.desc   = document.getElementById('pf-desc')?.value.trim()  || '';
+  portfolioData.layout = document.getElementById('pf-layout')?.value       || 'grid';
+  saveAllData();
+  renderPortfolioDisplay();
+}
+
+function togglePortfolioFields() {
+  const type = document.getElementById('pf-w-type')?.value;
+  const imageField = document.getElementById('pf-image-field');
+  const fileInput  = document.getElementById('pf-w-image-file');
+  const urlInput   = document.getElementById('pf-w-image');
+  const label = imageField?.querySelector('.form-label');
+  if(label) {
+    if(type === 'youtube') label.innerHTML = 'رابط فيديو يوتيوب <span style="font-size:10px;color:var(--text3);">(youtube.com/watch?v=...)</span>';
+    else if(type === 'video') label.innerHTML = 'رابط الفيديو <span style="font-size:10px;color:var(--text3);">(MP4/WebM)</span>';
+    else label.innerHTML = 'رابط الصورة <span style="font-size:10px;color:var(--text3);">(أو ارفع ملف)</span>';
+  }
+  if(fileInput) fileInput.style.display = type === 'image' ? '' : 'none';
+}
+
+// ── Image compression helper (reduces base64 size by ~80%) ──
+function compressImage(dataUrl, maxWidth = 1200, quality = 0.75) {
+  return new Promise(resolve => {
+    if(!dataUrl || !dataUrl.startsWith('data:image')) return resolve(dataUrl);
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      let w = img.width, h = img.height;
+      if(w > maxWidth) { h = h * (maxWidth/w); w = maxWidth; }
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      resolve(canvas.toDataURL('image/jpeg', quality));
+    };
+    img.onerror = () => resolve(dataUrl);
+    img.src = dataUrl;
+  });
+}
+
+function readPortfolioImage(input) {
+  const file = input.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = async e => {
+    const compressed = await compressImage(e.target.result);
+    document.getElementById('pf-w-image').value = compressed;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── Multi-image gallery state ──
+let _pfGallery = [];
+
+function readPortfolioImages(input) {
+  const files = Array.from(input.files || []);
+  if(!files.length) return;
+  const status = document.getElementById('pf-upload-status');
+  if(status) status.textContent = `جارٍ معالجة ${files.length} صورة...`;
+  let done = 0;
+  files.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = async e => {
+      const compressed = await compressImage(e.target.result);
+      _pfGallery.push(compressed);
+      done++;
+      if(done === files.length) {
+        if(status) status.textContent = `✓ تمت إضافة ${files.length} صورة مضغوطة (المجموع: ${_pfGallery.length})`;
+        renderGalleryPreview();
+        const mainImg = document.getElementById('pf-w-image');
+        if(mainImg && !mainImg.value) mainImg.value = _pfGallery[0];
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+  input.value = '';
+}
+
+function readPortfolioVideo(input) {
+  const file = input.files[0]; if(!file) return;
+  const status = document.getElementById('pf-upload-status');
+  if(file.size > 50 * 1024 * 1024) {
+    showNotif('الفيديو كبير جداً (أكبر من 50 MB)','error');
+    return;
+  }
+  if(status) status.textContent = `جارٍ معالجة الفيديو (${(file.size/1024/1024).toFixed(1)} MB)...`;
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('pf-w-image').value = e.target.result;
+    document.getElementById('pf-w-type').value = 'video';
+    togglePortfolioFields();
+    if(status) status.textContent = `✓ تم رفع الفيديو (${(file.size/1024/1024).toFixed(1)} MB)`;
+    renderGalleryPreview();
+  };
+  reader.readAsDataURL(file);
+  input.value = '';
+}
+
+function renderGalleryPreview() {
+  const wrap = document.getElementById('pf-gallery-preview');
+  if(!wrap) return;
+  const main = document.getElementById('pf-w-image')?.value;
+  const items = [];
+  if(main && !_pfGallery.includes(main)) items.push({src:main, isMain:true, type:'main'});
+  _pfGallery.forEach((src,i) => items.push({src, isMain:false, idx:i}));
+  if(!items.length) { wrap.innerHTML = ''; return; }
+  wrap.innerHTML = items.map((item,i) => {
+    const isVideo = (item.src||'').startsWith('data:video');
+    const safeSrc = item.src.replace(/'/g, "\\'");
+    return `<div style="position:relative;width:80px;height:80px;border-radius:10px;overflow:hidden;border:2px solid ${item.isMain?'#f5c518':'var(--border3)'};transition:.2s;box-shadow:${item.isMain?'0 0 12px rgba(245,197,24,.3)':'none'};">
+      ${isVideo
+        ? `<video src="${item.src}" muted style="width:100%;height:100%;object-fit:cover;"></video><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.3);pointer-events:none;"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><polygon points="6,4 20,12 6,20"/></svg></div>`
+        : `<img src="${item.src}" style="width:100%;height:100%;object-fit:cover;display:block;">`
+      }
+
+      <!-- Top-right corner: action buttons -->
+      <div style="position:absolute;top:3px;right:3px;display:flex;flex-direction:column;gap:3px;">
+        ${item.isMain
+          ? '<div style="background:#f5c518;color:#000;font-size:9px;padding:2px 5px;border-radius:4px;font-weight:800;">⭐ رئيسية</div>'
+          : `<button onclick="event.stopPropagation();setAsMainImage(${item.idx})" title="اجعلها رئيسية" style="background:rgba(245,197,24,.9);color:#000;border:none;width:22px;height:22px;border-radius:50%;cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;font-weight:900;">⭐</button>`
+        }
+      </div>
+
+      <!-- Bottom-right corner: delete (for gallery items) or change (for main) -->
+      <div style="position:absolute;bottom:3px;right:3px;display:flex;gap:3px;">
+        ${item.isMain
+          ? `<button onclick="event.stopPropagation();changeMainImage()" title="تغيير الصورة الرئيسية" style="background:rgba(34,197,94,.9);color:#fff;border:none;width:22px;height:22px;border-radius:50%;cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;">✎</button>`
+          : `<button onclick="event.stopPropagation();removeGalleryItem(${item.idx})" title="حذف" style="background:rgba(239,68,68,.9);color:#fff;border:none;width:22px;height:22px;border-radius:50%;cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;">✕</button>`
+        }
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function setAsMainImage(galleryIdx) {
+  const newMain = _pfGallery[galleryIdx];
+  if(!newMain) return;
+  const oldMain = document.getElementById('pf-w-image')?.value;
+  // Move old main into gallery (if it exists and isn't already there)
+  if(oldMain && !_pfGallery.includes(oldMain)) {
+    _pfGallery.push(oldMain);
+  }
+  // Set new main and remove from gallery
+  _pfGallery.splice(galleryIdx, 1);
+  document.getElementById('pf-w-image').value = newMain;
+  renderGalleryPreview();
+  showNotif('⭐ تم تعيين الصورة الرئيسية','success');
+}
+
+function changeMainImage() {
+  // Trigger file input for changing just the main image
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*,video/*';
+  input.onchange = async () => {
+    const file = input.files[0]; if(!file) return;
+    const reader = new FileReader();
+    reader.onload = async e => {
+      const isVideo = file.type.startsWith('video/');
+      let result = e.target.result;
+      if(!isVideo) result = await compressImage(result);
+      document.getElementById('pf-w-image').value = result;
+      if(isVideo) {
+        document.getElementById('pf-w-type').value = 'video';
+        togglePortfolioFields();
+      }
+      renderGalleryPreview();
+      showNotif('✓ تم تغيير الصورة الرئيسية','success');
+    };
+    reader.readAsDataURL(file);
+  };
+  input.click();
+}
+
+function removeGalleryItem(idx) {
+  _pfGallery.splice(idx,1);
+  renderGalleryPreview();
+  const status = document.getElementById('pf-upload-status');
+  if(status) status.textContent = `المجموع: ${_pfGallery.length} صور`;
+}
+
+function savePortfolioWork() {
+  const title = document.getElementById('pf-w-title')?.value.trim();
+  let   type  = document.getElementById('pf-w-type')?.value;
+  const desc  = document.getElementById('pf-w-desc')?.value.trim();
+  let   image = document.getElementById('pf-w-image')?.value.trim();
+  const link  = document.getElementById('pf-w-link')?.value.trim();
+  const cta   = document.getElementById('pf-w-cta')?.value.trim() || 'عرض';
+  const editId = document.getElementById('pf-edit-id')?.value;
+  const gallery = [..._pfGallery];
+
+  // ── Auto-detect content type ──
+  // YouTube URL → switch to youtube type
+  if(/youtube\.com|youtu\.be/i.test(image) || /youtube\.com|youtu\.be/i.test(link)) {
+    type = 'youtube';
+    if(!image && link) image = link;
+  }
+  // Video file URL → switch to video
+  else if(/\.(mp4|webm|ogg|mov)(\?|$)/i.test(image)) {
+    type = 'video';
+  }
+  // Data URI video → video
+  else if(image.startsWith('data:video')) {
+    type = 'video';
+  }
+  // Data URI image or image URL → image
+  else if(image.startsWith('data:image') || /\.(jpg|jpeg|png|gif|webp|svg)(\?|$)/i.test(image)) {
+    type = 'image';
+  }
+  // Has link but no media → link type
+  else if(link && !image) {
+    type = 'link';
+  }
+
+  if(!title) { showNotif('أدخل عنوان العمل','error'); return; }
+  if(!image && !gallery.length && !link) { showNotif('أضف صورة أو فيديو أو رابط','error'); return; }
+
+  // Warn if "video" type but content doesn't look like a video
+  if(type === 'video' && image && !image.startsWith('data:video') && !/\.(mp4|webm|mov|ogg)(\?|$)/i.test(image)) {
+    showNotif('⚠ المحتوى لا يبدو فيديو صحيحاً — استخدم رابط .mp4 أو ارفع ملف من جهازك','error');
+    return;
+  }
+
+  if(editId) {
+    const w = portfolioData.works.find(x=>x.id===editId);
+    if(w) { Object.assign(w, {title,type,desc,image,link,cta,gallery}); }
+    cancelPortfolioEdit();
+    showNotif('✓ تم تحديث العمل','success');
+  } else {
+    portfolioData.works.push({ id:'pf_'+Date.now(), title, type, desc, image, link, cta, gallery });
+    showNotif('✓ تمت إضافة العمل','success');
+  }
+  ['pf-w-title','pf-w-desc','pf-w-image','pf-w-link'].forEach(id=>{
+    const el = document.getElementById(id); if(el) el.value = '';
+  });
+  document.getElementById('pf-w-cta').value = 'عرض';
+  _pfGallery = [];
+  renderGalleryPreview();
+  const status = document.getElementById('pf-upload-status');
+  if(status) status.textContent = '';
+  saveAllData();
+  renderPortfolioAdmin();
+  renderPortfolioDisplay();
+}
+
+function editPortfolioWork(id) {
+  const w = portfolioData.works.find(x=>x.id===id); if(!w) return;
+  document.getElementById('pf-edit-id').value = id;
+  document.getElementById('pf-w-title').value = w.title || '';
+  document.getElementById('pf-w-type').value  = w.type  || 'image';
+  document.getElementById('pf-w-desc').value  = w.desc  || '';
+  document.getElementById('pf-w-image').value = w.image || '';
+  document.getElementById('pf-w-link').value  = w.link  || '';
+  document.getElementById('pf-w-cta').value   = w.cta   || 'عرض';
+  _pfGallery = Array.isArray(w.gallery) ? [...w.gallery] : [];
+  renderGalleryPreview();
+  document.getElementById('pf-form-title').textContent = '✏ تعديل العمل';
+  document.getElementById('pf-save-btn').textContent = 'حفظ التغييرات';
+  document.getElementById('pf-cancel-btn').style.display = 'inline-block';
+  togglePortfolioFields();
+  document.getElementById('pf-w-title').scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function cancelPortfolioEdit() {
+  document.getElementById('pf-edit-id').value = '';
+  document.getElementById('pf-form-title').textContent = '➕ إضافة عمل جديد';
+  document.getElementById('pf-save-btn').textContent = 'حفظ ➕';
+  document.getElementById('pf-cancel-btn').style.display = 'none';
+  ['pf-w-title','pf-w-desc','pf-w-image','pf-w-link'].forEach(id=>{
+    const el = document.getElementById(id); if(el) el.value = '';
+  });
+  document.getElementById('pf-w-cta').value = 'عرض';
+  _pfGallery = [];
+  renderGalleryPreview();
+  const status = document.getElementById('pf-upload-status');
+  if(status) status.textContent = '';
+}
+
+function deletePortfolioWork(id) {
+  showConfirmBox('حذف هذا العمل؟', () => {
+    portfolioData.works = portfolioData.works.filter(x=>x.id!==id);
+    saveAllData();
+    renderPortfolioAdmin();
+    renderPortfolioDisplay();
+    showNotif('🗑 تم الحذف','error');
+  });
+}
+
+function movePortfolio(i, dir) {
+  const works = portfolioData.works;
+  const j = i + dir;
+  if(j < 0 || j >= works.length) return;
+  [works[i], works[j]] = [works[j], works[i]];
+  saveAllData();
+  renderPortfolioAdmin();
+  renderPortfolioDisplay();
+}
+
 // ====== QR CODE GENERATOR (via QR Server API — no library needed) ======
 let _qrCanvas = null;
 let _qrImgEl  = null;
@@ -12573,7 +13384,7 @@ function buildPayload() {
     products, orders, coupons, cats, adsData, teamList, staffList,
     contactList, featuresList, featuresSectionTitle,
     jobApplications, siteRatings, staffRatings,
-    chatConversations, deletedConvIds, sales, workSessions, newsletterSubs, contactMessages, promoBanner, heroBadgeText, joinBanner, siteCustom, advPage, paymentMethods, btnCustom, subsData, customRoles, adminPassword,
+    chatConversations, deletedConvIds, sales, workSessions, newsletterSubs, portfolioData, contactMessages, promoBanner, heroBadgeText, joinBanner, siteCustom, advPage, paymentMethods, btnCustom, subsData, customRoles, adminPassword,
     _ts: Date.now(), _v: '2.0'
   };
 }
@@ -12592,17 +13403,31 @@ function saveAllData() {
     lean.teamList  = (lean.teamList||[]).map(m=>({...m, image:''}));
     lean.staffList = (lean.staffList||[]).map(s=>({...s, image:''}));
     lean.adsData   = (lean.adsData||[]).map(a=>({...a, image:''}));
+    // Portfolio: keep small references but strip heavy base64 media
+    if(lean.portfolioData && Array.isArray(lean.portfolioData.works)) {
+      lean.portfolioData.works = lean.portfolioData.works.map(w => ({
+        ...w,
+        image:   w.image && w.image.startsWith('data:') ? '' : w.image,
+        gallery: (w.gallery||[]).filter(s => !s.startsWith('data:')).slice(0,20),
+      }));
+    }
+    // Strip category icons that are base64
+    if(lean.cats) lean.cats = lean.cats.map(c => ({...c, image: c.image && c.image.startsWith('data:') ? '' : c.image}));
+    // Strip subs base64
+    if(lean.subsData?.plans) lean.subsData.plans = lean.subsData.plans.map(p => ({...p, image:'', logoImg:''}));
+    // Strip site customization image
+    if(lean.siteCustom) lean.siteCustom = {...lean.siteCustom, logoImg:'', favicon:''};
     const encoded = obfuscate(JSON.stringify(lean));
-    localStorage.removeItem(BACKUP_KEY); // لا نحتاج backup إضافي
+    localStorage.removeItem(BACKUP_KEY);
     localStorage.setItem(STORE_KEY, encoded);
   } catch(e) {
-    // ممتلئ — امسح القديم وحاول مرة ثانية
     try { localStorage.clear(); } catch(_) {}
     console.warn('localStorage full — relying on Firebase only');
   }
   // تحديث الواجهة
   renderContactDisplay();
   renderFeaturesDisplay();
+renderPortfolioDisplay();
   renderTeamDisplay();
 }
 
@@ -12758,6 +13583,7 @@ function applyLoadedData(d) {
   if(d.staffRatings)            staffRatings         = d.staffRatings;
   if(d.workSessions)              workSessions = d.workSessions.filter?.(s=>s?.id) || [];
   if(d.newsletterSubs)            newsletterSubs = Array.isArray(d.newsletterSubs) ? d.newsletterSubs : Object.values(d.newsletterSubs||{});
+  if(d.portfolioData)             { portfolioData = {...portfolioData, ...d.portfolioData}; if(!Array.isArray(portfolioData.works)) portfolioData.works = []; }
   if(d.deletedConvIds) {
     const remote = Array.isArray(d.deletedConvIds) ? d.deletedConvIds : Object.values(d.deletedConvIds||{});
     deletedConvIds = [...new Set([...deletedConvIds, ...remote])];
@@ -12922,6 +13748,7 @@ renderFeatured();
 renderTeamDisplay();
 renderContactDisplay();
 renderFeaturesDisplay();
+renderPortfolioDisplay();
 renderReviews();
 rebuildSlider();
 
@@ -13312,6 +14139,26 @@ window.printQR = printQR;
 window.initQRCode = initQRCode;
 window.onQRLoaded = onQRLoaded;
 window.onQRError = onQRError;
+window.renderPortfolioDisplay = renderPortfolioDisplay;
+window.renderPortfolioAdmin = renderPortfolioAdmin;
+window.updatePortfolioSettings = updatePortfolioSettings;
+window.togglePortfolioFields = togglePortfolioFields;
+window.readPortfolioImage = readPortfolioImage;
+window.readPortfolioImages = readPortfolioImages;
+window.readPortfolioVideo = readPortfolioVideo;
+window.renderGalleryPreview = renderGalleryPreview;
+window.removeGalleryItem = removeGalleryItem;
+window.openLightbox = openLightbox;
+window.openWorkDetails = openWorkDetails;
+window.navWorkMedia = navWorkMedia;
+window.navWorkMediaTo = navWorkMediaTo;
+window.setAsMainImage = setAsMainImage;
+window.changeMainImage = changeMainImage;
+window.savePortfolioWork = savePortfolioWork;
+window.editPortfolioWork = editPortfolioWork;
+window.cancelPortfolioEdit = cancelPortfolioEdit;
+window.deletePortfolioWork = deletePortfolioWork;
+window.movePortfolio = movePortfolio;
 window.subscribe = subscribe;
 window.sendContact = sendContact;
 window.doLogin = doLogin;
