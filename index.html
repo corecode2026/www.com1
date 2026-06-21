@@ -13606,6 +13606,18 @@ function applyLoadedData(d) {
   }
   if(d.sales)                   sales                = d.sales;
   if(d.adminPassword)           adminPassword        = d.adminPassword;
+
+  // Re-render dynamic content after Firebase load (data may have arrived AFTER initial render)
+  setTimeout(() => {
+    if(typeof renderPortfolioDisplay === 'function')  renderPortfolioDisplay();
+    if(typeof renderFeaturesDisplay === 'function')   renderFeaturesDisplay();
+    if(typeof renderContactDisplay === 'function')    renderContactDisplay();
+    if(typeof renderTeamDisplay === 'function')       renderTeamDisplay();
+    if(typeof renderHomeCats === 'function')          renderHomeCats();
+    if(typeof renderFeatured === 'function')          renderFeatured();
+    if(typeof renderReviews === 'function')           renderReviews();
+    if(typeof renderPaymentBar === 'function')        renderPaymentBar();
+  }, 50);
 }
 
 // ── Merge chat conversations: union of messages, never lose any (fixes write races) ──
