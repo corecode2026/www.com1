@@ -11299,25 +11299,20 @@ function savePortfolioWork() {
   const editId = document.getElementById('pf-edit-id')?.value;
   const gallery = [..._pfGallery];
 
-  // ── Auto-detect content type ──
-  // YouTube URL → switch to youtube type
-  if(/youtube\.com|youtu\.be/i.test(image) || /youtube\.com|youtu\.be/i.test(link)) {
+  // If no main image but gallery has items, promote first to main
+  if(!image && gallery.length) image = gallery.shift();
+
+  // ── Auto-detect content type based on MEDIA only (link field is separate) ──
+  if(/youtube\.com|youtu\.be/i.test(image)) {
     type = 'youtube';
-    if(!image && link) image = link;
   }
-  // Video file URL → switch to video
-  else if(/\.(mp4|webm|ogg|mov)(\?|$)/i.test(image)) {
+  else if(image.startsWith('data:video') || /\.(mp4|webm|ogg|mov)(\?|$)/i.test(image)) {
     type = 'video';
   }
-  // Data URI video → video
-  else if(image.startsWith('data:video')) {
-    type = 'video';
-  }
-  // Data URI image or image URL → image
-  else if(image.startsWith('data:image') || /\.(jpg|jpeg|png|gif|webp|svg)(\?|$)/i.test(image)) {
+  else if(image.startsWith('data:image') || /\.(jpg|jpeg|png|gif|webp|svg)(\?|$)/i.test(image) || gallery.length) {
+    // Has images → image type (even if link is also present)
     type = 'image';
   }
-  // Has link but no media → link type
   else if(link && !image) {
     type = 'link';
   }
