@@ -6715,6 +6715,9 @@ function sendContactMsg() {
   contactMessages.unshift(entry);
   saveAllData();
 
+  // Send email to admin
+  notifyAdminFirebase('contact_message', { name, email, phone, message: msg, subject });
+
   // show auto-reply
   const replyText = autoReplies[subject] || autoReplies['default'];
   (document.getElementById('contact-auto-reply')||{}).innerHTML =
@@ -13706,13 +13709,97 @@ function refreshAllViews() {
 }
 
 // ── Notify admin of new orders/messages via Firebase ──
+// ── Admin email address (notifications) ──
+const ADMIN_EMAIL = 'hk983480@gmail.com';
+
 function notifyAdminFirebase(type, data) {
-  if(!firebaseReady || !db) return;
-  db.ref(`ccs_notifications`).push({
-    type, data,
-    ts: Date.now(),
-    read: false
-  });
+  if(firebaseReady && db) {
+    db.ref(`ccs_notifications`).push({
+      type, data,
+      ts: Date.now(),
+      read: false
+    });
+  }
+  // Also send email notification to admin
+  sendAdminEmail(type, data);
+}
+
+function sendAdminEmail(type, data) {
+  // Build subject + body based on notification type
+  let subject = 'إشعار من Core Code Store';
+  let body = '';
+  const time = new Date().toLocaleString('ar-SA', { hour12: false });
+
+  if(type === 'new_order') {
+    subject = `🛒 طلب جديد — ${data.customer || 'زبون'}`;
+    body = `طلب جديد على متجرك:\n\n` +
+           `🆔 رقم الطلب: ${data.id || '—'}\n` +
+           `👤 العميل: ${data.customer || '—'}\n` +
+           `📦 المنتج: ${data.product || '—'}\n` +
+           `💰 المبلغ: ${data.amount || '—'}\n` +
+           `📞 الهاتف: ${data.phone || '—'}\n` +
+           `⏰ الوقت: ${time}\n\n` +
+           `سجّل دخول للوحة التحكم لمراجعة الطلب.`;
+  } else if(type === 'new_chat') {
+    subject = `💬 رسالة دردشة جديدة — ${data.name || 'زائر'}`;
+    body = `رسالة جديدة من زائر في الدردشة:\n\n` +
+           `👤 الاسم: ${data.name || 'زائر'}\n` +
+           `💬 النص: ${data.text || '—'}\n` +
+           `⏰ الوقت: ${time}\n\n` +
+           `افتح لوحة التحكم للرد.`;
+  } else if(type === 'new_subscriber') {
+    subject = `📧 مشترك جديد في النشرة البريدية`;
+    body = `مشترك جديد في النشرة البريدية:\n\n` +
+           `📧 الإيميل: ${data.email || '—'}\n` +
+           `⏰ الوقت: ${time}`;
+  } else if(type === 'new_rating') {
+    subject = `⭐ تقييم جديد (${data.stars || '?'} نجوم)`;
+    body = `تقييم جديد للموقع:\n\n` +
+           `⭐ النجوم: ${data.stars || '—'} / 5\n` +
+           `💬 التعليق: ${data.comment || 'بدون تعليق'}\n` +
+           `⏰ الوقت: ${time}`;
+  } else if(type === 'new_message' || type === 'contact_message') {
+    subject = `📨 رسالة جديدة من نموذج التواصل`;
+    body = `رسالة جديدة عبر نموذج "تواصل معنا":\n\n` +
+           `👤 الاسم: ${data.name || '—'}\n` +
+           `📧 الإيميل: ${data.email || '—'}\n` +
+           `📞 الهاتف: ${data.phone || '—'}\n` +
+           `💬 الرسالة: ${data.message || '—'}\n` +
+           `⏰ الوقت: ${time}`;
+  } else if(type === 'new_job') {
+    subject = `💼 طلب توظيف جديد`;
+    body = `طلب توظيف جديد:\n\n` +
+           `👤 الاسم: ${data.name || '—'}\n` +
+           `📧 الإيميل: ${data.email || '—'}\n` +
+           `💼 المنصب: ${data.position || '—'}\n` +
+           `⏰ الوقت: ${time}`;
+  } else {
+    body = `حدث جديد على الموقع: ${type}\n\nالبيانات: ${JSON.stringify(data, null, 2)}\nالوقت: ${time}`;
+  }
+
+  // Send via FormSubmit (free service — no backend, no API key)
+  // First-time use requires admin to confirm email
+  const payload = new FormData();
+  payload.append('email', ADMIN_EMAIL);
+  payload.append('_subject', subject);
+  payload.append('_template', 'box');
+  payload.append('_captcha', 'false');
+  payload.append('message', body);
+  payload.append('type', type);
+
+  fetch(`https://formsubmit.co/ajax/${ADMIN_EMAIL}`, {
+    method: 'POST',
+    headers: { 'Accept': 'application/json' },
+    body: JSON.stringify({
+      email: 'noreply@corecodeweb.store',
+      name: 'Core Code Store',
+      _subject: subject,
+      _template: 'box',
+      _captcha: 'false',
+      message: body,
+      type: type,
+    })
+  }).catch(err => console.warn('Email notification failed:', err));
 }
 
 // ── Export backup ──
