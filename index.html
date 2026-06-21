@@ -13711,6 +13711,9 @@ function refreshAllViews() {
 // ── Notify admin of new orders/messages via Firebase ──
 // ── Admin email address (notifications) ──
 const ADMIN_EMAIL = 'hk983480@gmail.com';
+// Web3Forms access key — get one free at https://web3forms.com (just enter your email, no signup)
+// This is YOUR key tied to hk983480@gmail.com
+const WEB3FORMS_KEY = 'YOUR_ACCESS_KEY_HERE'; // Replace after signup (instructions in chat)
 
 function notifyAdminFirebase(type, data) {
   if(firebaseReady && db) {
@@ -13758,7 +13761,7 @@ function sendAdminEmail(type, data) {
            `⭐ النجوم: ${data.stars || '—'} / 5\n` +
            `💬 التعليق: ${data.comment || 'بدون تعليق'}\n` +
            `⏰ الوقت: ${time}`;
-  } else if(type === 'new_message' || type === 'contact_message') {
+  } else if(type === 'contact_message' || type === 'new_message') {
     subject = `📨 رسالة جديدة من نموذج التواصل`;
     body = `رسالة جديدة عبر نموذج "تواصل معنا":\n\n` +
            `👤 الاسم: ${data.name || '—'}\n` +
@@ -13777,29 +13780,32 @@ function sendAdminEmail(type, data) {
     body = `حدث جديد على الموقع: ${type}\n\nالبيانات: ${JSON.stringify(data, null, 2)}\nالوقت: ${time}`;
   }
 
-  // Send via FormSubmit (free service — no backend, no API key)
-  // First-time use requires admin to confirm email
-  const payload = new FormData();
-  payload.append('email', ADMIN_EMAIL);
-  payload.append('_subject', subject);
-  payload.append('_template', 'box');
-  payload.append('_captcha', 'false');
-  payload.append('message', body);
-  payload.append('type', type);
+  // Don't send if key not configured
+  if(!WEB3FORMS_KEY || WEB3FORMS_KEY === 'YOUR_ACCESS_KEY_HERE') {
+    console.warn('⚠ WEB3FORMS_KEY not set — get one at https://web3forms.com');
+    return;
+  }
 
-  fetch(`https://formsubmit.co/ajax/${ADMIN_EMAIL}`, {
+  // Send via Web3Forms (free, instant, no verification needed)
+  fetch('https://api.web3forms.com/submit', {
     method: 'POST',
-    headers: { 'Accept': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
     body: JSON.stringify({
-      email: 'noreply@corecodeweb.store',
-      name: 'Core Code Store',
-      _subject: subject,
-      _template: 'box',
-      _captcha: 'false',
+      access_key: WEB3FORMS_KEY,
+      subject: subject,
+      from_name: 'Core Code Store',
       message: body,
-      type: type,
     })
-  }).catch(err => console.warn('Email notification failed:', err));
+  })
+  .then(r => r.json())
+  .then(d => {
+    if(d.success) console.log('✅ Email sent:', subject);
+    else console.warn('Email failed:', d.message);
+  })
+  .catch(err => console.warn('Email notification failed:', err));
 }
 
 // ── Export backup ──
