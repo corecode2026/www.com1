@@ -2074,6 +2074,7 @@ body.light-theme svg{stroke:currentColor;}
 <div class="page" id="page-admin">
   <div class="admin-layout">
     <div class="sidebar">
+      <div style="text-align:center;padding:6px;font-size:10px;color:#f5c518;background:rgba(245,197,24,.08);border-radius:6px;margin:0 10px 10px;font-weight:700;">🔵 إصدار الموقع: v2.1-voice</div>
       <div class="sb-group">الرئيسية</div>
       <div class="sb-item active" onclick="showAdmin('dashboard',this)"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span> لوحة التحكم</div>
       <div class="sb-group">المتجر</div>
@@ -2102,12 +2103,13 @@ body.light-theme svg{stroke:currentColor;}
       <div class="sb-item" onclick="showAdmin('portfolio',this)"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><polyline points="16 3 12 7 8 3"/></svg></span> أعمالنا</div>
       <div class="sb-item" onclick="showAdmin('newsletter',this)"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span> النشرة البريدية</div>
       <div class="sb-item" onclick="showAdmin('workhours',this)"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg></span> ساعات العمل</div>
-      <div class="sb-item" onclick="toggleSubMenu(this)"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span> الموظفون <span style="margin-right:auto;font-size:10px;">▼</span></div>
+      <div class="sb-item" onclick="toggleSubMenu(event)" style="cursor:pointer;"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span> الموظفون <span style="margin-right:auto;font-size:10px;transition:.3s;" class="staff-arrow">▼</span></div>
       <div class="sb-submenu" style="display:none;flex-direction:column;gap:0;margin:0;padding:0;border-left:2px solid var(--border3);margin-left:10px;">
         <div class="sb-item" onclick="showAdmin('staff',this)" style="padding-right:20px;font-size:13px;"><span class="ico" style="width:12px;height:12px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/></svg></span> قائمة الموظفين</div>
-        <div class="sb-item" onclick="showAdmin('voice',this)" style="padding-right:20px;font-size:13px;"><span class="ico" style="width:12px;height:12px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg></span> 🎤 الغرف الصوتية</div>
       </div>
       <div class="sb-item" onclick="showAdmin('settings',this)"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span> الإعدادات</div>
+      <div class="sb-group">غرفة الموظفين</div>
+      <div class="sb-item" onclick="showAdmin('voice',this)" style="background:linear-gradient(90deg,rgba(245,197,24,.1),transparent);border-right:3px solid #f5c518;"><span class="ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></span> 🎤 الغرف الصوتية</div>
       <!-- Clock In/Out widget -->
       <div id="sidebar-clock-widget" style="margin:8px 10px;background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:10px 12px;transition:.3s;">
         <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
@@ -3025,7 +3027,7 @@ body.light-theme svg{stroke:currentColor;}
           <div class="form-group">
             <label class="form-label">
               <input type="checkbox" id="vr-active" checked style="margin-left:6px;">
-              الغرفة مفعّلة ومتاحة للزوار
+              الغرفة مفعّلة ومتاحة للموظفين
             </label>
           </div>
           <div class="form-actions">
@@ -6024,6 +6026,7 @@ const ALL_PAGES = [
   { id:'workhours',    label:'ساعات العمل' },
   { id:'newsletter',   label:'النشرة البريدية' },
   { id:'portfolio',    label:'أعمالنا' },
+  { id:'voice',        label:'الغرف الصوتية' },
 ];
 
 // Custom roles — starts with defaults, admin can add/edit/delete
@@ -6139,12 +6142,15 @@ function logout(){
   showNotif('تم تسجيل الخروج بنجاح');
   hideAdminLangBtn();
 }
-function toggleSubMenu(el) {
+function toggleSubMenu(evt) {
+  evt.stopPropagation();
+  const el = evt.currentTarget;
   const submenu = el.nextElementSibling;
   if(submenu && submenu.classList.contains('sb-submenu')) {
     const isHidden = submenu.style.display === 'none';
     submenu.style.display = isHidden ? 'flex' : 'none';
-    el.style.fontWeight = isHidden ? '700' : '500';
+    const arrow = el.querySelector('.staff-arrow');
+    if(arrow) arrow.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
   }
 }
 
@@ -10834,6 +10840,7 @@ function joinVoiceRoom(roomId) {
   if(!room) return;
   const roomName = room.name.replace(/\s+/g, '-').toLowerCase();
   const jitsiRoom = `CoreCodeStore-${roomName}-${roomId.slice(0,6)}`;
+  const directUrl = `https://meet.jit.si/${jitsiRoom}`;
   
   // Remove old modal if exists
   document.getElementById('_voice-modal')?.remove();
@@ -10846,23 +10853,61 @@ function joinVoiceRoom(roomId) {
       <h2 style="color:#fff;margin:0;font-size:18px;">🎤 ${room.name}</h2>
       <button onclick="document.getElementById('_voice-modal').remove()" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;">✕</button>
     </div>
-    <div id="jitsi-container" style="flex:1;border-radius:12px;overflow:hidden;"></div>
+    <div id="jitsi-container" style="flex:1;border-radius:12px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#1a1a1a;">
+      <div style="text-align:center;color:#888;">
+        <div style="font-size:32px;margin-bottom:10px;">🎤</div>
+        <div style="font-size:14px;">جارٍ تحميل الغرفة الصوتية...</div>
+      </div>
+    </div>
   `;
   document.body.appendChild(modal);
+  
+  // Timeout fallback — if Jitsi doesn't load within 7s, offer direct link
+  const loadTimeout = setTimeout(() => {
+    const container = document.getElementById('jitsi-container');
+    if(container && !container.querySelector('iframe')) {
+      container.innerHTML = `
+        <div style="text-align:center;color:#fff;padding:2rem;max-width:380px;">
+          <div style="font-size:32px;margin-bottom:14px;">⚠️</div>
+          <div style="font-size:15px;margin-bottom:8px;font-weight:700;">تعذّر تحميل الغرفة هنا</div>
+          <div style="font-size:12px;color:#aaa;margin-bottom:18px;line-height:1.7;">هذا يحدث غالباً داخل معاينة المتصفح التجريبية. على موقعك الفعلي على الإنترنت ستعمل مباشرة بدون مشاكل.<br><br>بإمكانك فتحها بنافذة مستقلة الآن:</div>
+          <a href="${directUrl}" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#f5c518,#d4af37);color:#000;padding:12px 24px;border-radius:10px;text-decoration:none;font-weight:800;font-size:13px;">🎙️ فتح الغرفة بنافذة مستقلة</a>
+        </div>
+      `;
+    }
+  }, 7000);
   
   // Load Jitsi API if not loaded
   if(!window.JitsiMeetExternalAPI) {
     const script = document.createElement('script');
     script.src = 'https://meet.jit.si/external_api.js';
-    script.onload = () => initJitsi(jitsiRoom);
+    script.onload = () => { clearTimeout(loadTimeout); initJitsi(jitsiRoom); };
+    script.onerror = () => { clearTimeout(loadTimeout); showJitsiError(directUrl); };
     document.head.appendChild(script);
   } else {
+    clearTimeout(loadTimeout);
     initJitsi(jitsiRoom);
+  }
+}
+
+function showJitsiError(directUrl) {
+  const container = document.getElementById('jitsi-container');
+  if(container) {
+    container.innerHTML = `
+      <div style="text-align:center;color:#fff;padding:2rem;max-width:380px;">
+        <div style="font-size:32px;margin-bottom:14px;">⚠️</div>
+        <div style="font-size:15px;margin-bottom:8px;font-weight:700;">تعذّر تحميل الغرفة هنا</div>
+        <div style="font-size:12px;color:#aaa;margin-bottom:18px;line-height:1.7;">جرّب على موقعك الفعلي أو افتح بنافذة مستقلة:</div>
+        <a href="${directUrl}" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#f5c518,#d4af37);color:#000;padding:12px 24px;border-radius:10px;text-decoration:none;font-weight:800;font-size:13px;">🎙️ فتح الغرفة بنافذة مستقلة</a>
+      </div>
+    `;
   }
 }
 
 function initJitsi(roomName) {
   const domain = 'meet.jit.si';
+  const container = document.getElementById('jitsi-container');
+  if(container) container.innerHTML = ''; // clear loading placeholder
   const options = {
     roomName: roomName,
     width: '100%',
@@ -10914,6 +10959,7 @@ function renderVoiceRoomsAdmin() {
         <div style="font-size:10px;color:var(--text3);margin-top:4px;">👥 ${users} متحدث${r.maxusers?' من '+r.maxusers:''}</div>
       </div>
       <div style="display:flex;gap:5px;flex-shrink:0;">
+        <button onclick="joinVoiceRoom('${r.id}')" style="background:linear-gradient(135deg,#f5c518,#d4af37);color:#000;border:none;padding:8px 16px;border-radius:8px;cursor:pointer;font-weight:800;font-size:12px;font-family:Cairo,sans-serif;display:flex;align-items:center;gap:5px;">🎙️ دخول وتحدث</button>
         <button onclick="editVoiceRoom('${r.id}')" class="a-action a-action-edit">✏</button>
         <button onclick="deleteVoiceRoom('${r.id}')" class="a-action a-action-del">🗑</button>
       </div>
