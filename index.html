@@ -6182,6 +6182,9 @@ function showAdmin(p, el) {
   if(p==='subs') { renderSubsAdmin(); setTimeout(renderTiersList, 100); }
   if(p==='btneditor') renderBtnEditor();
   if(p==='reports')   renderReports();
+  if(p==='voice')     renderVoiceRoomsAdmin();
+  if(p==='portfolio') renderPortfolioAdmin();
+  if(p==='workhours') { if(typeof renderWorkHours==='function') renderWorkHours(); }
   setTimeout(applyButtonPermissions, 150);
 }
 function updateAdminCounts(){
@@ -13857,6 +13860,8 @@ function applyLoadedData(d) {
     if(typeof renderFeatured === 'function')          renderFeatured();
     if(typeof renderReviews === 'function')           renderReviews();
     if(typeof renderPaymentBar === 'function')        renderPaymentBar();
+    // Re-render voice rooms admin if currently viewing it
+    if(typeof renderVoiceRoomsAdmin === 'function' && document.getElementById('apg-voice')?.classList.contains('active')) renderVoiceRoomsAdmin();
   }, 50);
 }
 
