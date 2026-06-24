@@ -2102,7 +2102,11 @@ body.light-theme svg{stroke:currentColor;}
       <div class="sb-item" onclick="showAdmin('portfolio',this)"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><polyline points="16 3 12 7 8 3"/></svg></span> أعمالنا</div>
       <div class="sb-item" onclick="showAdmin('newsletter',this)"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span> النشرة البريدية</div>
       <div class="sb-item" onclick="showAdmin('workhours',this)"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg></span> ساعات العمل</div>
-      <div class="sb-item" onclick="showAdmin('staff',this)"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span> الموظفون</div>
+      <div class="sb-item" onclick="toggleSubMenu(this)"><span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span> الموظفون <span style="margin-right:auto;font-size:10px;">▼</span></div>
+      <div class="sb-submenu" style="display:none;flex-direction:column;gap:0;margin:0;padding:0;border-left:2px solid var(--border3);margin-left:10px;">
+        <div class="sb-item" onclick="showAdmin('staff',this)" style="padding-right:20px;font-size:13px;"><span class="ico" style="width:12px;height:12px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/></svg></span> قائمة الموظفين</div>
+        <div class="sb-item" onclick="showAdmin('voice',this)" style="padding-right:20px;font-size:13px;"><span class="ico" style="width:12px;height:12px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg></span> 🎤 الغرف الصوتية</div>
+      </div>
       <div class="sb-item" onclick="showAdmin('settings',this)"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span> الإعدادات</div>
       <!-- Clock In/Out widget -->
       <div id="sidebar-clock-widget" style="margin:8px 10px;background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:10px 12px;transition:.3s;">
@@ -2990,6 +2994,52 @@ body.light-theme svg{stroke:currentColor;}
         <div class="tbl-box">
           <div class="tbl-head"><span class="tbl-head-title">الرتب الحالية</span></div>
           <div id="roles-list" style="padding:16px;display:flex;flex-direction:column;gap:10px;"></div>
+        </div>
+      </div>
+
+      <!-- VOICE ROOMS MANAGEMENT -->
+      <div class="admin-pg" id="apg-voice">
+        <div class="admin-pg-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:8px;vertical-align:middle;"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          إدارة الغرف الصوتية
+        </div>
+
+        <!-- Add new room form -->
+        <div class="form-card" style="max-width:100%;margin-bottom:1rem;">
+          <div class="form-card-title" id="vr-form-title">➕ إنشاء غرفة صوتية جديدة</div>
+          <input type="hidden" id="vr-edit-id">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">اسم الغرفة</label>
+              <input type="text" id="vr-name" class="form-input" placeholder="مثال: نقاش مع الفريق">
+            </div>
+            <div class="form-group">
+              <label class="form-label">الحد الأقصى للأشخاص (0 = بدون حد)</label>
+              <input type="number" id="vr-maxusers" class="form-input" value="0" min="0">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">الوصف</label>
+            <textarea id="vr-desc" class="form-textarea" rows="2" placeholder="وصف الغرفة..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">
+              <input type="checkbox" id="vr-active" checked style="margin-left:6px;">
+              الغرفة مفعّلة ومتاحة للزوار
+            </label>
+          </div>
+          <div class="form-actions">
+            <button class="btn-silver" onclick="saveVoiceRoom()" id="vr-save-btn">إنشاء ➕</button>
+            <button class="btn-outline" onclick="cancelVoiceRoomEdit()" id="vr-cancel-btn" style="display:none;">إلغاء</button>
+          </div>
+        </div>
+
+        <!-- Rooms list -->
+        <div class="tbl-box">
+          <div class="tbl-head">
+            <span class="tbl-head-title">الغرف المتاحة (<span id="vr-count">0</span>)</span>
+          </div>
+          <div id="vr-list" style="padding:14px;display:flex;flex-direction:column;gap:10px;"></div>
         </div>
       </div>
 
@@ -6089,6 +6139,15 @@ function logout(){
   showNotif('تم تسجيل الخروج بنجاح');
   hideAdminLangBtn();
 }
+function toggleSubMenu(el) {
+  const submenu = el.nextElementSibling;
+  if(submenu && submenu.classList.contains('sb-submenu')) {
+    const isHidden = submenu.style.display === 'none';
+    submenu.style.display = isHidden ? 'flex' : 'none';
+    el.style.fontWeight = isHidden ? '700' : '500';
+  }
+}
+
 function showAdmin(p, el) {
   sessionStorage.setItem('ccs_last_admin_pg', p);
   document.querySelectorAll('.admin-pg').forEach(x=>x.classList.remove('active'));
@@ -10729,6 +10788,195 @@ function toggleTheme() {
 // restore theme on load
 if(localStorage.getItem('ccs_theme') === 'light') { isLightTheme = true; }
 
+// ====== VOICE ROOMS SYSTEM ======
+let voiceRooms = [];
+
+function renderVoiceRoomsDisplay() {
+  const grid = document.getElementById('voice-rooms-grid');
+  const empty = document.getElementById('voice-empty');
+  if(!grid) return;
+
+  const active = voiceRooms.filter(r => r.active !== false);
+  if(!active.length) {
+    grid.innerHTML = '';
+    if(empty) empty.style.display = 'block';
+    return;
+  }
+  if(empty) empty.style.display = 'none';
+
+  grid.innerHTML = active.map(r => {
+    const users = r.users || 0;
+    const maxText = r.maxusers && r.maxusers > 0 ? `${users} / ${r.maxusers}` : `${users} متحدث`;
+    const isFull = r.maxusers && users >= r.maxusers;
+    return `
+    <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:12px;cursor:pointer;transition:.3s;" onclick="joinVoiceRoom('${r.id}')">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:50px;height:50px;background:linear-gradient(135deg,#f5c518,#d4af37);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#000;font-size:20px;">🎤</div>
+          <div>
+            <h3 style="font-size:16px;font-weight:900;color:var(--silver2);margin:0;">${r.name}</h3>
+            <div style="font-size:11px;color:var(--text3);margin-top:2px;">${maxText}</div>
+          </div>
+        </div>
+        ${isFull ? '<div style="background:rgba(239,68,68,.1);color:#ef4444;padding:4px 10px;border-radius:6px;font-size:10px;font-weight:700;">🔴 ممتلئة</div>' : '<div style="background:rgba(34,197,94,.1);color:#22c55e;padding:4px 10px;border-radius:6px;font-size:10px;font-weight:700;">🟢 متاحة</div>'}
+      </div>
+      ${r.desc ? `<p style="font-size:12px;color:var(--text2);margin:0;line-height:1.6;">${r.desc}</p>` : ''}
+      <button style="background:var(--grad);color:var(--silver2);border:1px solid var(--silver3);padding:10px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;font-family:Cairo,sans-serif;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        دخول الغرفة
+      </button>
+    </div>`;
+  }).join('');
+}
+
+function joinVoiceRoom(roomId) {
+  const room = voiceRooms.find(r => r.id === roomId);
+  if(!room) return;
+  const roomName = room.name.replace(/\s+/g, '-').toLowerCase();
+  const jitsiRoom = `CoreCodeStore-${roomName}-${roomId.slice(0,6)}`;
+  
+  // Remove old modal if exists
+  document.getElementById('_voice-modal')?.remove();
+  
+  const modal = document.createElement('div');
+  modal.id = '_voice-modal';
+  modal.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.9);display:flex;flex-direction:column;padding:1rem;';
+  modal.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+      <h2 style="color:#fff;margin:0;font-size:18px;">🎤 ${room.name}</h2>
+      <button onclick="document.getElementById('_voice-modal').remove()" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;">✕</button>
+    </div>
+    <div id="jitsi-container" style="flex:1;border-radius:12px;overflow:hidden;"></div>
+  `;
+  document.body.appendChild(modal);
+  
+  // Load Jitsi API if not loaded
+  if(!window.JitsiMeetExternalAPI) {
+    const script = document.createElement('script');
+    script.src = 'https://meet.jit.si/external_api.js';
+    script.onload = () => initJitsi(jitsiRoom);
+    document.head.appendChild(script);
+  } else {
+    initJitsi(jitsiRoom);
+  }
+}
+
+function initJitsi(roomName) {
+  const domain = 'meet.jit.si';
+  const options = {
+    roomName: roomName,
+    width: '100%',
+    height: '100%',
+    parentNode: document.getElementById('jitsi-container'),
+    configOverwrite: {
+      disableModeratorIndicator: false,
+      startWithAudioMuted: false,
+      startWithVideoMuted: true,
+      disableDeepLinking: true,
+    },
+    interfaceConfigOverwrite: {
+      TOOLBAR_BUTTONS: ['microphone', 'camera', 'desktop', 'fullscreen', 'foyer', 'chat', 'settings', 'raisehand', 'help', 'hangup'],
+      HIDE_INVITE_PROMPT: true,
+    },
+    userInfo: {
+      email: '',
+      displayName: 'زائر'
+    }
+  };
+  try {
+    new window.JitsiMeetExternalAPI(domain, options);
+  } catch(e) {
+    console.error('Jitsi init failed:', e);
+    showNotif('فشل تحميل الغرفة الصوتية','error');
+    document.getElementById('_voice-modal')?.remove();
+  }
+}
+
+function renderVoiceRoomsAdmin() {
+  const list = document.getElementById('vr-list');
+  const count = document.getElementById('vr-count');
+  if(count) count.textContent = voiceRooms.length;
+  if(!list) return;
+  if(!voiceRooms.length) {
+    list.innerHTML = '<div style="text-align:center;padding:1.5rem;color:var(--text3);">لا توجد غرف بعد — أنشئ واحدة ↑</div>';
+    return;
+  }
+  list.innerHTML = voiceRooms.map((r,i) => {
+    const users = r.users || 0;
+    return `
+    <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:12px;display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap;">
+      <div style="flex:1;min-width:200px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <span style="font-size:12px;padding:2px 8px;border-radius:6px;background:${r.active!==false?'rgba(34,197,94,.15)':'rgba(100,116,139,.15)'};color:${r.active!==false?'#22c55e':'#64748b'};border:1px solid ${r.active!==false?'rgba(34,197,94,.3)':'rgba(100,116,139,.3)'};">🎤 ${r.active!==false?'مفعّلة':'معطّلة'}</span>
+          <span style="font-size:13px;font-weight:700;color:var(--silver2);">${r.name}</span>
+        </div>
+        ${r.desc ? `<div style="font-size:11px;color:var(--text3);">${r.desc}</div>` : ''}
+        <div style="font-size:10px;color:var(--text3);margin-top:4px;">👥 ${users} متحدث${r.maxusers?' من '+r.maxusers:''}</div>
+      </div>
+      <div style="display:flex;gap:5px;flex-shrink:0;">
+        <button onclick="editVoiceRoom('${r.id}')" class="a-action a-action-edit">✏</button>
+        <button onclick="deleteVoiceRoom('${r.id}')" class="a-action a-action-del">🗑</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function saveVoiceRoom() {
+  const name = document.getElementById('vr-name')?.value.trim();
+  const desc = document.getElementById('vr-desc')?.value.trim();
+  const maxusers = parseInt(document.getElementById('vr-maxusers')?.value || 0);
+  const active = document.getElementById('vr-active')?.checked;
+  const editId = document.getElementById('vr-edit-id')?.value;
+
+  if(!name) { showNotif('أدخل اسم الغرفة','error'); return; }
+  if(editId) {
+    const r = voiceRooms.find(x=>x.id===editId);
+    if(r) { Object.assign(r, {name, desc, maxusers, active}); }
+    cancelVoiceRoomEdit();
+    showNotif('✓ تم تحديث الغرفة','success');
+  } else {
+    voiceRooms.push({ id:'vr_'+Date.now(), name, desc, maxusers, active, users: 0 });
+    showNotif('✓ تم إنشاء الغرفة','success');
+  }
+  ['vr-name','vr-desc'].forEach(id=>{ const el = document.getElementById(id); if(el) el.value = ''; });
+  document.getElementById('vr-maxusers').value = '0';
+  saveAllData();
+  renderVoiceRoomsAdmin();
+  renderVoiceRoomsDisplay();
+}
+
+function editVoiceRoom(id) {
+  const r = voiceRooms.find(x=>x.id===id); if(!r) return;
+  document.getElementById('vr-edit-id').value = id;
+  document.getElementById('vr-name').value = r.name || '';
+  document.getElementById('vr-desc').value = r.desc || '';
+  document.getElementById('vr-maxusers').value = r.maxusers || 0;
+  document.getElementById('vr-active').checked = r.active !== false;
+  document.getElementById('vr-form-title').textContent = '✏ تعديل الغرفة';
+  document.getElementById('vr-save-btn').textContent = 'حفظ التغييرات';
+  document.getElementById('vr-cancel-btn').style.display = 'inline-block';
+  document.getElementById('vr-name').scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function cancelVoiceRoomEdit() {
+  document.getElementById('vr-edit-id').value = '';
+  document.getElementById('vr-form-title').textContent = '➕ إنشاء غرفة صوتية جديدة';
+  document.getElementById('vr-save-btn').textContent = 'إنشاء ➕';
+  document.getElementById('vr-cancel-btn').style.display = 'none';
+  ['vr-name','vr-desc'].forEach(id=>{ const el = document.getElementById(id); if(el) el.value = ''; });
+  document.getElementById('vr-maxusers').value = '0';
+}
+
+function deleteVoiceRoom(id) {
+  showConfirmBox('حذف هذه الغرفة؟', () => {
+    voiceRooms = voiceRooms.filter(x=>x.id!==id);
+    saveAllData();
+    renderVoiceRoomsAdmin();
+    renderVoiceRoomsDisplay();
+    showNotif('🗑 تم الحذف','error');
+  });
+}
+
 // ====== PORTFOLIO / OUR WORKS SYSTEM ======
 let portfolioData = {
   title: 'أعمالنا',
@@ -13382,7 +13630,7 @@ function buildPayload() {
     products, orders, coupons, cats, adsData, teamList, staffList,
     contactList, featuresList, featuresSectionTitle,
     jobApplications, siteRatings, staffRatings,
-    chatConversations, deletedConvIds, sales, workSessions, newsletterSubs, portfolioData, contactMessages, promoBanner, heroBadgeText, joinBanner, siteCustom, advPage, paymentMethods, btnCustom, subsData, customRoles, adminPassword,
+    chatConversations, deletedConvIds, sales, workSessions, newsletterSubs, portfolioData, voiceRooms, contactMessages, promoBanner, heroBadgeText, joinBanner, siteCustom, advPage, paymentMethods, btnCustom, subsData, customRoles, adminPassword,
     _ts: Date.now(), _v: '2.0'
   };
 }
@@ -13582,6 +13830,7 @@ function applyLoadedData(d) {
   if(d.workSessions)              workSessions = d.workSessions.filter?.(s=>s?.id) || [];
   if(d.newsletterSubs)            newsletterSubs = Array.isArray(d.newsletterSubs) ? d.newsletterSubs : Object.values(d.newsletterSubs||{});
   if(d.portfolioData)             { portfolioData = {...portfolioData, ...d.portfolioData}; if(!Array.isArray(portfolioData.works)) portfolioData.works = []; }
+  if(d.voiceRooms)                { voiceRooms = Array.isArray(d.voiceRooms) ? d.voiceRooms : []; }
   if(d.deletedConvIds) {
     const remote = Array.isArray(d.deletedConvIds) ? d.deletedConvIds : Object.values(d.deletedConvIds||{});
     deletedConvIds = [...new Set([...deletedConvIds, ...remote])];
@@ -14259,11 +14508,19 @@ window.editPortfolioWork = editPortfolioWork;
 window.cancelPortfolioEdit = cancelPortfolioEdit;
 window.deletePortfolioWork = deletePortfolioWork;
 window.movePortfolio = movePortfolio;
+window.renderVoiceRoomsDisplay = renderVoiceRoomsDisplay;
+window.renderVoiceRoomsAdmin = renderVoiceRoomsAdmin;
+window.saveVoiceRoom = saveVoiceRoom;
+window.editVoiceRoom = editVoiceRoom;
+window.cancelVoiceRoomEdit = cancelVoiceRoomEdit;
+window.deleteVoiceRoom = deleteVoiceRoom;
+window.joinVoiceRoom = joinVoiceRoom;
 window.subscribe = subscribe;
 window.sendContact = sendContact;
 window.doLogin = doLogin;
 window.logout = logout;
 window.showAdmin = showAdmin;
+window.toggleSubMenu = toggleSubMenu;
 window.updateAdminCounts = updateAdminCounts;
 window.renderAdminProds = renderAdminProds;
 window.confirmDelete = confirmDelete;
