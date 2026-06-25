@@ -4098,6 +4098,7 @@ function tryInitFirebase() {
     firebaseReady = true;
     console.log('✅ Firebase connected');
     startFirebaseListener();
+    setTimeout(() => { if(typeof initVoicePresenceListener==='function') initVoicePresenceListener(); }, 1000);
     return true;
   } catch(e) {
     console.warn('⚠ Firebase init failed:', e.message);
@@ -10907,6 +10908,36 @@ function joinVoiceRoom(roomId) {
     </div>
   `;
   document.body.appendChild(modal);
+
+  // ── Track presence: mark this user as IN the room (live) ──
+  if(firebaseReady && db) {
+    const uid = (currentUser?.name || 'موظف') + '_' + (currentUser?.id || Math.random().toString(36).slice(2,7));
+    const presenceRef = db.ref(`ccs_voice_presence/${roomId}/${uid}`);
+    presenceRef.set({
+      name: currentUser?.name || 'موظف',
+      joinedAt: Date.now()
+    });
+    presenceRef.onDisconnect().remove();
+    const closeBtn = modal.querySelector('button');
+    if(closeBtn) {
+      closeBtn.onclick = () => {
+        try { presenceRef.remove(); } catch(e){}
+        document.getElementById('_voice-modal')?.remove();
+      };
+    }
+  }
+}
+
+// ── Listen to voice room presence and update UI live ──
+let _voicePresence = {};
+function initVoicePresenceListener() {
+  if(!firebaseReady || !db) return;
+  db.ref('ccs_voice_presence').on('value', snap => {
+    _voicePresence = snap.val() || {};
+    if(document.getElementById('apg-voice')?.classList.contains('active')) {
+      renderVoiceRoomsAdmin();
+    }
+  });
 }
 
 function renderVoiceRoomsAdmin() {
@@ -10919,16 +10950,24 @@ function renderVoiceRoomsAdmin() {
     return;
   }
   list.innerHTML = voiceRooms.map((r,i) => {
-    const users = r.users || 0;
+    // Live presence: who's currently in this room
+    const roomPresence = _voicePresence[r.id] || {};
+    const liveUsers = Object.values(roomPresence);
+    const liveCount = liveUsers.length;
+    const namesList = liveUsers.map(u => u.name).join('، ');
     return `
-    <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:12px;display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap;">
+    <div style="background:var(--bg3);border:1px solid ${liveCount>0?'rgba(34,197,94,.5)':'var(--border2)'};border-radius:10px;padding:12px;display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap;${liveCount>0?'box-shadow:0 0 12px rgba(34,197,94,.15);':''}">
       <div style="flex:1;min-width:200px;">
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap;">
           <span style="font-size:12px;padding:2px 8px;border-radius:6px;background:${r.active!==false?'rgba(34,197,94,.15)':'rgba(100,116,139,.15)'};color:${r.active!==false?'#22c55e':'#64748b'};border:1px solid ${r.active!==false?'rgba(34,197,94,.3)':'rgba(100,116,139,.3)'};">🎤 ${r.active!==false?'مفعّلة':'معطّلة'}</span>
           <span style="font-size:13px;font-weight:700;color:var(--silver2);">${r.name}</span>
+          ${liveCount>0 ? `<span style="font-size:11px;padding:2px 10px;border-radius:20px;background:rgba(34,197,94,.2);color:#22c55e;border:1px solid rgba(34,197,94,.4);font-weight:800;display:inline-flex;align-items:center;gap:4px;"><span style="width:7px;height:7px;background:#22c55e;border-radius:50%;display:inline-block;animation:pulse 1.5s infinite;"></span>🔴 ${liveCount} داخل الآن</span>` : ''}
         </div>
         ${r.desc ? `<div style="font-size:11px;color:var(--text3);">${r.desc}</div>` : ''}
-        <div style="font-size:10px;color:var(--text3);margin-top:4px;">👥 ${users} متحدث${r.maxusers?' من '+r.maxusers:''}</div>
+        ${liveCount>0
+          ? `<div style="font-size:11px;color:#22c55e;margin-top:5px;font-weight:600;">🟢 المتواجدون: ${namesList}</div>`
+          : `<div style="font-size:10px;color:var(--text3);margin-top:4px;">⚪ لا أحد داخل الغرفة حالياً</div>`
+        }
       </div>
       <div style="display:flex;gap:5px;flex-shrink:0;">
         <button onclick="joinVoiceRoom('${r.id}')" style="background:linear-gradient(135deg,#f5c518,#d4af37);color:#000;border:none;padding:8px 16px;border-radius:8px;cursor:pointer;font-weight:800;font-size:12px;font-family:Cairo,sans-serif;display:flex;align-items:center;gap:5px;">🎙️ دخول وتحدث</button>
@@ -14535,6 +14574,7 @@ window.editVoiceRoom = editVoiceRoom;
 window.cancelVoiceRoomEdit = cancelVoiceRoomEdit;
 window.deleteVoiceRoom = deleteVoiceRoom;
 window.joinVoiceRoom = joinVoiceRoom;
+window.initVoicePresenceListener = initVoicePresenceListener;
 window.subscribe = subscribe;
 window.sendContact = sendContact;
 window.doLogin = doLogin;
