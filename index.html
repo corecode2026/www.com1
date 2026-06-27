@@ -6077,8 +6077,9 @@ function applyRoleUI(){
     document.querySelector('.sidebar').prepend(cu);
   }
   const r = roleLabels[currentUser.role]||roleLabels.support;
+  const roleIcon = currentUser.role==='admin'?'👑':currentUser.role==='moderator'?'🛡':currentUser.role==='editor'?'✏':currentUser.role==='support'?'🎧':'🏷️';
   cu.innerHTML=`<div style="display:flex;align-items:center;gap:8px;">
-    <div style="width:34px;height:34px;border-radius:50%;background:var(--bg4);border:1px solid var(--border3);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">${currentUser.role==='admin'?'👑':currentUser.role==='moderator'?'🛡':currentUser.role==='editor'?'✏':'🎧'}</div>
+    <div style="width:34px;height:34px;border-radius:50%;background:var(--bg4);border:1px solid var(--border3);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">${roleIcon}</div>
     <div style="min-width:0;">
       <div style="font-size:13px;font-weight:700;color:var(--silver2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${currentUser.name}</div>
       <span style="font-size:10px;background:${r.bg};border:1px solid ${r.border};color:${r.color};padding:1px 7px;border-radius:4px;font-weight:700;">${r.label}</span>
@@ -6088,12 +6089,42 @@ function applyRoleUI(){
   document.querySelectorAll('.sb-item').forEach(item=>{
     item.style.display='';
     const oc = item.getAttribute('onclick')||'';
+    // Items that open submenus (toggleSubMenu) are handled separately below
+    if(oc.includes('toggleSubMenu')) return;
     // extract page name from onclick="showAdmin('xxx',this)"
-    const match = oc.match(/'([^']+)'/);
+    const match = oc.match(/showAdmin\(\s*'([^']+)'/);
     if(match && match[1] !== 'logout') {
       const page = match[1];
       if(!canPage(page)) item.style.display='none';
     }
+  });
+
+  // Handle "الموظفون" submenu toggle: hide it if ALL children are not permitted
+  document.querySelectorAll('.sb-item').forEach(item=>{
+    const oc = item.getAttribute('onclick')||'';
+    if(!oc.includes('toggleSubMenu')) return;
+    const submenu = item.nextElementSibling;
+    if(submenu && submenu.classList.contains('sb-submenu')) {
+      const children = submenu.querySelectorAll('.sb-item');
+      let anyVisible = false;
+      children.forEach(ch => { if(ch.style.display !== 'none') anyVisible = true; });
+      // Toggle button visible only if at least one child is permitted
+      item.style.display = anyVisible ? '' : 'none';
+      if(!anyVisible) submenu.style.display = 'none';
+    }
+  });
+
+  // Hide group headers (sb-group) that have no visible items after them
+  document.querySelectorAll('.sb-group').forEach(group=>{
+    let sib = group.nextElementSibling;
+    let hasVisible = false;
+    while(sib && !sib.classList.contains('sb-group')) {
+      if((sib.classList.contains('sb-item') || sib.classList.contains('sb-submenu')) && sib.style.display !== 'none') {
+        hasVisible = true; break;
+      }
+      sib = sib.nextElementSibling;
+    }
+    group.style.display = hasVisible ? '' : 'none';
   });
 
   // apply button permissions after short delay (pages may not be rendered yet)
@@ -6156,6 +6187,11 @@ function toggleSubMenu(evt) {
 }
 
 function showAdmin(p, el) {
+  // Permission guard — block access to pages the current role can't see
+  if(currentUser.role !== 'admin' && !canPage(p)) {
+    showNotif('ليس لديك صلاحية للوصول لهذه الصفحة','error');
+    return;
+  }
   sessionStorage.setItem('ccs_last_admin_pg', p);
   document.querySelectorAll('.admin-pg').forEach(x=>x.classList.remove('active'));
   document.getElementById('apg-'+p).classList.add('active');
@@ -6999,10 +7035,14 @@ function renderFooterSocial() {
   if(!contactList.length) { el.innerHTML = ''; return; }
   el.innerHTML = contactList.map(c => {
     const href = c.link || '#';
+    const isDirectScheme = href.startsWith('mailto:') || href.startsWith('tel:');
+    const clickHandler = isDirectScheme
+      ? `window.location.href='${href.replace(/'/g,"\\'")}'`
+      : `window.open('${href.replace(/'/g,"\\'")}','_blank')`;
     const svgIcon = c.image
       ? `<img src="${c.image}" style="width:16px;height:16px;object-fit:contain;border-radius:3px;">`
       : (CONTACT_SVG[c.type] || CONTACT_SVG.custom);
-    return `<div class="soc-btn" title="${c.title}" onclick="window.open('${href.replace(/'/g,"\\'")}','_blank')" style="cursor:pointer;color:var(--text2);transition:.2s;" onmouseover="this.style.color='var(--silver2)';this.style.borderColor='var(--silver4)'" onmouseout="this.style.color='var(--text2)';this.style.borderColor='var(--border2)'">${svgIcon}</div>`;
+    return `<div class="soc-btn" title="${c.title}" onclick="${clickHandler}" style="cursor:pointer;color:var(--text2);transition:.2s;" onmouseover="this.style.color='var(--silver2)';this.style.borderColor='var(--silver4)'" onmouseout="this.style.color='var(--text2)';this.style.borderColor='var(--border2)'">${svgIcon}</div>`;
   }).join('');
 }
 
@@ -7012,7 +7052,14 @@ function renderContactDisplay() {
   el.innerHTML = contactList.map(c => {
     const href = c.link || '#';
     const isLink = href !== '#';
-    return `<div class="contact-card" ${isLink?`onclick="window.open('${href}','_blank')"`:''}>
+    // mailto: and tel: should open directly (not in new tab, which shows a black blank page)
+    const isDirectScheme = href.startsWith('mailto:') || href.startsWith('tel:');
+    const clickHandler = isLink
+      ? (isDirectScheme
+          ? `onclick="window.location.href='${href.replace(/'/g,"\\'")}'"`
+          : `onclick="window.open('${href.replace(/'/g,"\\'")}','_blank')"`)
+      : '';
+    return `<div class="contact-card" ${clickHandler}>
       ${getContactIconHTMLWithImage(c)}
       <div>
         <div class="contact-title">${c.title}</div>
@@ -7877,6 +7924,10 @@ function saveEditRole(rid, btn) {
   saveAllData();
   renderRolesList();
   updateStaffRoleSelects();
+  // If the currently logged-in user has this role, refresh their sidebar live
+  if(isAdminLoggedIn && currentUser.role === rid && typeof applyRoleUI === 'function') {
+    applyRoleUI();
+  }
   btn.closest('[style*="fixed"]').remove();
   showNotif('✓ تم تحديث الرتبة','success');
 }
@@ -8393,12 +8444,25 @@ let staffList = [];
 let currentUser = {username:'admin', role:'admin', name:'المدير'};
 let isAdminLoggedIn = false;
 
-const roleLabels = {
-  admin:     {label:'مدير',    color:'#d4b84a', bg:'rgba(180,150,30,.15)', border:'rgba(200,170,40,.28)'},
-  moderator: {label:'مشرف',   color:'#5588cc', bg:'rgba(50,80,160,.12)',  border:'rgba(60,100,200,.25)'},
-  editor:    {label:'محرر',   color:'#6dbf8d', bg:'rgba(30,100,50,.15)',  border:'rgba(50,150,70,.25)'},
-  support:   {label:'دعم',    color:'#c0c0c0', bg:'rgba(80,80,80,.15)',   border:'rgba(120,120,120,.25)'},
-};
+// Dynamic role labels — auto-reads from customRoles so new roles work correctly
+const _roleColorPalette = ['#d4b84a','#5588cc','#6dbf8d','#a78bfa','#f59e0b','#ec4899','#14b8a6','#ef4444','#8b5cf6'];
+function _roleStyleFor(roleId) {
+  const cr = (typeof customRoles !== 'undefined') ? customRoles[roleId] : null;
+  if(!cr) return {label:'دعم', color:'#c0c0c0', bg:'rgba(80,80,80,.15)', border:'rgba(120,120,120,.25)'};
+  const color = cr.color || _roleColorPalette[Object.keys(customRoles).indexOf(roleId) % _roleColorPalette.length] || '#c0c0c0';
+  // Convert hex to rgba background/border
+  const hex = color.replace('#','');
+  const r = parseInt(hex.slice(0,2),16)||120, g = parseInt(hex.slice(2,4),16)||120, b = parseInt(hex.slice(4,6),16)||120;
+  return {
+    label: cr.label || roleId,
+    color: color,
+    bg: `rgba(${r},${g},${b},.15)`,
+    border: `rgba(${r},${g},${b},.3)`
+  };
+}
+const roleLabels = new Proxy({}, {
+  get(_, roleId) { return _roleStyleFor(roleId); }
+});
 
 function renderStaff() {
   (document.getElementById(('staff-count'))||{}).textContent = staffList.length;
