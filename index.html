@@ -4099,6 +4099,7 @@ function tryInitFirebase() {
     console.log('✅ Firebase connected');
     startFirebaseListener();
     setTimeout(() => { if(typeof initVoicePresenceListener==='function') initVoicePresenceListener(); }, 1000);
+    setTimeout(() => { if(typeof startNotifListener==='function') startNotifListener(); }, 500);
     return true;
   } catch(e) {
     console.warn('⚠ Firebase init failed:', e.message);
@@ -7034,7 +7035,16 @@ function renderFooterSocial() {
   const el = document.getElementById('footer-social-icons'); if(!el) return;
   if(!contactList.length) { el.innerHTML = ''; return; }
   el.innerHTML = contactList.map(c => {
-    const href = c.link || '#';
+    let href = c.link || '#';
+    // Auto-fix broken links by type
+    if(c.type === 'email' && !href.startsWith('mailto:')) {
+      const v = (c.value||'').trim(); href = v ? `mailto:${v}` : '#';
+    } else if(c.type === 'phone' && !href.startsWith('tel:')) {
+      const v = (c.value||'').replace(/\s/g,''); href = v ? `tel:${v}` : '#';
+    } else if(c.type === 'whatsapp' && !href.startsWith('http')) {
+      const v = (c.value||'').replace(/\s/g,'').replace('+',''); href = v ? `https://wa.me/${v}` : '#';
+    }
+    if(href === '#') return '';
     const isDirectScheme = href.startsWith('mailto:') || href.startsWith('tel:');
     const clickHandler = isDirectScheme
       ? `window.location.href='${href.replace(/'/g,"\\'")}'`
@@ -7050,16 +7060,33 @@ function renderContactDisplay() {
   const el = document.getElementById('contact-cards-display');
   if(!el) return;
   el.innerHTML = contactList.map(c => {
-    const href = c.link || '#';
+    let href = c.link || '#';
+    // Auto-fix broken links based on type (handles old cards saved with wrong links)
+    if(c.type === 'email') {
+      // If link isn't a proper mailto:, rebuild it from the value
+      if(!href.startsWith('mailto:')) {
+        const emailVal = (c.value||'').trim();
+        href = emailVal ? `mailto:${emailVal}` : '#';
+      }
+    } else if(c.type === 'phone') {
+      if(!href.startsWith('tel:')) {
+        const phoneVal = (c.value||'').replace(/\s/g,'');
+        href = phoneVal ? `tel:${phoneVal}` : '#';
+      }
+    } else if(c.type === 'whatsapp') {
+      if(!href.startsWith('http')) {
+        const wa = (c.value||'').replace(/\s/g,'').replace('+','');
+        href = wa ? `https://wa.me/${wa}` : '#';
+      }
+    }
     const isLink = href !== '#';
-    // mailto: and tel: should open directly (not in new tab, which shows a black blank page)
     const isDirectScheme = href.startsWith('mailto:') || href.startsWith('tel:');
     const clickHandler = isLink
       ? (isDirectScheme
           ? `onclick="window.location.href='${href.replace(/'/g,"\\'")}'"`
           : `onclick="window.open('${href.replace(/'/g,"\\'")}','_blank')"`)
       : '';
-    return `<div class="contact-card" ${clickHandler}>
+    return `<div class="contact-card" ${clickHandler} style="${isLink?'cursor:pointer;':''}">
       ${getContactIconHTMLWithImage(c)}
       <div>
         <div class="contact-title">${c.title}</div>
@@ -13757,10 +13784,16 @@ function buildPayload() {
 }
 
 // ── Save: Firebase PRIMARY + localStorage BACKUP ──
+let _firebaseDataLoaded = false; // becomes true only after full Firebase data arrives
+// Safety: if Firebase hasn't responded within 10s, allow saves anyway (offline/slow network)
+setTimeout(() => { _firebaseDataLoaded = true; }, 10000);
+
 function saveAllData() {
   const payload = buildPayload();
   // Firebase — المصدر الأساسي (مع الصور)
-  if(firebaseReady && db) {
+  // CRITICAL: don't write to Firebase until we've loaded the full data at least once,
+  // otherwise we could overwrite complete data (with images) with a partial/empty state
+  if(firebaseReady && db && _firebaseDataLoaded) {
     try { db.ref(FB_PATH).set(payload); } catch(e){ console.warn('Firebase save error:', e); }
   }
   // localStorage — احتياطي بدون صور (لتوفير المساحة)
@@ -13813,9 +13846,13 @@ function loadAllData() {
     const d = snap.val();
     if(d && d._ts) {
       applyLoadedData(d);
+      _firebaseDataLoaded = true; // now safe to write back to Firebase
       refreshAllViews();
+    } else {
+      // No data in Firebase yet (first run) — allow writes so initial data can be saved
+      _firebaseDataLoaded = true;
     }
-  }).catch(e => console.warn('Firebase load error:', e));
+  }).catch(e => { console.warn('Firebase load error:', e); });
 }
 
 // ── Real-time listener: updates ALL connected browsers instantly ──
@@ -13920,7 +13957,8 @@ function startFirebaseListener() {
   startChatListener();
   db.ref(FB_PATH).on('value', snap => {
     const d = snap.val();
-    if(!d) return;
+    if(!d) { _firebaseDataLoaded = true; return; } // empty DB — allow first write
+    _firebaseDataLoaded = true; // real data present — safe to write back
     // only update if newer than what we have
     if(d._ts && d._ts <= (window._lastFbTs||0)) return;
     window._lastFbTs = d._ts;
@@ -14347,8 +14385,15 @@ function playMsgSound() {
 
 // Per-browser processed-notification tracker (no global read flag — every staff browser gets its own copy)
 const _processedNotifs = new Set();
+let _notifListenerActive = false;
 
-if(firebaseReady && db) db.ref('ccs_notifications').orderByChild('ts').startAt(Date.now()).on('child_added', snap => {
+function startNotifListener() {
+  if(_notifListenerActive) return; // avoid double registration
+  if(!firebaseReady || !db) return;
+  _notifListenerActive = true;
+  console.log('✅ Notification listener started');
+
+  db.ref('ccs_notifications').orderByChild('ts').startAt(Date.now()).on('child_added', snap => {
   const n = snap.val();
   const key = snap.key;
   if(!n || _processedNotifs.has(key)) return;
@@ -14396,7 +14441,20 @@ if(firebaseReady && db) db.ref('ccs_notifications').orderByChild('ts').startAt(D
     renderAdminChatList();
     if(adminActiveChatId) renderAdminChat(adminActiveChatId);
   }
-});
+  });
+}
+
+// Start listener now if Firebase is ready, otherwise keep retrying until it is
+startNotifListener();
+if(!_notifListenerActive) {
+  const _notifRetry = setInterval(() => {
+    startNotifListener();
+    if(_notifListenerActive) clearInterval(_notifRetry);
+  }, 2000);
+  // Stop retrying after 60s to avoid infinite loop
+  setTimeout(() => clearInterval(_notifRetry), 60000);
+}
+window.startNotifListener = startNotifListener;
 
 window.sendContactMsg = sendContactMsg;
 window.resetContactForm = resetContactForm;
