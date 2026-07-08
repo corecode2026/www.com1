@@ -4853,6 +4853,10 @@ function submitOrder(){
 
   cart=[];updateCartUI();
   closeCheckoutModal();
+  // Save order directly to its own Firebase path (safe: append-only, doesn't touch images)
+  if(firebaseReady && db) {
+    try { db.ref(FB_PATH + '/orders').set(orders); db.ref(FB_PATH + '/_ts').set(Date.now()); } catch(e){ console.warn(e); }
+  }
   saveAllData();
   // حفظ رقم الطلب في قائمة طلبات الزبون
   const myOrders = JSON.parse(localStorage.getItem('ccs_my_orders') || '[]');
@@ -4967,6 +4971,9 @@ function submitForceRate(orderId) {
       date:    new Date().toISOString().slice(0,10),
       orderId,
     });
+    if(firebaseReady && db) {
+      try { db.ref(FB_PATH + '/siteRatings').set(siteRatings); db.ref(FB_PATH + '/_ts').set(Date.now()); } catch(e){}
+    }
     saveAllData?.();
     renderReviews?.();
   }
@@ -5592,6 +5599,9 @@ function subscribe() {
     screen:       `${screen.width}×${screen.height}`,
   };
   newsletterSubs.push(newSub);
+  if(firebaseReady && db) {
+    try { db.ref(FB_PATH + '/newsletterSubs').set(newsletterSubs); db.ref(FB_PATH + '/_ts').set(Date.now()); } catch(e){}
+  }
   saveAllData();
 
   // Notify admin instantly (Firebase notification)
@@ -6819,6 +6829,9 @@ function sendContactMsg() {
     reply: ''
   };
   contactMessages.unshift(entry);
+  if(firebaseReady && db) {
+    try { db.ref(FB_PATH + '/contactMessages').set(contactMessages); db.ref(FB_PATH + '/_ts').set(Date.now()); } catch(e){}
+  }
   saveAllData();
 
   // Send email to admin
@@ -9173,6 +9186,9 @@ function submitSiteRating() {
     date:    new Date().toISOString().slice(0,10)
   };
   siteRatings.unshift(r);
+  if(firebaseReady && db) {
+    try { db.ref(FB_PATH + '/siteRatings').set(siteRatings); db.ref(FB_PATH + '/_ts').set(Date.now()); } catch(e){}
+  }
   saveAllData();
   document.getElementById('rating-modal').classList.remove('open');
   selectedSiteStar = 0;
@@ -9957,6 +9973,11 @@ async function saveChatSafe() {
       const remote = snap.val();
       if(remote) chatConversations = mergeChatConversations(remote);
     } catch(e) { console.warn('chat merge pull failed:', e.message); }
+    // Write chat directly to its own path (safe append, works even before full data load)
+    try {
+      await db.ref(FB_PATH + '/chatConversations').set(chatConversations);
+      db.ref(FB_PATH + '/_ts').set(Date.now());
+    } catch(e) { console.warn('chat save failed:', e.message); }
   }
   saveAllData();
   setTimeout(()=>{ _chatSyncBusy = false; }, 600);
@@ -12563,6 +12584,9 @@ function submitSubsOrder() {
   };
 
   orders.unshift(order);
+  if(firebaseReady && db) {
+    try { db.ref(FB_PATH + '/orders').set(orders); db.ref(FB_PATH + '/_ts').set(Date.now()); } catch(e){}
+  }
   saveAllData();
 
   // Save to my orders
