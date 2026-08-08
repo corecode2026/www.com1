@@ -12777,6 +12777,27 @@ const BTN_DEFS = [
 
 let btnCustom = {};
 
+function _toHexColor(color, fallback) {
+  if(!color) return fallback || '#1a1a1a';
+  color = String(color).trim();
+  // Already hex
+  if(/^#[0-9a-fA-F]{6}$/.test(color)) return color;
+  if(/^#[0-9a-fA-F]{3}$/.test(color)) {
+    // expand shorthand #abc -> #aabbcc
+    return '#' + color[1]+color[1]+color[2]+color[2]+color[3]+color[3];
+  }
+  // rgba() or rgb() -> hex
+  const m = color.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i);
+  if(m) {
+    const r = Math.min(255,+m[1]).toString(16).padStart(2,'0');
+    const g = Math.min(255,+m[2]).toString(16).padStart(2,'0');
+    const b = Math.min(255,+m[3]).toString(16).padStart(2,'0');
+    return '#' + r + g + b;
+  }
+  // Unknown format (var(), named color, gradient) — use fallback for the color picker
+  return fallback || '#1a1a1a';
+}
+
 function renderBtnEditor() {
   const list = document.getElementById('btn-editor-list'); if(!list) return;
   list.innerHTML = BTN_DEFS.map(b => {
@@ -12786,8 +12807,11 @@ function renderBtnEditor() {
     const customColor = saved.color && saved.color !== '';
     const curBg    = customBg    ? saved.bg    : (b.defBg    || '#1a1a1a');
     const curColor = customColor ? saved.color : (b.defColor || '#e0e0e0');
+    // Color <input> requires hex — convert any rgba()/var() to a safe hex value
+    const curBgHex    = _toHexColor(curBg, '#1a1a1a');
+    const curColorHex = _toHexColor(curColor, '#e0e0e0');
     const previewStyle = customBg
-      ? `background:${curBg};color:${curColor};border:1px solid ${curBg}88;`
+      ? `background:${curBg};color:${curColor};border:1px solid ${curBgHex}88;`
       : `background:var(--grad);color:${customColor?curColor:'var(--silver2)'};border:1px solid var(--silver3);`;
     return `
     <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:14px 16px;">
@@ -12804,7 +12828,7 @@ function renderBtnEditor() {
             <input type="checkbox" id="bbg-on-${b.id}" ${customBg?'checked':''} onchange="previewBtnChange('${b.id}')" style="width:11px;height:11px;cursor:pointer;">
             خلفية
           </label>
-          <input type="color" value="${curBg}" style="height:30px;width:34px;cursor:pointer;border-radius:6px;border:1px solid var(--border3);" id="bbg-${b.id}" oninput="document.getElementById('bbg-on-${b.id}').checked=true;previewBtnChange('${b.id}')">
+          <input type="color" value="${curBgHex}" style="height:30px;width:34px;cursor:pointer;border-radius:6px;border:1px solid var(--border3);" id="bbg-${b.id}" oninput="document.getElementById('bbg-on-${b.id}').checked=true;previewBtnChange('${b.id}')">
         </div>
         <!-- text color with enable checkbox -->
         <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
@@ -13857,6 +13881,28 @@ if(localStorage.getItem('ccs_lang') === 'en') { siteLang = 'en'; setTimeout(appl
       // was on admin — need login again, skip
     }
   }
+})();
+
+// ── Security watchdog ──
+// Continuously ensures the admin panel can't be revealed by directly manipulating
+// the DOM/CSS from the console. If the admin page is visible without a valid session,
+// it's hidden immediately and the user is bounced to home.
+(function adminWatchdog(){
+  setInterval(() => {
+    const adminPage = document.getElementById('page-admin');
+    if(adminPage && adminPage.classList.contains('active') && !_verifyAdminSession()) {
+      adminPage.classList.remove('active');
+      isAdminLoggedIn = false;
+      _AdminSession.revoke();
+      const home = document.getElementById('page-home');
+      if(home) {
+        document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+        home.classList.add('active');
+      }
+      // Also hide any admin sub-page that might have been force-shown
+      document.querySelectorAll('.admin-pg').forEach(x=>x.classList.remove('active'));
+    }
+  }, 800);
 })();
 
 // ====== FIREBASE REALTIME STORAGE ======
