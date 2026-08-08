@@ -4113,14 +4113,46 @@ const FB_PATH    = 'ccs_store';
 const STORE_KEY  = 'ccs_data_v2';
 const BACKUP_KEY = 'ccs_backup_v2';
 const SALT       = 'CoreCode$Store#2025!';
+
+// Convert any color (rgba/rgb/short-hex/named) to a #rrggbb hex value.
+// <input type="color"> only accepts hex, so this prevents "does not conform" errors.
+function _toHexColor(color, fallback) {
+  if(!color) return fallback || '#1a1a1a';
+  color = String(color).trim();
+  if(/^#[0-9a-fA-F]{6}$/.test(color)) return color;
+  if(/^#[0-9a-fA-F]{3}$/.test(color)) {
+    return '#' + color[1]+color[1]+color[2]+color[2]+color[3]+color[3];
+  }
+  const m = color.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i);
+  if(m) {
+    const r = Math.min(255,+m[1]).toString(16).padStart(2,'0');
+    const g = Math.min(255,+m[2]).toString(16).padStart(2,'0');
+    const b = Math.min(255,+m[3]).toString(16).padStart(2,'0');
+    return '#' + r + g + b;
+  }
+  return fallback || '#1a1a1a';
+}
 // ── Admin session verification (secret hidden inside closure) ──
-// Console users can set isAdminLoggedIn=true, but they cannot forge a valid token
-// because the secret lives inside this closure and is never exposed.
+// grant() now REQUIRES the correct password. Calling _AdminSession.grant('admin')
+// from the console without the real password produces NO valid token.
 const _AdminSession = (function(){
   const secret = 'rt_' + Math.random().toString(36).slice(2) + Date.now().toString(36) + Math.random().toString(36).slice(2);
   let token = null;
   return {
-    grant(username){ token = btoa(encodeURIComponent(username + '|' + secret + '|' + Math.floor(Date.now()/1000))); },
+    // grant requires (username, password) — password is verified against the stored one
+    grant(username, password){
+      if(typeof _AdminPass === 'undefined') return false;
+      // admin uses the master password; staff verified separately via _grantStaff
+      if(!_AdminPass.verify(password)) { token = null; return false; }
+      token = btoa(encodeURIComponent(username + '|' + secret + '|' + Math.floor(Date.now()/1000)));
+      return true;
+    },
+    // staff grant — verified against that staff member's own password by the caller
+    _grantStaff(username, staffObj, password){
+      if(!staffObj || staffObj.password !== password) { token = null; return false; }
+      token = btoa(encodeURIComponent(username + '|' + secret + '|' + Math.floor(Date.now()/1000)));
+      return true;
+    },
     revoke(){ token = null; },
     valid(){ return token !== null && typeof token === 'string' && token.length > 10; }
   };
@@ -6030,9 +6062,9 @@ function doLogin(){
   const u = document.getElementById('l-user').value.trim();
   const p = document.getElementById('l-pass').value;
   if(u==='admin' && _AdminPass.verify(p)){
+    if(!_AdminSession.grant('admin', p)) { showNotif('فشل تسجيل الدخول','error'); return; }
     currentUser = {username:'admin', role:'admin', name:'المدير'};
     isAdminLoggedIn = true;
-    _AdminSession.grant('admin');
     applyRoleUI(); showPage('admin');
     startPresenceTracking('admin');
     setTimeout(initClockWidget, 300);
@@ -6049,9 +6081,9 @@ function doLogin(){
   }
   const staff = staffList.find(s=>s.username===u && s.password===p && s.status==='active');
   if(staff){
+    if(!_AdminSession._grantStaff(staff.username, staff, p)) { showNotif('فشل تسجيل الدخول','error'); return; }
     currentUser = {username:staff.username, role:staff.role, name:staff.name, id:staff.id};
     isAdminLoggedIn = true;
-    _AdminSession.grant(staff.username);
     applyRoleUI();
     startPresenceTracking(staff.id||staff.username);
     showPage('admin');
@@ -10730,7 +10762,7 @@ function renderAdvPackages() {
         <input type="text" value="${pkg.name}" placeholder="اسم الباقة" class="form-input" style="flex:1;min-width:120px;" onchange="updAdvPkg(${i},'name',this.value)">
         <input type="text" value="${pkg.price}" placeholder="السعر" class="form-input" style="width:80px;" onchange="updAdvPkg(${i},'price',this.value)">
         <input type="text" value="${pkg.duration}" placeholder="المدة" class="form-input" style="width:100px;" onchange="updAdvPkg(${i},'duration',this.value)">
-        <input type="color" value="${pkg.color}" style="height:38px;width:44px;cursor:pointer;border-radius:6px;border:1px solid var(--border3);" onchange="updAdvPkg(${i},'color',this.value)">
+        <input type="color" value="${_toHexColor(pkg.color,'#5566ee')}" style="height:38px;width:44px;cursor:pointer;border-radius:6px;border:1px solid var(--border3);" onchange="updAdvPkg(${i},'color',this.value)">
         <button onclick="delAdvPkg(${i})" style="background:none;border:1px solid rgba(200,60,60,.3);color:var(--red);padding:6px 10px;border-radius:6px;cursor:pointer;font-size:12px;">✕</button>
       </div>
       <div style="font-size:11px;color:var(--text3);margin-bottom:6px;">المميزات (سطر لكل ميزة)</div>
@@ -12147,15 +12179,15 @@ function renderTiersList() {
       </div>
       <div style="display:flex;flex-direction:column;gap:2px;align-items:center;">
         <span style="font-size:9px;color:var(--text3);">اللون</span>
-        <input type="color" value="${p.color}" style="height:34px;width:34px;cursor:pointer;border-radius:6px;border:1px solid var(--border3);" oninput="updSubsPlan(${i},'color',this.value)">
+        <input type="color" value="${_toHexColor(p.color,'#5566ee')}" style="height:34px;width:34px;cursor:pointer;border-radius:6px;border:1px solid var(--border3);" oninput="updSubsPlan(${i},'color',this.value)">
       </div>
       <div style="display:flex;flex-direction:column;gap:2px;align-items:center;">
         <span style="font-size:9px;color:var(--text3);">من</span>
-        <input type="color" value="${p.grad1||'#ffffff'}" style="height:34px;width:34px;cursor:pointer;border-radius:6px;border:1px solid var(--border3);" oninput="updSubsPlan(${i},'grad1',this.value)">
+        <input type="color" value="${_toHexColor(p.grad1,'#ffffff')}" style="height:34px;width:34px;cursor:pointer;border-radius:6px;border:1px solid var(--border3);" oninput="updSubsPlan(${i},'grad1',this.value)">
       </div>
       <div style="display:flex;flex-direction:column;gap:2px;align-items:center;">
         <span style="font-size:9px;color:var(--text3);">إلى</span>
-        <input type="color" value="${p.grad2||'#000000'}" style="height:34px;width:34px;cursor:pointer;border-radius:6px;border:1px solid var(--border3);" oninput="updSubsPlan(${i},'grad2',this.value)">
+        <input type="color" value="${_toHexColor(p.grad2,'#000000')}" style="height:34px;width:34px;cursor:pointer;border-radius:6px;border:1px solid var(--border3);" oninput="updSubsPlan(${i},'grad2',this.value)">
       </div>
     </div>
     <!-- actions -->
@@ -12227,9 +12259,9 @@ function editTierFull(i) {
       <div class="form-group"><label class="form-label" style="font-size:11px;">العملة</label><input type="text" value="${p.currency}" class="form-input" onchange="updSubsPlan(${i},'currency',this.value)"></div>
       <div class="form-group"><label class="form-label" style="font-size:11px;">الفترة</label><input type="text" value="${p.period}" class="form-input" onchange="updSubsPlan(${i},'period',this.value)"></div>
       <div class="form-group"><label class="form-label" style="font-size:11px;">شارة مميزة</label><input type="text" value="${p.badge||''}" class="form-input" onchange="updSubsPlan(${i},'badge',this.value)"></div>
-      <div class="form-group"><label class="form-label" style="font-size:11px;">لون الرتبة</label><input type="color" value="${p.color}" style="height:38px;width:100%;cursor:pointer;border-radius:8px;border:1px solid var(--border3);" onchange="updSubsPlan(${i},'color',this.value)"></div>
-      <div class="form-group"><label class="form-label" style="font-size:11px;">تدرج من</label><input type="color" value="${p.grad1||'#ffffff'}" style="height:38px;width:100%;cursor:pointer;border-radius:8px;border:1px solid var(--border3);" onchange="updSubsPlan(${i},'grad1',this.value)"></div>
-      <div class="form-group"><label class="form-label" style="font-size:11px;">تدرج إلى</label><input type="color" value="${p.grad2||'#000000'}" style="height:38px;width:100%;cursor:pointer;border-radius:8px;border:1px solid var(--border3);" onchange="updSubsPlan(${i},'grad2',this.value)"></div>
+      <div class="form-group"><label class="form-label" style="font-size:11px;">لون الرتبة</label><input type="color" value="${_toHexColor(p.color,'#5566ee')}" style="height:38px;width:100%;cursor:pointer;border-radius:8px;border:1px solid var(--border3);" onchange="updSubsPlan(${i},'color',this.value)"></div>
+      <div class="form-group"><label class="form-label" style="font-size:11px;">تدرج من</label><input type="color" value="${_toHexColor(p.grad1,'#ffffff')}" style="height:38px;width:100%;cursor:pointer;border-radius:8px;border:1px solid var(--border3);" onchange="updSubsPlan(${i},'grad1',this.value)"></div>
+      <div class="form-group"><label class="form-label" style="font-size:11px;">تدرج إلى</label><input type="color" value="${_toHexColor(p.grad2,'#000000')}" style="height:38px;width:100%;cursor:pointer;border-radius:8px;border:1px solid var(--border3);" onchange="updSubsPlan(${i},'grad2',this.value)"></div>
     </div>
     <div class="form-group" style="margin-bottom:12px;">
       <label class="form-label" style="font-size:11px;">المميزات (سطر لكل ميزة)</label>
@@ -12334,7 +12366,7 @@ function renderSubsPlansEditor() {
       </div>
       <div class="form-group">
         <label class="form-label" style="font-size:11px;">لون الباقة</label>
-        <input type="color" value="${p.color}" style="height:38px;width:100%;cursor:pointer;border-radius:8px;border:1px solid var(--border3);" onchange="updSubsPlan(${i},'color',this.value)">
+        <input type="color" value="${_toHexColor(p.color,'#5566ee')}" style="height:38px;width:100%;cursor:pointer;border-radius:8px;border:1px solid var(--border3);" onchange="updSubsPlan(${i},'color',this.value)">
       </div>
       <div class="form-group" style="display:flex;flex-direction:column;justify-content:flex-end;">
         <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;color:var(--text2);">
@@ -12777,27 +12809,6 @@ const BTN_DEFS = [
 
 let btnCustom = {};
 
-function _toHexColor(color, fallback) {
-  if(!color) return fallback || '#1a1a1a';
-  color = String(color).trim();
-  // Already hex
-  if(/^#[0-9a-fA-F]{6}$/.test(color)) return color;
-  if(/^#[0-9a-fA-F]{3}$/.test(color)) {
-    // expand shorthand #abc -> #aabbcc
-    return '#' + color[1]+color[1]+color[2]+color[2]+color[3]+color[3];
-  }
-  // rgba() or rgb() -> hex
-  const m = color.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i);
-  if(m) {
-    const r = Math.min(255,+m[1]).toString(16).padStart(2,'0');
-    const g = Math.min(255,+m[2]).toString(16).padStart(2,'0');
-    const b = Math.min(255,+m[3]).toString(16).padStart(2,'0');
-    return '#' + r + g + b;
-  }
-  // Unknown format (var(), named color, gradient) — use fallback for the color picker
-  return fallback || '#1a1a1a';
-}
-
 function renderBtnEditor() {
   const list = document.getElementById('btn-editor-list'); if(!list) return;
   list.innerHTML = BTN_DEFS.map(b => {
@@ -12836,7 +12847,7 @@ function renderBtnEditor() {
             <input type="checkbox" id="bcolor-on-${b.id}" ${customColor?'checked':''} onchange="previewBtnChange('${b.id}')" style="width:11px;height:11px;cursor:pointer;">
             نص
           </label>
-          <input type="color" value="${curColor}" style="height:30px;width:34px;cursor:pointer;border-radius:6px;border:1px solid var(--border3);" id="bcolor-${b.id}" oninput="document.getElementById('bcolor-on-${b.id}').checked=true;previewBtnChange('${b.id}')">
+          <input type="color" value="${curColorHex}" style="height:30px;width:34px;cursor:pointer;border-radius:6px;border:1px solid var(--border3);" id="bcolor-${b.id}" oninput="document.getElementById('bcolor-on-${b.id}').checked=true;previewBtnChange('${b.id}')">
         </div>
         <button onclick="resetSingleBtn('${b.id}')" style="background:none;border:1px solid var(--border3);color:var(--text3);padding:6px 10px;border-radius:6px;cursor:pointer;font-size:11px;" title="استعادة الافتراضي">↺</button>
       </div>
@@ -13884,25 +13895,43 @@ if(localStorage.getItem('ccs_lang') === 'en') { siteLang = 'en'; setTimeout(appl
 })();
 
 // ── Security watchdog ──
-// Continuously ensures the admin panel can't be revealed by directly manipulating
-// the DOM/CSS from the console. If the admin page is visible without a valid session,
-// it's hidden immediately and the user is bounced to home.
+// Ensures the admin panel can't be revealed by ANY DOM/CSS manipulation from the
+// console — whether via the 'active' class OR a direct inline style.display change.
+// If the admin page is visible without a valid session, it's force-hidden.
 (function adminWatchdog(){
-  setInterval(() => {
+  function isVisible(el){
+    if(!el) return false;
+    if(el.classList.contains('active')) return true;
+    const inline = el.style.display;
+    if(inline === 'block' || inline === 'flex' || inline === 'grid') return true;
+    return false;
+  }
+  function lockDown(){
     const adminPage = document.getElementById('page-admin');
-    if(adminPage && adminPage.classList.contains('active') && !_verifyAdminSession()) {
+    if(!adminPage) return;
+    if(isVisible(adminPage) && !_verifyAdminSession()){
+      // Force-hide the admin panel every possible way
       adminPage.classList.remove('active');
+      adminPage.style.display = 'none';
       isAdminLoggedIn = false;
       _AdminSession.revoke();
+      currentUser = {username:'', role:'', name:''};
+      document.querySelectorAll('.admin-pg').forEach(x=>{ x.classList.remove('active'); });
+      // Return to home
+      document.querySelectorAll('.page').forEach(x=>{ x.classList.remove('active'); if(x.id!=='page-home') x.style.display=''; });
       const home = document.getElementById('page-home');
-      if(home) {
-        document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
-        home.classList.add('active');
-      }
-      // Also hide any admin sub-page that might have been force-shown
-      document.querySelectorAll('.admin-pg').forEach(x=>x.classList.remove('active'));
+      if(home){ home.style.display=''; home.classList.add('active'); }
+    } else if(_verifyAdminSession()){
+      // Legit session — clear any leftover inline display:none on admin page
+      if(adminPage.style.display === 'none') adminPage.style.display = '';
     }
-  }, 800);
+  }
+  setInterval(lockDown, 400);
+  // Also react instantly to DOM attribute changes on the admin page
+  const target = document.getElementById('page-admin');
+  if(target && window.MutationObserver){
+    new MutationObserver(lockDown).observe(target, { attributes:true, attributeFilter:['style','class'] });
+  }
 })();
 
 // ====== FIREBASE REALTIME STORAGE ======
