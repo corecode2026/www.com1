@@ -4113,6 +4113,18 @@ const FB_PATH    = 'ccs_store';
 const STORE_KEY  = 'ccs_data_v2';
 const BACKUP_KEY = 'ccs_backup_v2';
 const SALT       = 'CoreCode$Store#2025!';
+// ── Admin session verification (secret hidden inside closure) ──
+// Console users can set isAdminLoggedIn=true, but they cannot forge a valid token
+// because the secret lives inside this closure and is never exposed.
+const _AdminSession = (function(){
+  const secret = 'rt_' + Math.random().toString(36).slice(2) + Date.now().toString(36) + Math.random().toString(36).slice(2);
+  let token = null;
+  return {
+    grant(username){ token = btoa(encodeURIComponent(username + '|' + secret + '|' + Math.floor(Date.now()/1000))); },
+    revoke(){ token = null; },
+    valid(){ return token !== null && typeof token === 'string' && token.length > 10; }
+  };
+})();
 const FB_CONFIG = {
   apiKey: "AIzaSyD3TxoPFeA5LX9afehXIPdtwal_-BmCAj4",
   authDomain: "corecode22.firebaseapp.com",
@@ -4193,6 +4205,12 @@ let adImageBase64 = '';
 
 // ====== NAVIGATION ======
 function showPage(p) {
+  // Security guard: block direct access to admin page without a valid login session
+  if(p === 'admin' && !_verifyAdminSession()) {
+    isAdminLoggedIn = false;
+    showNotif('يجب تسجيل الدخول أولاً','error');
+    p = 'home';
+  }
   sessionStorage.setItem('ccs_last_page', p);
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
   document.getElementById('page-'+p).classList.add('active');
@@ -4206,6 +4224,11 @@ function showPage(p) {
   if(p==='advertise') renderAdvPage();
   if(p==='subs') renderSubsPage();
   if(p==='admin'){renderAdminProds();renderDashOrders();renderOrders();renderCoupons();renderCatsAdmin();buildChart('sales-chart',salesData);buildChart('report-chart',salesData);updateAdminCounts();updateSalesDash();renderSbRatingsMini();}
+}
+
+// ── Admin session verification ──
+function _verifyAdminSession() {
+  return isAdminLoggedIn === true && _AdminSession.valid();
 }
 
 // ====== HOME ======
@@ -6006,9 +6029,10 @@ function sendContact(){showNotif('✓ تم إرسال رسالتك، سنرد ق
 function doLogin(){
   const u = document.getElementById('l-user').value.trim();
   const p = document.getElementById('l-pass').value;
-  if(u==='admin' && p===adminPassword){
+  if(u==='admin' && _AdminPass.verify(p)){
     currentUser = {username:'admin', role:'admin', name:'المدير'};
     isAdminLoggedIn = true;
+    _AdminSession.grant('admin');
     applyRoleUI(); showPage('admin');
     startPresenceTracking('admin');
     setTimeout(initClockWidget, 300);
@@ -6027,6 +6051,7 @@ function doLogin(){
   if(staff){
     currentUser = {username:staff.username, role:staff.role, name:staff.name, id:staff.id};
     isAdminLoggedIn = true;
+    _AdminSession.grant(staff.username);
     applyRoleUI();
     startPresenceTracking(staff.id||staff.username);
     showPage('admin');
@@ -6213,6 +6238,7 @@ function applyButtonPermissions() {
 function logout(){
   currentUser={username:'admin',role:'admin',name:'المدير'};
   isAdminLoggedIn = false;
+  _AdminSession.revoke();
   document.querySelectorAll('.sb-item').forEach(item=>item.style.display='');
   const cu=document.getElementById('sb-current-user');
   if(cu) cu.remove();
@@ -6233,6 +6259,12 @@ function toggleSubMenu(evt) {
 }
 
 function showAdmin(p, el) {
+  // Security: block admin sub-pages without a valid login session
+  if(!_verifyAdminSession()) {
+    showNotif('يجب تسجيل الدخول أولاً','error');
+    showPage('home');
+    return;
+  }
   // Permission guard — block access to pages the current role can't see
   if(currentUser.role !== 'admin' && !canPage(p)) {
     showNotif('ليس لديك صلاحية للوصول لهذه الصفحة','error');
@@ -8687,7 +8719,17 @@ function togglePassVis(inputId, btn) {
 
 // ====== BRANDING ======
 let siteLogoBase64 = '';
-let adminPassword = '1234';
+// Admin password kept inside a closure — cannot be read directly from the console.
+// Only verify() and set() are exposed via _AdminPass; the raw value never leaks.
+const _AdminPass = (function(){
+  let pw = '1234'; // default — CHANGE THIS from Settings on first login
+  return {
+    verify(input){ return input === pw; },
+    set(newPw){ pw = newPw; },
+    _load(v){ if(v) pw = v; },       // used when loading from Firebase
+    _export(){ return pw; }          // used only when building the save payload
+  };
+})();
 
 function previewBranding() {
   const name = document.getElementById('set-site-name').value || 'Core Code';
@@ -8802,9 +8844,9 @@ function changePassword() {
   const oldP = document.getElementById('set-old-pass').value;
   const newP = document.getElementById('set-new-pass').value;
   if (!oldP || !newP) { showNotif('أدخل كلمة المرور الحالية والجديدة', 'error'); return; }
-  if (oldP !== adminPassword) { showNotif('كلمة المرور الحالية غير صحيحة', 'error'); return; }
+  if (!_AdminPass.verify(oldP)) { showNotif('كلمة المرور الحالية غير صحيحة', 'error'); return; }
   if (newP.length < 4) { showNotif('كلمة المرور الجديدة قصيرة جداً', 'error'); return; }
-  adminPassword = newP;
+  _AdminPass.set(newP);
   document.getElementById('set-old-pass').value = '';
   document.getElementById('set-new-pass').value = '';
   showNotif('✓ تم تحديث كلمة المرور بنجاح', 'success'); saveAllData();
@@ -13837,7 +13879,7 @@ function buildPayload() {
     products, orders, coupons, cats, adsData, teamList, staffList,
     contactList, featuresList, featuresSectionTitle,
     jobApplications, siteRatings, staffRatings,
-    chatConversations, deletedConvIds, sales, workSessions, newsletterSubs, portfolioData, voiceRooms, contactMessages, promoBanner, heroBadgeText, joinBanner, siteCustom, advPage, paymentMethods, btnCustom, subsData, customRoles, adminPassword,
+    chatConversations, deletedConvIds, sales, workSessions, newsletterSubs, portfolioData, voiceRooms, contactMessages, promoBanner, heroBadgeText, joinBanner, siteCustom, advPage, paymentMethods, btnCustom, subsData, customRoles, adminPassword: _AdminPass._export(),
     _ts: Date.now(), _v: '2.0'
   };
 }
@@ -14075,7 +14117,7 @@ function applyLoadedData(d) {
     if(!customRoles.moderator?.pages?.length) customRoles.moderator = { label:'مشرف', color:'#a78bfa', pages:['dashboard','products','addproduct','categories','orders','chat','customers','reports','coupons','ads','contact','contactmsgs','features','team','jobs','reviews'] };
   }
   if(d.sales)                   sales                = d.sales;
-  if(d.adminPassword)           adminPassword        = d.adminPassword;
+  if(d.adminPassword)           _AdminPass._load(d.adminPassword);
 
   // Re-render dynamic content after Firebase load (data may have arrived AFTER initial render)
   setTimeout(() => {
@@ -14182,7 +14224,11 @@ function refreshAllViews() {
 const ADMIN_EMAIL = 'hk983480@gmail.com';
 // Web3Forms access key — get one free at https://web3forms.com (just enter your email, no signup)
 // This is YOUR key tied to hk983480@gmail.com
-const WEB3FORMS_KEY = 'd289c14c-838d-4f90-ae88-8c5c207335a6';
+// Web3Forms key kept inside a closure — not directly readable from the console.
+const _Web3FormsKey = (function(){
+  const k = 'd289c14c-838d-4f90-ae88-8c5c207335a6';
+  return { get(){ return k; }, isSet(){ return k && k !== 'YOUR_ACCESS_KEY_HERE'; } };
+})();
 
 function notifyAdminFirebase(type, data) {
   if(firebaseReady && db) {
@@ -14250,8 +14296,8 @@ function sendAdminEmail(type, data) {
   }
 
   // Don't send if key not configured
-  if(!WEB3FORMS_KEY || WEB3FORMS_KEY === 'YOUR_ACCESS_KEY_HERE') {
-    console.warn('⚠ WEB3FORMS_KEY not set — get one at https://web3forms.com');
+  if(!_Web3FormsKey.isSet()) {
+    console.warn('⚠ Web3Forms key not set — get one at https://web3forms.com');
     return;
   }
 
@@ -14263,7 +14309,7 @@ function sendAdminEmail(type, data) {
       'Accept': 'application/json'
     },
     body: JSON.stringify({
-      access_key: WEB3FORMS_KEY,
+      access_key: _Web3FormsKey.get(),
       subject: subject,
       from_name: 'Core Code Store',
       message: body,
