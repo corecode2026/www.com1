@@ -4139,11 +4139,10 @@ const _AdminSession = (function(){
   const secret = 'rt_' + Math.random().toString(36).slice(2) + Date.now().toString(36) + Math.random().toString(36).slice(2);
   let token = null;
   return {
-    // grant requires (username, password) — password is verified against the stored one
-    grant(username, password){
+    // grant requires (username, password) — password is verified against the stored hash
+    async grant(username, password){
       if(typeof _AdminPass === 'undefined') return false;
-      // admin uses the master password; staff verified separately via _grantStaff
-      if(!_AdminPass.verify(password)) { token = null; return false; }
+      if(!(await _AdminPass.verify(password))) { token = null; return false; }
       token = btoa(encodeURIComponent(username + '|' + secret + '|' + Math.floor(Date.now()/1000)));
       return true;
     },
@@ -6058,11 +6057,11 @@ function broadcastCustom() { sendBroadcast(); }
 function sendContact(){showNotif('✓ تم إرسال رسالتك، سنرد قريباً','success');}
 
 // ====== ADMIN ======
-function doLogin(){
+async function doLogin(){
   const u = document.getElementById('l-user').value.trim();
   const p = document.getElementById('l-pass').value;
-  if(u==='admin' && _AdminPass.verify(p)){
-    if(!_AdminSession.grant('admin', p)) { showNotif('فشل تسجيل الدخول','error'); return; }
+  if(u==='admin' && await _AdminPass.verify(p)){
+    if(!(await _AdminSession.grant('admin', p))) { showNotif('فشل تسجيل الدخول','error'); return; }
     currentUser = {username:'admin', role:'admin', name:'المدير'};
     isAdminLoggedIn = true;
     applyRoleUI(); showPage('admin');
@@ -8751,15 +8750,20 @@ function togglePassVis(inputId, btn) {
 
 // ====== BRANDING ======
 let siteLogoBase64 = '';
-// Admin password kept inside a closure — cannot be read directly from the console.
-// Only verify() and set() are exposed via _AdminPass; the raw value never leaks.
+// Admin password stored as a SHA-256 HASH — the plaintext is never kept or saved.
+// Even if someone reads Firebase, they only see a hash they can't reverse.
 const _AdminPass = (function(){
-  let pw = '1234'; // default — CHANGE THIS from Settings on first login
+  // Default password '1234' pre-hashed (SHA-256). Change it from Settings on first login.
+  let pwHash = '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4'; // = sha256('1234')
+  async function sha256(str){
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  }
   return {
-    verify(input){ return input === pw; },
-    set(newPw){ pw = newPw; },
-    _load(v){ if(v) pw = v; },       // used when loading from Firebase
-    _export(){ return pw; }          // used only when building the save payload
+    async verify(input){ return (await sha256(String(input))) === pwHash; },
+    async set(newPw){ pwHash = await sha256(String(newPw)); },
+    _load(v){ if(v && /^[0-9a-f]{64}$/i.test(v)) pwHash = v; }, // only accept a hash
+    _export(){ return pwHash; }  // exports the HASH (safe), never plaintext
   };
 })();
 
@@ -8872,13 +8876,13 @@ function loadStoreInfo() {
   if(sold) sold.value = siteCustom.soldSites ?? 86;
 }
 
-function changePassword() {
+async function changePassword() {
   const oldP = document.getElementById('set-old-pass').value;
   const newP = document.getElementById('set-new-pass').value;
   if (!oldP || !newP) { showNotif('أدخل كلمة المرور الحالية والجديدة', 'error'); return; }
-  if (!_AdminPass.verify(oldP)) { showNotif('كلمة المرور الحالية غير صحيحة', 'error'); return; }
+  if (!(await _AdminPass.verify(oldP))) { showNotif('كلمة المرور الحالية غير صحيحة', 'error'); return; }
   if (newP.length < 4) { showNotif('كلمة المرور الجديدة قصيرة جداً', 'error'); return; }
-  _AdminPass.set(newP);
+  await _AdminPass.set(newP);
   document.getElementById('set-old-pass').value = '';
   document.getElementById('set-new-pass').value = '';
   showNotif('✓ تم تحديث كلمة المرور بنجاح', 'success'); saveAllData();
