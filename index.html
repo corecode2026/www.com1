@@ -1018,6 +1018,26 @@ body.light-theme svg{stroke:currentColor;}
 </head>
 <body>
 
+<!-- ===== CONSOLE PROTECTION (runs immediately, standalone) ===== -->
+<script>
+(function(){
+  function warn(){
+    try {
+      console.log('%c⛔ توقّف!', 'color:#ef4444;font-size:52px;font-weight:900;text-shadow:2px 2px 0 #000;');
+      console.log('%cهذه ميزة متصفح مخصصة للمطورين. إذا أخبرك أحدهم بنسخ ولصق شيء ما هنا لتفعيل ميزة ما في المتجر أو لاختراق حساب، فهو يحاول الاحتيال عليك وسرقة بياناتك أو اختراق جهازك.', 'background:#ef4444;color:#fff;font-size:15px;font-weight:700;padding:12px 18px;border-radius:6px;line-height:1.8;');
+      console.log('%c🔒 يُرجى إغلاق هذه النافذة فوراً لضمان أمان حسابك.', 'color:#f5c518;font-size:14px;font-weight:700;');
+    } catch(e){}
+  }
+  warn();
+  // Re-print when devtools is (re)opened
+  var open=false;
+  setInterval(function(){
+    var wd=window.outerWidth-window.innerWidth, hd=window.outerHeight-window.innerHeight;
+    if(wd>160||hd>160){ if(!open){open=true;warn();} } else { open=false; }
+  },1500);
+})();
+</script>
+
 <!-- ===== TOP BAR ===== -->
 <nav class="topbar">
   <button class="logo" onclick="showPage('home')" style="background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:12px;">
@@ -4110,6 +4130,7 @@ body.light-theme svg{stroke:currentColor;}
 let db = null;
 let firebaseReady = false;
 const FB_PATH    = 'ccs_store';
+
 const STORE_KEY  = 'ccs_data_v2';
 const BACKUP_KEY = 'ccs_backup_v2';
 const SALT       = 'CoreCode$Store#2025!';
