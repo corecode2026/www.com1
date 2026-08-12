@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title id="page-title">Core Code Store</title>
 
+<!-- ═══ Google AdSense ═══ -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2053917230593629" crossorigin="anonymous"></script>
+
   <!-- ═══ SEO / Search Engine Optimization ═══ -->
   <meta name="description" content="Core Code Store — متجر البرمجيات والسكريبتات والتطبيقات الجاهزة. اشتري كودات جاهزة للنشر بجودة عالية وتسليم فوري ودعم مستمر. Software scripts, plugins, web apps.">
   <meta name="keywords" content="Core Code Store, Core Code, CoreCode, كور كود ستور, كور كود, core, code, store, برمجة, برمجيات, مواقع, تطوير مواقع, تطوير تطبيقات, سكريبت, كود, قالب, PHP, WordPress, Laravel, React, JavaScript, Python, API, plugin, script, web, app, متجر برمجيات, سكريبت جاهز, كود جاهز, برنامج جاهز, موقع جاهز, فلسطين, الأردن, السعودية, الإمارات, عالم عربي, Palestine, Jordan, Saudi, UAE, software, coding, developer, web development, mobile app">
@@ -4131,6 +4134,17 @@ let db = null;
 let firebaseReady = false;
 const FB_PATH    = 'ccs_store';
 
+// Escape user-supplied text before inserting into HTML (prevents XSS attacks).
+function esc(str){
+  if(str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
+}
+
 const STORE_KEY  = 'ccs_data_v2';
 const BACKUP_KEY = 'ccs_backup_v2';
 const SALT       = 'CoreCode$Store#2025!';
@@ -4153,21 +4167,17 @@ function _toHexColor(color, fallback) {
   }
   return fallback || '#1a1a1a';
 }
-// ── Admin session verification (secret hidden inside closure) ──
-// grant() now REQUIRES the correct password. Calling _AdminSession.grant('admin')
-// from the console without the real password produces NO valid token.
+// ── internal ──
 const _AdminSession = (function(){
   const secret = 'rt_' + Math.random().toString(36).slice(2) + Date.now().toString(36) + Math.random().toString(36).slice(2);
   let token = null;
   return {
-    // grant requires (username, password) — password is verified against the stored hash
     async grant(username, password){
       if(typeof _AdminPass === 'undefined') return false;
       if(!(await _AdminPass.verify(password))) { token = null; return false; }
       token = btoa(encodeURIComponent(username + '|' + secret + '|' + Math.floor(Date.now()/1000)));
       return true;
     },
-    // staff grant — verified against that staff member's own password by the caller
     _grantStaff(username, staffObj, password){
       if(!staffObj || staffObj.password !== password) { token = null; return false; }
       token = btoa(encodeURIComponent(username + '|' + secret + '|' + Math.floor(Date.now()/1000)));
@@ -4257,7 +4267,6 @@ let adImageBase64 = '';
 
 // ====== NAVIGATION ======
 function showPage(p) {
-  // Security guard: block direct access to admin page without a valid login session
   if(p === 'admin' && !_verifyAdminSession()) {
     isAdminLoggedIn = false;
     showNotif('يجب تسجيل الدخول أولاً','error');
@@ -4278,7 +4287,6 @@ function showPage(p) {
   if(p==='admin'){renderAdminProds();renderDashOrders();renderOrders();renderCoupons();renderCatsAdmin();buildChart('sales-chart',salesData);buildChart('report-chart',salesData);updateAdminCounts();updateSalesDash();renderSbRatingsMini();}
 }
 
-// ── Admin session verification ──
 function _verifyAdminSession() {
   return isAdminLoggedIn === true && _AdminSession.valid();
 }
@@ -5596,7 +5604,7 @@ function openOrderDetail(id) {
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.2rem;">
       <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:12px;">
         <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">👤 العميل</div>
-        <div style="font-size:15px;font-weight:700;color:var(--silver2);">${o.customer}</div>
+        <div style="font-size:15px;font-weight:700;color:var(--silver2);">${esc(o.customer)}</div>
       </div>
       <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:12px;">
         <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">📅 التاريخ</div>
@@ -5614,7 +5622,7 @@ function openOrderDetail(id) {
     </div>
     <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:12px;margin-bottom:10px;">
       <div style="font-size:11px;color:var(--text3);margin-bottom:6px;">📦 المنتج المطلوب</div>
-      <div style="font-size:15px;font-weight:700;color:var(--silver2);">${o.product}</div>
+      <div style="font-size:15px;font-weight:700;color:var(--silver2);">${esc(o.product)}</div>
       <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;">
         <span class="s-badge ${statusClass[o.status]||'s-pending'}">${statusMap[o.status]||o.status}</span>
         <span style="font-size:20px;font-weight:900;color:var(--silver2);">$${o.amount}</span>
@@ -5623,7 +5631,7 @@ function openOrderDetail(id) {
     ${o.notes ? `
     <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:12px;margin-bottom:10px;">
       <div style="font-size:11px;color:var(--text3);margin-bottom:6px;">📝 ملاحظات العميل</div>
-      <div style="font-size:13px;color:var(--text2);line-height:1.7;">${o.notes}</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.7;">${esc(o.notes)}</div>
     </div>` : ''}
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
       <button class="btn-silver" style="flex:1;" onclick="changeOrderStatus('${o.id}');document.getElementById('order-detail-modal').classList.remove('open');renderOrders();">🔄 تغيير الحالة</button>
@@ -6311,13 +6319,11 @@ function toggleSubMenu(evt) {
 }
 
 function showAdmin(p, el) {
-  // Security: block admin sub-pages without a valid login session
   if(!_verifyAdminSession()) {
     showNotif('يجب تسجيل الدخول أولاً','error');
     showPage('home');
     return;
   }
-  // Permission guard — block access to pages the current role can't see
   if(currentUser.role !== 'admin' && !canPage(p)) {
     showNotif('ليس لديك صلاحية للوصول لهذه الصفحة','error');
     return;
@@ -6546,7 +6552,7 @@ function saveProduct(){
 function renderDashOrders(){
   (document.getElementById(('dash-orders'))||{}).innerHTML=orders.slice(0,5).map(o=>`<tr>
     <td style="color:var(--silver3);font-family:monospace">${o.id}</td>
-    <td>${o.customer}</td><td>${o.product}</td>
+    <td>${esc(o.customer)}</td><td>${esc(o.product)}</td>
     <td style="font-weight:700;color:var(--silver2)">$${o.amount}</td>
     <td style="color:var(--text3)">${o.date}</td>
     <td><span class="s-badge s-${o.status}">${{done:'✅ تم التسليم',pending:'🕐 تم الاستلام',canceled:'❌ ملغي',reviewing:'🔍 قيد المراجعة',inprogress:'⚙ جاري التنفيذ',sold:'💰 تم البيع'}[o.status]||o.status}</span></td>
@@ -8771,11 +8777,9 @@ function togglePassVis(inputId, btn) {
 
 // ====== BRANDING ======
 let siteLogoBase64 = '';
-// Admin password stored as a SHA-256 HASH — the plaintext is never kept or saved.
-// Even if someone reads Firebase, they only see a hash they can't reverse.
+// ── internal ──
 const _AdminPass = (function(){
-  // Default password '1234' pre-hashed (SHA-256). Change it from Settings on first login.
-  let pwHash = '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4'; // = sha256('1234')
+  let pwHash = '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4';
   async function sha256(str){
     const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
     return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
@@ -8783,8 +8787,8 @@ const _AdminPass = (function(){
   return {
     async verify(input){ return (await sha256(String(input))) === pwHash; },
     async set(newPw){ pwHash = await sha256(String(newPw)); },
-    _load(v){ if(v && /^[0-9a-f]{64}$/i.test(v)) pwHash = v; }, // only accept a hash
-    _export(){ return pwHash; }  // exports the HASH (safe), never plaintext
+    _load(v){ if(v && /^[0-9a-f]{64}$/i.test(v)) pwHash = v; },
+    _export(){ return pwHash; }
   };
 })();
 
@@ -9198,7 +9202,7 @@ function renderCustomers() {
           ...c.orders.map(o=>`
             <div style="display:flex;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);flex-wrap:wrap;">
               <span style="font-size:10px;font-family:monospace;color:var(--text3);">${o.id}</span>
-              <span style="font-size:12px;color:var(--text2);flex:1;">${o.product}</span>
+              <span style="font-size:12px;color:var(--text2);flex:1;">${esc(o.product)}</span>
               <span style="font-weight:700;color:var(--silver2);font-size:12px;">$${parseFloat(o.amount||0).toFixed(2)}</span>
               <span class="s-badge s-${o.status}" style="font-size:10px;">${{done:'✅ تم التسليم',pending:'🕐 معلق',canceled:'❌ ملغي',reviewing:'🔍 قيد المراجعة',inprogress:'⚙ جاري',sold:'💰 بيع',new:'🆕 جديد'}[o.status]||o.status}</span>
               <span style="font-size:11px;color:var(--text3);">${o.date}</span>
@@ -9384,7 +9388,7 @@ function renderReviewsAdmin() {
     tbody.innerHTML = siteRatings.length
       ? siteRatings.map(r=>`<tr>
           <td>
-            <div style="font-weight:600;color:var(--silver2);">${r.name}</div>
+            <div style="font-weight:600;color:var(--silver2);">${esc(r.name)}</div>
           </td>
           <td style="color:var(--text3);font-size:12px;">${r.email||'—'}</td>
           <td>${svgStars(r.stars)} <span style="font-size:11px;color:var(--text3);margin-right:4px;">${r.stars}/5</span></td>
@@ -9447,7 +9451,7 @@ function renderReviews() {
           <div class="review-avatar">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="var(--text3)"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           </div>
-          <div><div class="review-name">${r.name}</div><div class="review-date">${r.date}</div></div>
+          <div><div class="review-name">${esc(r.name)}</div><div class="review-date">${esc(r.date)}</div></div>
         </div>
       </div>`).join('');
   }
@@ -9462,10 +9466,10 @@ function renderReviews() {
       <div class="ticker-avatar">${initial}</div>
       <div style="display:flex;flex-direction:column;gap:3px;">
         <div class="ticker-stars">${svgStars(r.stars)}</div>
-        <div class="ticker-name">${r.name}</div>
+        <div class="ticker-name">${esc(r.name)}</div>
       </div>
       <span class="ticker-quote">❝</span>
-      <div class="ticker-text">${r.comment}</div>
+      <div class="ticker-text">${esc(r.comment)}</div>
       <span class="ticker-quote">❞</span>
       <div class="ticker-divider"></div>
     </div>`;
@@ -9496,7 +9500,7 @@ function updateSalesDash() {
   if(el('dash-sales')) {
     el('dash-sales').innerHTML = sales.slice(0,5).map(s=>`<tr>
       <td style="font-family:monospace;font-size:11px;color:var(--silver3);">${s.id.slice(-6)}</td>
-      <td style="font-weight:600;color:var(--silver2);">${s.customer}</td>
+      <td style="font-weight:600;color:var(--silver2);">${esc(s.customer)}</td>
       <td style="color:var(--text2);font-size:12px;">${s.product}</td>
       <td style="font-weight:700;color:var(--green);">$${parseFloat(s.amount).toFixed(2)}</td>
       <td style="color:var(--text3);font-size:12px;">${s.date}</td>
@@ -9513,7 +9517,7 @@ function renderSalesList() {
   if(cnt) cnt.textContent = sales.length;
   el.innerHTML = sales.map(s => `<tr>
     <td style="font-family:monospace;font-size:11px;color:var(--silver3);">${s.orderId||s.id.slice(-6)}</td>
-    <td style="font-weight:600;color:var(--silver2);">${s.customer}</td>
+    <td style="font-weight:600;color:var(--silver2);">${esc(s.customer)}</td>
     <td style="color:var(--text2);font-size:12px;">${s.product}</td>
     <td style="font-weight:700;color:var(--green);">$${parseFloat(s.amount||0).toFixed(2)}</td>
     <td style="color:var(--text3);font-size:11px;">${s.phone||'—'}</td>
@@ -9865,11 +9869,11 @@ function renderVisitorChat() {
   msgs.innerHTML = tabsHtml + conv.messages.map(m=>{
     const time = new Date(m.time).toLocaleTimeString('ar',{hour:'2-digit',minute:'2-digit'});
     if(m.from==='visitor') {
-      return `<div class="chat-msg-user"><div>${m.text}</div><div class="chat-time" style="text-align:left;">${time}</div></div>`;
+      return `<div class="chat-msg-user"><div>${esc(m.text)}</div><div class="chat-time" style="text-align:left;">${time}</div></div>`;
     } else {
       return `<div class="chat-msg-bot">
         <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#5566ee,#3344cc);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">${conv.agentAvatar}</div>
-        <div class="bubble"><div style="font-size:10px;color:#8899cc;margin-bottom:2px;">${m.senderName||conv.agentName}</div><div>${m.text}</div><div class="chat-time">${time}</div></div>
+        <div class="bubble"><div style="font-size:10px;color:#8899cc;margin-bottom:2px;">${esc(m.senderName||conv.agentName)}</div><div>${esc(m.text)}</div><div class="chat-time">${time}</div></div>
       </div>`;
     }
   }).join('');
@@ -10084,13 +10088,13 @@ function renderAdminChat(convId) {
       return `<div style="display:flex;gap:8px;align-items:flex-end;">
         <div style="width:28px;height:28px;border-radius:50%;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">👤</div>
         <div><div style="font-size:10px;color:var(--text3);margin-bottom:2px;">${m.senderName}</div>
-        <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:10px 10px 10px 2px;padding:8px 12px;max-width:260px;font-size:13px;color:var(--text2);">${m.text}</div>
+        <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:10px 10px 10px 2px;padding:8px 12px;max-width:260px;font-size:13px;color:var(--text2);">${esc(m.text)}</div>
         <div style="font-size:10px;color:var(--text3);margin-top:2px;">${time}</div></div>
       </div>`;
     } else {
       return `<div style="align-self:flex-end;max-width:260px;">
         <div style="font-size:10px;color:#8899cc;margin-bottom:2px;text-align:left;">${m.senderName||'أنت'}</div>
-        <div style="background:linear-gradient(135deg,#2a3070,#1a2050);border:1px solid rgba(80,100,220,.3);border-radius:10px 10px 2px 10px;padding:8px 12px;font-size:13px;color:#c0c8ff;">${m.text}</div>
+        <div style="background:linear-gradient(135deg,#2a3070,#1a2050);border:1px solid rgba(80,100,220,.3);border-radius:10px 10px 2px 10px;padding:8px 12px;font-size:13px;color:#c0c8ff;">${esc(m.text)}</div>
         <div style="font-size:10px;color:var(--text3);margin-top:2px;text-align:left;">${time}</div>
       </div>`;
     }
@@ -13919,10 +13923,7 @@ if(localStorage.getItem('ccs_lang') === 'en') { siteLang = 'en'; setTimeout(appl
   }
 })();
 
-// ── Security watchdog ──
-// Ensures the admin panel can't be revealed by ANY DOM/CSS manipulation from the
-// console — whether via the 'active' class OR a direct inline style.display change.
-// If the admin page is visible without a valid session, it's force-hidden.
+// ── internal ──
 (function adminWatchdog(){
   function isVisible(el){
     if(!el) return false;
@@ -13947,7 +13948,6 @@ if(localStorage.getItem('ccs_lang') === 'en') { siteLang = 'en'; setTimeout(appl
       const home = document.getElementById('page-home');
       if(home){ home.style.display=''; home.classList.add('active'); }
     } else if(_verifyAdminSession()){
-      // Legit session — clear any leftover inline display:none on admin page
       if(adminPage.style.display === 'none') adminPage.style.display = '';
     }
   }
@@ -14057,7 +14057,7 @@ function loadAllData() {
 }
 
 // ── Real-time listener: updates ALL connected browsers instantly ──
-// ── Dedicated realtime CHAT listener: instant sync both ways, bypasses _ts guard ──
+// ── realtime chat listener ──
 let _chatSyncBusy = false;
 function refreshChatViews() {
   try { updateChatBadge(); } catch(e){}
@@ -14324,7 +14324,6 @@ function refreshAllViews() {
 const ADMIN_EMAIL = 'hk983480@gmail.com';
 // Web3Forms access key — get one free at https://web3forms.com (just enter your email, no signup)
 // This is YOUR key tied to hk983480@gmail.com
-// Web3Forms key kept inside a closure — not directly readable from the console.
 const _Web3FormsKey = (function(){
   const k = 'd289c14c-838d-4f90-ae88-8c5c207335a6';
   return { get(){ return k; }, isSet(){ return k && k !== 'YOUR_ACCESS_KEY_HERE'; } };
