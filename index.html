@@ -5,9 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title id="page-title">Core Code Store</title>
 
-<!-- ═══ Monetag verification ═══ -->
-<meta name="monetag" content="98fa396f911bf5af8db12e66564f88fa">
-
   <!-- ═══ SEO / Search Engine Optimization ═══ -->
   <meta name="description" content="Core Code Store — متجر البرمجيات والسكريبتات والتطبيقات الجاهزة. اشتري كودات جاهزة للنشر بجودة عالية وتسليم فوري ودعم مستمر. Software scripts, plugins, web apps.">
   <meta name="keywords" content="Core Code Store, Core Code, CoreCode, كور كود ستور, كور كود, core, code, store, برمجة, برمجيات, مواقع, تطوير مواقع, تطوير تطبيقات, سكريبت, كود, قالب, PHP, WordPress, Laravel, React, JavaScript, Python, API, plugin, script, web, app, متجر برمجيات, سكريبت جاهز, كود جاهز, برنامج جاهز, موقع جاهز, فلسطين, الأردن, السعودية, الإمارات, عالم عربي, Palestine, Jordan, Saudi, UAE, software, coding, developer, web development, mobile app">
@@ -1653,7 +1650,7 @@ body.light-theme svg{stroke:currentColor;}
   </div>
 
   <!-- ===== ANIMATED ADS SLIDER ===== -->
-  <div class="ads-section">
+  <div class="ads-section" id="ads-section" style="display:none;">
     <div class="ads-slider" id="ads-slider">
       <!-- AD 1 -->
       <div class="ad-slide ad-slide-1 active">
@@ -2145,7 +2142,7 @@ body.light-theme svg{stroke:currentColor;}
       <div class="sb-item" onclick="showAdmin('customers',this)"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span> العملاء</div>
       <div class="sb-item" onclick="showAdmin('reports',this)"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span> التقارير</div>
       <div class="sb-group">الإعلانات</div>
-      <div class="sb-item" onclick="showAdmin('ads',this)"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg></span> إدارة الإعلانات</div>
+      <div class="sb-item" onclick="showAdmin('ads',this)" style="display:none;"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg></span> إدارة الإعلانات</div>
       <div class="sb-group">الإعدادات</div>
       <div class="sb-item" onclick="showAdmin('subs',this)"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span> الاشتراكات</div>
       <div class="sb-item" onclick="showAdmin('btneditor',this)"><span class="ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="10" rx="3"/><path d="M8 11h.01M12 11h.01M16 11h.01"/></svg></span> تعديل الأزرار</div>
@@ -4255,12 +4252,7 @@ const salesData = [
   {month:'يناير',val:0},{month:'فبراير',val:0},{month:'مارس',val:0},
   {month:'أبريل',val:0},{month:'مايو',val:0},{month:'يونيو',val:0},
 ];
-let adsData = [
-  {id:1,tag:'⚡ عرض اليوم',title:'خصم',highlight:'50%',titleAfter:'على تطبيقات الموبايل',desc:'احصل على تطبيق Flutter أو iOS احترافي بنصف السعر — لفترة محدودة فقط!',btn:'اكتشف التطبيقات ←',link:'apps',icon:'📱',visual:'phone',color1:'#111122',color2:'#1a1a2e',image:'',active:true},
-  {id:2,tag:'🔥 الأكثر طلبًا',title:'بوتات تيليغرام',highlight:'احترافية',titleAfter:'',desc:'بوتات Python متكاملة مع لوحة إدارة، جاهزة للنشر الفوري — ابدأ مشروعك اليوم!',btn:'تصفح البوتات ←',link:'bots',icon:'🤖',visual:'bot',color1:'#0d1a0d',color2:'#1a2a1a',image:'',active:true},
-  {id:3,tag:'🌐 جديد',title:'مواقع متكاملة',highlight:'جاهزة للنشر',titleAfter:'',desc:'مواقع WordPress وReact احترافية مع SEO كامل — وفر وقتك وابدأ مشروعك الآن!',btn:'شاهد المواقع ←',link:'websites',icon:'🌐',visual:'browser',color1:'#1a1000',color2:'#2a1800',image:'',active:true},
-  {id:4,tag:'🎟 كوبون حصري',title:'استخدم كود',highlight:'CORE30',titleAfter:'',desc:'وفر 30% على أي منتج من متجرنا — العرض ينتهي قريباً، لا تفوته!',btn:'انسخ الكوبون ←',link:'promo',icon:'🎁',visual:'coupon',color1:'#1a0000',color2:'#2a0a1a',image:'',active:true},
-];
+let adsData = [];
 let adEditId = null;
 let adImageBase64 = '';
 
